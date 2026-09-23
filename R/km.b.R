@@ -12,7 +12,11 @@ kmClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
         # cleared (see clearWith), so plot options leave the tables untouched.
         .init = function() {
             o <- self$results
-            times <- parseTimes(self$options$survTimes)
+            opt <- self$options
+            if (!hideUnlessReady(o, !is.null(opt$elapsed) && !is.null(opt$event) &&
+                                    !noEventLevel(opt$eventLevel)))
+                return()
+            times <- parseTimes(opt$survTimes)
             o$survTable$setVisible(length(times) > 0)
 
             keys <- private$.groupKeys()

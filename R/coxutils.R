@@ -20,9 +20,7 @@ coefRows <- function(fit, lab) {
     rows <- lapply(names(b), function(nm) {
         cp <- coefParts(nm, safe)
         isf <- cp$vars %in% names(fit$xlevels)
-        lev <- if (length(cp$vars) == 1 && isf)
-                   sprintf("%s – %s", cp$levels, fit$xlevels[[cp$vars]][1])
-               else paste(cp$levels[isf], collapse = " × ")
+        lev <- paste(cp$levels[isf], collapse = " × ")
         data.frame(key = nm, term = paste(cp$vars, collapse = ":"),
                    var = paste(lab[cp$vars], collapse = " × "), level = lev,
                    hr = ci[nm, 1], lower = ci[nm, 3], upper = ci[nm, 4],
@@ -52,7 +50,7 @@ forestRows <- function(fit, terms, lab, uni = NULL) {
             add(lab[[t]])
             add(paste0("    ", fit$xlevels[[t]][1]), ref = TRUE)
             for (i in seq_len(nrow(rt)))
-                add(paste0("    ", sub(" – .*$", "", rt$level[i])), rt[i, ], key = rt$key[i])
+                add(paste0("    ", rt$level[i]), rt[i, ], key = rt$key[i])
         } else if (!grepl(":", t, fixed = TRUE)) {
             add(lab[[t]], rt[1, ], key = rt$key[1])
         } else {

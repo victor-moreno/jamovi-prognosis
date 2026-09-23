@@ -55,7 +55,7 @@ items:
     - name: coefTable
       title: Hazard ratios
       type: Table
-      clearWith: [ elapsed, event, eventLevel, factors, covs, interactions, strata, uniMulti ]
+      clearWith: [ elapsed, event, eventLevel, factors, covs, interactions, strata, uniMulti, trend ]
       columns:
         - name: var
           title: ''
@@ -85,6 +85,12 @@ items:
           type: number
           format: zto,pvalue
           visible: (uniMulti)
+        - name: ptrend_u
+          title: p trend
+          superTitle: Univariable
+          type: number
+          format: zto,pvalue
+          visible: (uniMulti && trend)
         - name: hr
           title: HR
           type: number
@@ -100,6 +106,11 @@ items:
           title: p
           type: number
           format: zto,pvalue
+        - name: ptrend
+          title: p trend
+          type: number
+          format: zto,pvalue
+          visible: (trend)
         - name: beta
           title: β
           type: number

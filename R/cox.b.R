@@ -4,6 +4,13 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
     inherit = coxBase,
     private = list(
 
+        .init = function() {
+            o <- self$options
+            hideUnlessReady(self$results,
+                            !is.null(o$elapsed) && !is.null(o$event) && !noEventLevel(o$eventLevel) &&
+                                length(o$factors) + length(o$covs) > 0)
+        },
+
         .run = function() {
             o <- self$options
             if (is.null(o$elapsed) || is.null(o$event) || noEventLevel(o$eventLevel) ||
@@ -16,10 +23,11 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
                 jmvcore::reject("The model could not be estimated")
 
             uni <- if (o$uniMulti) private$.uniRows(m) else NULL
+            trend <- if (o$trend) private$.trendP(m) else NULL
 
             private$.fillModel(fit, m)
             private$.fillGlobal(fit)
-            private$.fillCoef(fit, m, uni)
+            private$.fillCoef(fit, m, uni, trend)
             private$.fillInteractions(fit, m)
             private$.fillPH(fit, m)
 
@@ -96,8 +104,32 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
 
         # univariable fits on the same complete cases as the multivariable model
         .uniRows = function(m) {
-            do.call(rbind, lapply(m$main, function(v)
-                coefRows(private$.fit(m$df, v, m$strata), m$lab)))
+            wald <- c()
+            rows <- do.call(rbind, lapply(m$main, function(v) {
+                f <- private$.fit(m$df, v, m$strata)
+                wald[[v]] <<- summary(f)$waldtest[["pvalue"]]
+                coefRows(f, m$lab)
+            }))
+            attr(rows, "wald") <- wald
+            rows
+        },
+
+        # Trend tests for factors: the factor enters as.numeric() (its level
+        # order as scores). Univariable: alone; multivariable: replacing only
+        # that factor in the model, so the adjustment matches the HRs. Skipped
+        # for factors that are part of an interaction.
+        .trendP = function(m) {
+            fac <- m$main[vapply(m$main, function(v) is.factor(m$df[[v]]), logical(1))]
+            pOf <- function(terms, v) {
+                f <- private$.fit(m$df, terms, m$strata)
+                nm <- sprintf("as.numeric(%s)", v)
+                summary(f)$coefficients[nm, "Pr(>|z|)"]
+            }
+            inInt <- function(v) any(vapply(strsplit(m$ints, ":", fixed = TRUE),
+                                            function(t) v %in% t, logical(1)))
+            list(uni = vapply(fac, function(v) pOf(sprintf("as.numeric(%s)", v), v), numeric(1)),
+                 multi = vapply(fac, function(v) if (inInt(v)) NA_real_ else
+                     pOf(replace(m$terms, m$terms == v, sprintf("as.numeric(%s)", v)), v), numeric(1)))
         },
 
         # ---- tables ----------------------------------------------------
@@ -164,25 +196,40 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
                 tab$setNote("expl", "H0: all hazard ratios in the model are 1.")
         },
 
-        .fillCoef = function(fit, m, uni) {
+        .fillCoef = function(fit, m, uni, trend) {
             o <- self$options
             tab <- self$results$coefTable
             cr <- coefRows(fit, m$lab)
             if (o$uniMulti) {
-                for (col in c("hr", "lower", "upper", "p"))
+                for (col in c("hr", "lower", "upper", "p", "ptrend"))
                     tab$getColumn(col)$setSuperTitle("Multivariable")
             }
-            for (i in seq_len(nrow(cr))) {
-                r <- cr[i, ]
-                u <- if (!is.null(uni) && r$key %in% uni$key) uni[uni$key == r$key, ] else NULL
-                tab$addRow(rowKey = r$key, values = list(
-                    var = r$var, level = r$level,
-                    hr_u = if (is.null(u)) "" else u$hr,
-                    lower_u = if (is.null(u)) "" else u$lower,
-                    upper_u = if (is.null(u)) "" else u$upper,
-                    p_u = if (is.null(u)) "" else u$p,
-                    hr = r$hr, lower = r$lower, upper = r$upper, p = r$p,
-                    beta = r$beta, se = r$se, z = r$z))
+            blank <- list(hr_u = "", lower_u = "", upper_u = "", p_u = "", ptrend_u = "",
+                          hr = "", lower = "", upper = "", p = "", ptrend = "",
+                          beta = "", se = "", z = "")
+            row <- function(key, values) tab$addRow(rowKey = key, values = utils::modifyList(blank, values))
+            for (t in m$terms) {
+                rt <- cr[cr$term == t, , drop = FALSE]
+                # reference level: HR 1, blank CI; overall/trend p of the factor
+                if (!grepl(":", t, fixed = TRUE) && t %in% names(fit$xlevels)) {
+                    ref <- list(var = m$lab[[t]], level = fit$xlevels[[t]][1], hr = 1)
+                    if (o$uniMulti) ref <- c(ref, list(hr_u = 1, p_u = attr(uni, "wald")[[t]]))
+                    if (!is.null(trend)) ref <- c(ref, list(
+                        ptrend_u = trend$uni[[t]],
+                        ptrend = if (is.na(trend$multi[[t]])) "" else trend$multi[[t]]))
+                    row(paste0(t, "_ref"), ref)
+                }
+                for (i in seq_len(nrow(rt))) {
+                    r <- rt[i, ]
+                    u <- if (!is.null(uni) && r$key %in% uni$key) uni[uni$key == r$key, ] else NULL
+                    # a non-empty level keeps jamovi's row headers aligned
+                    vals <- list(var = r$var, level = if (nzchar(r$level)) r$level else "per unit",
+                                 hr = r$hr, lower = r$lower, upper = r$upper, p = r$p,
+                                 beta = r$beta, se = r$se, z = r$z)
+                    if (!is.null(u)) vals <- c(vals, list(hr_u = u$hr, lower_u = u$lower,
+                                                          upper_u = u$upper, p_u = u$p))
+                    row(r$key, vals)
+                }
             }
             if (o$showExplanations)
                 tab$setNote("expl", paste(
@@ -190,7 +237,8 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
                     "or per one-unit increase of a covariate.",
                     if (length(c(o$factors, o$covs)) > 1)
                         "Multivariable HRs are adjusted for the other variables in the model.",
-                    if (o$uniMulti) "Univariable: each variable alone.",
+                    if (o$uniMulti) "Univariable: each variable alone; on the reference row, p of the Wald test for the whole variable.",
+                    if (o$trend) "p trend: the factor entered as a numeric score (level order); multivariable trend keeps the other variables as in the model.",
                     if (length(m$ints))
                         "With interactions, main-effect HRs apply at the reference level (or 0) of the interacting variable."))
         },

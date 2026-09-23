@@ -138,7 +138,8 @@ Rscript --vanilla -e '
 
     cx <- prognosis::cox(data = d, elapsed = "time", event = "event",
                          eventLevel = "Dead", factors = c("sex", "ecog"), covs = "age")
-    hr <- cx$coefTable$asDF$hr
+    ct <- cx$coefTable$asDF
+    hr <- ct$hr[!is.na(ct$lower)]    # reference-level rows have HR 1 and a blank CI
     fit <- survival::coxph(survival::Surv(time, status) ~ sex + ecog + age, data = d)
     stopifnot(isTRUE(all.equal(unname(hr), unname(exp(coef(fit))))))
     cat(sprintf("   smoke test passed: log-rank chi2 %.2f, %d hazard ratios\n", lr, length(hr)))

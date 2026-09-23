@@ -66,6 +66,8 @@ children:
               - type: CheckBox
                 name: uniMulti
               - type: CheckBox
+                name: trend
+              - type: CheckBox
                 name: coefDetails
       - type: LayoutBox
         cell:

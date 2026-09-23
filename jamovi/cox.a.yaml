@@ -85,6 +85,11 @@ options:
       type: Bool
       default: false
 
+    - name: trend
+      title: Trend test (p)
+      type: Bool
+      default: false
+
     - name: coefDetails
       title: β, SE and z
       type: Bool

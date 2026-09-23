@@ -16,6 +16,7 @@ coxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             adjVar = NULL,
             timeUnit = "none",
             uniMulti = FALSE,
+            trend = FALSE,
             coefDetails = FALSE,
             globalTests = TRUE,
             cBoot = FALSE,
@@ -104,6 +105,10 @@ coxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "uniMulti",
                 uniMulti,
                 default=FALSE)
+            private$..trend <- jmvcore::OptionBool$new(
+                "trend",
+                trend,
+                default=FALSE)
             private$..coefDetails <- jmvcore::OptionBool$new(
                 "coefDetails",
                 coefDetails,
@@ -161,6 +166,7 @@ coxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..adjVar)
             self$.addOption(private$..timeUnit)
             self$.addOption(private$..uniMulti)
+            self$.addOption(private$..trend)
             self$.addOption(private$..coefDetails)
             self$.addOption(private$..globalTests)
             self$.addOption(private$..cBoot)
@@ -183,6 +189,7 @@ coxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         adjVar = function() private$..adjVar$value,
         timeUnit = function() private$..timeUnit$value,
         uniMulti = function() private$..uniMulti$value,
+        trend = function() private$..trend$value,
         coefDetails = function() private$..coefDetails$value,
         globalTests = function() private$..globalTests$value,
         cBoot = function() private$..cBoot$value,
@@ -204,6 +211,7 @@ coxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..adjVar = NA,
         ..timeUnit = NA,
         ..uniMulti = NA,
+        ..trend = NA,
         ..coefDetails = NA,
         ..globalTests = NA,
         ..cBoot = NA,
@@ -322,7 +330,8 @@ coxResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "covs",
                     "interactions",
                     "strata",
-                    "uniMulti"),
+                    "uniMulti",
+                    "trend"),
                 columns=list(
                     list(
                         `name`="var", 
@@ -359,6 +368,13 @@ coxResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         `format`="zto,pvalue", 
                         `visible`="(uniMulti)"),
                     list(
+                        `name`="ptrend_u", 
+                        `title`="p trend", 
+                        `superTitle`="Univariable", 
+                        `type`="number", 
+                        `format`="zto,pvalue", 
+                        `visible`="(uniMulti && trend)"),
+                    list(
                         `name`="hr", 
                         `title`="HR", 
                         `type`="number"),
@@ -377,6 +393,12 @@ coxResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         `title`="p", 
                         `type`="number", 
                         `format`="zto,pvalue"),
+                    list(
+                        `name`="ptrend", 
+                        `title`="p trend", 
+                        `type`="number", 
+                        `format`="zto,pvalue", 
+                        `visible`="(trend)"),
                     list(
                         `name`="beta", 
                         `title`="\u03B2", 
@@ -588,6 +610,7 @@ coxBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param adjVar .
 #' @param timeUnit .
 #' @param uniMulti .
+#' @param trend .
 #' @param coefDetails .
 #' @param globalTests .
 #' @param cBoot .
@@ -630,6 +653,7 @@ cox <- function(
     adjVar = NULL,
     timeUnit = "none",
     uniMulti = FALSE,
+    trend = FALSE,
     coefDetails = FALSE,
     globalTests = TRUE,
     cBoot = FALSE,
@@ -677,6 +701,7 @@ cox <- function(
         adjVar = adjVar,
         timeUnit = timeUnit,
         uniMulti = uniMulti,
+        trend = trend,
         coefDetails = coefDetails,
         globalTests = globalTests,
         cBoot = cBoot,

@@ -11,6 +11,12 @@ eventIndicator <- function(x, level) as.integer(as.character(x) == level)
 # TRUE when the event level has not been chosen yet: analyses then wait quietly
 noEventLevel <- function(level) is.null(level) || !nzchar(level)
 
+# Hide every table and plot until the variables needed for results are set
+hideUnlessReady <- function(results, ready) {
+    if (!ready) for (item in results$items) item$setVisible(FALSE)
+    ready
+}
+
 timeVar <- function(x) {
     x <- jmvcore::toNumeric(x)
     if (any(x < 0, na.rm = TRUE))
