@@ -29,7 +29,6 @@ options:
       title: Event level
       type: Level
       variable: (event)
-      default: null
 
     - name: group
       title: Group

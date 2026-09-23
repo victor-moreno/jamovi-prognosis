@@ -1,0 +1,211 @@
+---
+name:  cox
+title: Cox Regression
+jrs: '1.1'
+
+items:
+    - name: modelTable
+      title: Model summary
+      type: Table
+      rows: 1
+      clearWith: [ elapsed, event, eventLevel, factors, covs, interactions, strata, cBoot, bootN ]
+      columns:
+        - name: n
+          title: N
+          type: integer
+        - name: events
+          title: Events
+          type: integer
+        - name: cindex
+          title: C-index
+          type: number
+        - name: clower
+          title: Lower
+          superTitle: 95% CI
+          type: number
+        - name: cupper
+          title: Upper
+          superTitle: 95% CI
+          type: number
+        - name: cboot
+          title: Optimism-corrected
+          type: number
+          visible: (cBoot)
+
+    - name: globalTable
+      title: Global tests
+      type: Table
+      visible: (globalTests)
+      clearWith: [ elapsed, event, eventLevel, factors, covs, interactions, strata ]
+      columns:
+        - name: test
+          title: ''
+          type: text
+        - name: chisq
+          title: χ²
+          type: number
+        - name: df
+          title: df
+          type: integer
+        - name: p
+          title: p
+          type: number
+          format: zto,pvalue
+
+    - name: coefTable
+      title: Hazard ratios
+      type: Table
+      clearWith: [ elapsed, event, eventLevel, factors, covs, interactions, strata, uniMulti ]
+      columns:
+        - name: var
+          title: ''
+          type: text
+          combineBelow: true
+        - name: level
+          title: ''
+          type: text
+        - name: hr_u
+          title: HR
+          superTitle: Univariable
+          type: number
+          visible: (uniMulti)
+        - name: lower_u
+          title: Lower
+          superTitle: Univariable
+          type: number
+          visible: (uniMulti)
+        - name: upper_u
+          title: Upper
+          superTitle: Univariable
+          type: number
+          visible: (uniMulti)
+        - name: p_u
+          title: p
+          superTitle: Univariable
+          type: number
+          format: zto,pvalue
+          visible: (uniMulti)
+        - name: hr
+          title: HR
+          type: number
+        - name: lower
+          title: Lower
+          superTitle: 95% CI
+          type: number
+        - name: upper
+          title: Upper
+          superTitle: 95% CI
+          type: number
+        - name: p
+          title: p
+          type: number
+          format: zto,pvalue
+        - name: beta
+          title: β
+          type: number
+          visible: (coefDetails)
+        - name: se
+          title: SE
+          type: number
+          visible: (coefDetails)
+        - name: z
+          title: z
+          type: number
+          visible: (coefDetails)
+
+    - name: intTable
+      title: Interaction tests
+      type: Table
+      visible: (length(interactions) > 0)
+      clearWith: [ elapsed, event, eventLevel, factors, covs, interactions, strata ]
+      columns:
+        - name: term
+          title: ''
+          type: text
+        - name: chisq
+          title: χ²
+          type: number
+        - name: df
+          title: df
+          type: integer
+        - name: p
+          title: p
+          type: number
+          format: zto,pvalue
+
+    - name: subTable
+      title: Hazard ratios within subgroups
+      type: Table
+      visible: (length(interactions) > 0)
+      clearWith: [ elapsed, event, eventLevel, factors, covs, interactions, strata ]
+      columns:
+        - name: effect
+          title: Effect of
+          type: text
+          combineBelow: true
+        - name: within
+          title: Within
+          type: text
+        - name: hr
+          title: HR
+          type: number
+        - name: lower
+          title: Lower
+          superTitle: 95% CI
+          type: number
+        - name: upper
+          title: Upper
+          superTitle: 95% CI
+          type: number
+        - name: p
+          title: p
+          type: number
+          format: zto,pvalue
+
+    - name: phTable
+      title: Proportional hazards test
+      type: Table
+      visible: (ph)
+      clearWith: [ elapsed, event, eventLevel, factors, covs, interactions, strata ]
+      columns:
+        - name: term
+          title: ''
+          type: text
+        - name: chisq
+          title: χ²
+          type: number
+        - name: df
+          title: df
+          type: integer
+        - name: p
+          title: p
+          type: number
+          format: zto,pvalue
+
+    - name: forestPlot
+      title: Forest plot
+      type: Image
+      width: 700
+      height: 400
+      renderFun: .forestPlot
+      visible: (forest)
+      clearWith: [ elapsed, event, eventLevel, factors, covs, interactions, strata, uniMulti ]
+
+    - name: phPlot
+      title: Schoenfeld residuals
+      type: Image
+      width: 700
+      height: 450
+      renderFun: .phPlot
+      visible: (phPlot)
+      clearWith: [ elapsed, event, eventLevel, factors, covs, interactions, strata, timeUnit ]
+
+    - name: adjPlot
+      title: Adjusted survival curves
+      type: Image
+      width: 600
+      height: 450
+      renderFun: .adjPlot
+      visible: (length(adjVar) > 0)
+      clearWith: [ elapsed, event, eventLevel, factors, covs, interactions, strata, adjVar, adjKM, palette, timeUnit ]
+...

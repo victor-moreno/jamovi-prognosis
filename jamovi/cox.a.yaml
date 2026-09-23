@@ -1,0 +1,146 @@
+---
+name:  cox
+title: Cox Regression
+menuGroup: Prognosis
+version: '0.1.0'
+jas: '1.2'
+
+description:
+    main: Cox proportional hazards regression with univariable and
+          multivariable hazard ratios, model tests, proportional-hazards
+          checks and adjusted survival curves.
+
+options:
+    - name: data
+      type: Data
+
+    - name: elapsed
+      title: Time
+      type: Variable
+      suggested: [ continuous ]
+      permitted: [ numeric ]
+
+    - name: event
+      title: Event
+      type: Variable
+      suggested: [ nominal ]
+      permitted: [ factor, numeric ]
+
+    - name: eventLevel
+      title: Event level
+      type: Level
+      variable: (event)
+
+    - name: factors
+      title: Factors
+      type: Variables
+      default: null
+      suggested: [ nominal, ordinal ]
+      permitted: [ factor ]
+
+    - name: covs
+      title: Covariates
+      type: Variables
+      default: null
+      suggested: [ continuous ]
+      permitted: [ numeric ]
+
+    - name: interactions
+      title: Interaction terms
+      type: Terms
+      default: null
+
+    - name: strata
+      title: Strata
+      type: Variables
+      default: null
+      suggested: [ nominal, ordinal ]
+      permitted: [ factor ]
+
+    - name: adjVar
+      title: Adjusted curves by
+      type: Variable
+      default: null
+      suggested: [ nominal, ordinal ]
+      permitted: [ factor ]
+
+    - name: timeUnit
+      title: Time unit
+      type: List
+      options:
+        - name: none
+          title: (none)
+        - name: days
+          title: days
+        - name: weeks
+          title: weeks
+        - name: months
+          title: months
+        - name: years
+          title: years
+      default: none
+
+    - name: uniMulti
+      title: Univariable and multivariable
+      type: Bool
+      default: false
+
+    - name: coefDetails
+      title: β, SE and z
+      type: Bool
+      default: false
+
+    - name: globalTests
+      title: Global tests (LR, Wald, score)
+      type: Bool
+      default: true
+
+    - name: cBoot
+      title: Optimism-corrected C-index (bootstrap)
+      type: Bool
+      default: false
+
+    - name: bootN
+      title: Bootstrap samples
+      type: Integer
+      min: 20
+      max: 5000
+      default: 200
+
+    - name: ph
+      title: Proportional hazards test
+      type: Bool
+      default: false
+
+    - name: forest
+      title: Forest plot
+      type: Bool
+      default: false
+
+    - name: phPlot
+      title: Schoenfeld residuals
+      type: Bool
+      default: false
+
+    - name: adjKM
+      title: Overlay unadjusted Kaplan-Meier
+      type: Bool
+      default: true
+
+    - name: palette
+      title: Palette
+      type: List
+      options:
+        - name: jmv
+          title: jamovi
+        - name: set1
+          title: Set1
+        - name: okabe
+          title: Okabe-Ito
+      default: jmv
+
+    - name: showExplanations
+      title: Show explanations
+      type: Bool
+      default: false
+...

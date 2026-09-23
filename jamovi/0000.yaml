@@ -29,6 +29,11 @@ analyses:
     menuGroup: Prognosis
     menuTitle: Cox Regression
     menuSubtitle: Uni- and multivariable hazard ratios
+    category: analyses
+    description: >-
+      Cox proportional hazards regression with univariable and multivariable
+      hazard ratios, model tests, proportional-hazards checks and adjusted
+      survival curves.
 usesNative: true
 minApp: 2.3.0
 
