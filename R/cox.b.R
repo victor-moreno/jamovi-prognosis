@@ -62,6 +62,12 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
             for (v in names(df)) if (is.factor(df[[v]])) df[[v]] <- droplevels(df[[v]])
             if (nrow(df) == 0) jmvcore::reject("No complete rows")
             if (sum(df$status) == 0) jmvcore::reject("There are no events")
+            one <- vapply(df, function(x) is.factor(x) && nlevels(x) < 2, logical(1))
+            if (any(one)) {
+                nm <- c(lab, if (length(strata)) stats::setNames(o$strata, strata))[names(df)[one]]
+                jmvcore::reject(paste("Only one level (after removing missing values):",
+                                      paste(nm, collapse = ", ")))
+            }
 
             ints <- Filter(function(t) length(t) > 1, o$interactions)
             ints <- vapply(ints, function(t) paste(safe[match(unlist(t), vars)], collapse = ":"), "")
