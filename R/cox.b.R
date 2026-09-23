@@ -3,49 +3,89 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
     "coxClass",
     inherit = coxBase,
     private = list(
+        .m = NULL,
 
+        # Table rows and plot sizes are laid out here from the data; .run only
+        # fills tables that were cleared (clearWith in cox.r.yaml), so options
+        # that do not affect a table leave it untouched.
         .init = function() {
             o <- self$options
-            hideUnlessReady(self$results,
-                            !is.null(o$elapsed) && !is.null(o$event) && !noEventLevel(o$eventLevel) &&
-                                length(o$factors) + length(o$covs) > 0)
+            r <- self$results
+            if (!hideUnlessReady(r, private$.ready())) return()
+            m <- tryCatch(private$.prepare(), error = function(e) NULL)
+            if (is.null(m)) return()     # the error is reported by .run
+            private$.m <- m
+
+            rows <- private$.coefLayout(m)
+            if (o$uniMulti)
+                for (col in c("hr", "lower", "upper", "p", "ptrend"))
+                    r$coefTable$getColumn(col)$setSuperTitle("Multivariable")
+            for (i in seq_len(nrow(rows)))
+                r$coefTable$addRow(rowKey = rows$key[i],
+                                   values = list(var = rows$var[i], level = rows$level[i]))
+
+            if (o$globalTests)
+                for (k in names(globalLabels))
+                    r$globalTable$addRow(rowKey = k, values = list(test = globalLabels[[k]]))
+            for (t in m$ints) {
+                r$intTable$addRow(rowKey = t, values = list(term = termLabel(t, m$lab)))
+                plan <- subgroupPlan(m$df, t, m$lab)
+                for (i in seq_len(NROW(plan)))
+                    r$subTable$addRow(rowKey = plan$key[i],
+                                      values = list(effect = plan$effect[i], within = plan$within[i]))
+            }
+            if (o$ph) {
+                for (t in m$terms)
+                    r$phTable$addRow(rowKey = t, values = list(term = termLabel(t, m$lab)))
+                r$phTable$addRow(rowKey = "GLOBAL", values = list(term = "Global"))
+            }
+
+            nCoef <- sum(!rows$ref)
+            # forest rows: table rows plus a header per factor and per interaction
+            nForest <- nrow(rows) + sum(rows$ref) + length(m$ints)
+            r$forestPlot$setSize(700, 90 + 26 * nForest)
+            r$phPlot$setSize(700, 60 + 240 * ceiling(nCoef / 2))
+        },
+
+        .ready = function() {
+            o <- self$options
+            !is.null(o$elapsed) && !is.null(o$event) && !noEventLevel(o$eventLevel) &&
+                length(o$factors) + length(o$covs) > 0
         },
 
         .run = function() {
             o <- self$options
-            if (is.null(o$elapsed) || is.null(o$event) || noEventLevel(o$eventLevel) ||
-                length(o$factors) + length(o$covs) == 0)
-                return()
+            r <- self$results
+            if (!private$.ready()) return()
 
-            m <- private$.prepare()
+            m <- if (is.null(private$.m)) private$.prepare() else private$.m
             fit <- private$.fit(m$df, m$terms, m$strata)
             if (length(fit$coefficients) == 0 || all(is.na(stats::coef(fit))))
                 jmvcore::reject("The model could not be estimated")
 
-            uni <- if (o$uniMulti) private$.uniRows(m) else NULL
-            trend <- if (o$trend) private$.trendP(m) else NULL
-
-            private$.fillModel(fit, m)
-            private$.fillGlobal(fit)
-            private$.fillCoef(fit, m, uni, trend)
-            private$.fillInteractions(fit, m)
-            private$.fillPH(fit, m)
-
-            if (o$forest) {
-                r <- forestRows(fit, m$terms, m$lab, uni)
-                self$results$forestPlot$setSize(700, 90 + 26 * nrow(r))
-                self$results$forestPlot$setState(r)
+            uni <- NULL
+            getUni <- function() {
+                if (is.null(uni)) uni <<- private$.uniRows(m)
+                uni
             }
-            if (o$phPlot) {
-                # one panel per coefficient (the table above tests whole terms)
-                zph <- survival::cox.zph(fit, terms = FALSE)
-                cr <- coefRows(fit, m$lab)
-                labs <- stats::setNames(ifelse(nzchar(cr$level), paste0(cr$var, ": ", cr$level), cr$var),
-                                        cr$key)
-                self$results$phPlot$setSize(700, 60 + 240 * ceiling(ncol(zph$y) / 2))
-                self$results$phPlot$setState(list(zph = zph, labels = labs, coef = stats::coef(fit)))
-            }
-            private$.prepareAdjusted(fit, m)
+
+            if (r$modelTable$isNotFilled()) private$.fillModel(fit)
+            if (o$globalTests && r$globalTable$isNotFilled()) private$.fillGlobal(fit)
+            if (r$coefTable$isNotFilled())
+                private$.fillCoef(fit, m, if (o$uniMulti) getUni(),
+                                  if (o$trend) private$.trendP(m))
+            if (length(m$ints) && (r$intTable$isNotFilled() || r$subTable$isNotFilled()))
+                private$.fillInteractions(fit, m)
+            if (o$ph && r$phTable$isNotFilled()) private$.fillPH(fit)
+            private$.setNotes(m)
+
+            # plot states are small data, rebuilt only when a plot was cleared
+            if (o$forest && is.null(r$forestPlot$state))
+                r$forestPlot$setState(forestRows(fit, m$terms, m$lab, if (o$uniMulti) getUni()))
+            if (o$phPlot && is.null(r$phPlot$state))
+                private$.phState(fit, m)
+            if (o$adjCurves)
+                private$.adjStates(fit, m)
         },
 
         # ---- data and model --------------------------------------------
@@ -83,8 +123,34 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
                  strata = strata, excluded = n0 - nrow(df))
         },
 
-        # small formula environment: the fitted model is kept as plot state
-        # (not named .formula: that is a jmvcore hook used to generate syntax)
+        # Rows of the hazard-ratio table, from the model matrix (same names
+        # and order as the Cox coefficients): reference row + one per coefficient.
+        .coefLayout = function(m) {
+            cols <- colnames(stats::model.matrix(stats::reformulate(m$terms), m$df))[-1]
+            safe <- names(m$lab)
+            parts <- lapply(cols, coefParts, safe = safe)
+            term <- vapply(parts, function(p) paste(p$vars, collapse = ":"), "")
+            out <- list()
+            for (t in m$terms) {
+                isMainFactor <- !grepl(":", t, fixed = TRUE) && is.factor(m$df[[t]])
+                label <- if (grepl(":", t, fixed = TRUE)) termLabel(t, m$lab) else m$lab[[t]]
+                if (isMainFactor)
+                    out[[length(out) + 1]] <- data.frame(key = paste0(t, "_ref"), term = t, var = label,
+                                                         level = levels(m$df[[t]])[1], ref = TRUE)
+                for (i in which(term == t)) {
+                    isf <- vapply(parts[[i]]$vars, function(v) is.factor(m$df[[v]]), logical(1))
+                    lev <- paste(parts[[i]]$levels[isf], collapse = " × ")
+                    # a non-empty level keeps jamovi's row headers aligned
+                    out[[length(out) + 1]] <- data.frame(key = cols[i], term = t, var = label,
+                                                         level = if (nzchar(lev)) lev else "per unit",
+                                                         ref = FALSE)
+                }
+            }
+            do.call(rbind, out)
+        },
+
+        # small formula environment (not named .formula: that is a jmvcore
+        # hook used to generate the syntax)
         .coxFormula = function(terms, strata) {
             rhs <- paste(c(terms, if (length(strata))
                                       sprintf("strata(%s)", paste(strata, collapse = ", "))),
@@ -96,10 +162,9 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
         },
 
         .fit = function(df, terms, strata) {
-            fit <- tryCatch(
+            tryCatch(
                 survival::coxph(private$.coxFormula(terms, strata), data = df, model = TRUE),
                 error = function(e) jmvcore::reject(paste("Model error:", conditionMessage(e))))
-            fit
         },
 
         # univariable fits on the same complete cases as the multivariable model
@@ -122,8 +187,7 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
             fac <- m$main[vapply(m$main, function(v) is.factor(m$df[[v]]), logical(1))]
             pOf <- function(terms, v) {
                 f <- private$.fit(m$df, terms, m$strata)
-                nm <- sprintf("as.numeric(%s)", v)
-                summary(f)$coefficients[nm, "Pr(>|z|)"]
+                summary(f)$coefficients[sprintf("as.numeric(%s)", v), "Pr(>|z|)"]
             }
             inInt <- function(v) any(vapply(strsplit(m$ints, ":", fixed = TRUE),
                                             function(t) v %in% t, logical(1)))
@@ -132,166 +196,139 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
                      pOf(replace(m$terms, m$terms == v, sprintf("as.numeric(%s)", v)), v), numeric(1)))
         },
 
-        # ---- tables ----------------------------------------------------
-        .fillModel = function(fit, m) {
-            o <- self$options
-            tab <- self$results$modelTable
-            cc <- survival::concordance(fit)
-            cse <- sqrt(cc$var)
-            row <- list(n = fit$n, events = fit$nevent, cindex = cc$concordance,
-                        clower = cc$concordance - 1.96 * cse,
-                        cupper = cc$concordance + 1.96 * cse)
-            if (o$cBoot) row$cboot <- private$.cBoot(fit, m, cc$concordance)
-            tab$setRow(rowNo = 1, values = row)
-            if (m$excluded > 0)
-                tab$setNote("missing", sprintf("%d rows with missing values excluded", m$excluded))
-            if (length(m$strata))
-                tab$setNote("strata", paste("Stratified by", paste(self$options$strata, collapse = ", ")))
-            if (o$showExplanations)
-                tab$setNote("expl", paste(
-                    "C-index: probability that, of two patients, the one who has the event first",
-                    "has the higher predicted risk (0.5 = chance, 1 = perfect).",
-                    if (o$cBoot) "Optimism-corrected: bootstrap estimate of the C-index expected in new patients."))
+        # write a row by key (created in .init), adding it if missing
+        .putRow = function(tab, key, values) {
+            values <- blankNA(values)
+            if (key %in% tab$rowKeys) tab$setRow(rowKey = key, values = values)
+            else tab$addRow(rowKey = key, values = values)
         },
 
-        # Harrell's bootstrap optimism: C(boot model, boot data) - C(boot model, original data)
-        .cBoot = function(fit, m, capp) {
-            set.seed(1234)
-            f <- private$.coxFormula(m$terms, m$strata)
-            df <- m$df
-            tt <- stats::delete.response(stats::terms(stats::reformulate(m$terms)))
-            cf <- stats::as.formula(paste("survival::Surv(time, status) ~ lp",
-                                          if (length(m$strata))
-                                              sprintf("+ survival::strata(%s)", paste(m$strata, collapse = ", "))
-                                          else ""))
-            opt <- vapply(seq_len(self$options$bootN), function(i) {
-                db <- df[sample.int(nrow(df), replace = TRUE), , drop = FALSE]
-                fb <- tryCatch(suppressWarnings(survival::coxph(f, data = db, model = TRUE)), error = function(e) NULL)
-                if (is.null(fb)) return(NA_real_)
-                # X b by hand: predict.coxph fails on new data for stratified models
-                b <- stats::coef(fb); b[is.na(b)] <- 0
-                lp <- tryCatch(drop(stats::model.matrix(tt, df, xlev = fb$xlevels)[, names(b), drop = FALSE] %*% b),
-                               error = function(e) NULL)
-                if (is.null(lp)) return(NA_real_)
-                d2 <- df; d2$lp <- lp
-                # warns on rebuilding the model frame of stratified fits; harmless
-                suppressWarnings(survival::concordance(fb))$concordance -
-                    survival::concordance(cf, data = d2, reverse = TRUE)$concordance
-            }, numeric(1))
-            capp - mean(opt, na.rm = TRUE)
+        # ---- tables ----------------------------------------------------
+        .fillModel = function(fit) {
+            cc <- survival::concordance(fit)
+            cse <- sqrt(cc$var)
+            self$results$modelTable$setRow(rowNo = 1, values = list(
+                n = fit$n, events = fit$nevent, cindex = cc$concordance,
+                clower = cc$concordance - 1.96 * cse, cupper = cc$concordance + 1.96 * cse))
         },
 
         .fillGlobal = function(fit) {
-            if (!self$options$globalTests) return()
-            tab <- self$results$globalTable
             s <- summary(fit)
-            tests <- list(lr = list("Likelihood ratio", s$logtest),
-                          wald = list("Wald", s$waldtest),
-                          score = list("Score (log-rank)", s$sctest))
+            tests <- list(lr = s$logtest, wald = s$waldtest, score = s$sctest)
             for (k in names(tests))
-                tab$addRow(rowKey = k, values = list(test = tests[[k]][[1]],
-                    chisq = tests[[k]][[2]][["test"]], df = tests[[k]][[2]][["df"]],
-                    p = tests[[k]][[2]][["pvalue"]]))
-            if (self$options$showExplanations)
-                tab$setNote("expl", "H0: all hazard ratios in the model are 1.")
+                private$.putRow(self$results$globalTable, k, list(test = globalLabels[[k]],
+                    chisq = tests[[k]][["test"]], df = tests[[k]][["df"]], p = tests[[k]][["pvalue"]]))
         },
 
         .fillCoef = function(fit, m, uni, trend) {
-            o <- self$options
             tab <- self$results$coefTable
             cr <- coefRows(fit, m$lab)
-            if (o$uniMulti) {
-                for (col in c("hr", "lower", "upper", "p", "ptrend"))
-                    tab$getColumn(col)$setSuperTitle("Multivariable")
-            }
+            layout <- private$.coefLayout(m)
             blank <- list(hr_u = "", lower_u = "", upper_u = "", p_u = "", ptrend_u = "",
                           hr = "", lower = "", upper = "", p = "", ptrend = "",
                           beta = "", se = "", z = "")
-            row <- function(key, values) tab$addRow(rowKey = key, values = utils::modifyList(blank, values))
-            for (t in m$terms) {
-                rt <- cr[cr$term == t, , drop = FALSE]
-                # reference level: HR 1, blank CI; overall/trend p of the factor
-                if (!grepl(":", t, fixed = TRUE) && t %in% names(fit$xlevels)) {
-                    ref <- list(var = m$lab[[t]], level = fit$xlevels[[t]][1], hr = 1)
-                    if (o$uniMulti) ref <- c(ref, list(hr_u = 1, p_u = attr(uni, "wald")[[t]]))
-                    if (!is.null(trend)) ref <- c(ref, list(
-                        ptrend_u = trend$uni[[t]],
-                        ptrend = if (is.na(trend$multi[[t]])) "" else trend$multi[[t]]))
-                    row(paste0(t, "_ref"), ref)
+            for (i in seq_len(nrow(layout))) {
+                l <- layout[i, ]
+                vals <- list(var = l$var, level = l$level)
+                if (l$ref) {
+                    # reference level: HR 1, blank CI; overall/trend p of the factor
+                    vals$hr <- 1
+                    if (!is.null(uni)) { vals$hr_u <- 1; vals$p_u <- attr(uni, "wald")[[l$term]] }
+                    if (!is.null(trend)) { vals$ptrend_u <- trend$uni[[l$term]]
+                                           vals$ptrend <- trend$multi[[l$term]] }
+                } else {
+                    c1 <- cr[cr$key == l$key, ]
+                    vals[c("hr", "lower", "upper", "p", "beta", "se", "z")] <-
+                        as.list(c1[1, c("hr", "lower", "upper", "p", "beta", "se", "z")])
+                    u <- if (!is.null(uni)) uni[uni$key == l$key, ] else NULL
+                    if (NROW(u)) vals[c("hr_u", "lower_u", "upper_u", "p_u")] <-
+                        as.list(u[1, c("hr", "lower", "upper", "p")])
                 }
-                for (i in seq_len(nrow(rt))) {
-                    r <- rt[i, ]
-                    u <- if (!is.null(uni) && r$key %in% uni$key) uni[uni$key == r$key, ] else NULL
-                    # a non-empty level keeps jamovi's row headers aligned
-                    vals <- list(var = r$var, level = if (nzchar(r$level)) r$level else "per unit",
-                                 hr = r$hr, lower = r$lower, upper = r$upper, p = r$p,
-                                 beta = r$beta, se = r$se, z = r$z)
-                    if (!is.null(u)) vals <- c(vals, list(hr_u = u$hr, lower_u = u$lower,
-                                                          upper_u = u$upper, p_u = u$p))
-                    row(r$key, vals)
-                }
+                private$.putRow(tab, l$key, utils::modifyList(blank, vals))
             }
-            if (o$showExplanations)
-                tab$setNote("expl", paste(
-                    "HR > 1: higher hazard (worse prognosis) than the reference level,",
-                    "or per one-unit increase of a covariate.",
-                    if (length(c(o$factors, o$covs)) > 1)
-                        "Multivariable HRs are adjusted for the other variables in the model.",
-                    if (o$uniMulti) "Univariable: each variable alone; on the reference row, p of the Wald test for the whole variable.",
-                    if (o$trend) "p trend: the factor entered as a numeric score (level order); multivariable trend keeps the other variables as in the model.",
-                    if (length(m$ints))
-                        "With interactions, main-effect HRs apply at the reference level (or 0) of the interacting variable."))
         },
 
         .fillInteractions = function(fit, m) {
-            if (length(m$ints) == 0) return()
-            it <- self$results$intTable
-            st <- self$results$subTable
             for (t in m$ints) {
                 red <- private$.fit(m$df, setdiff(m$terms, t), m$strata)
                 chi <- 2 * (fit$loglik[2] - red$loglik[2])
                 df <- sum(!is.na(stats::coef(fit))) - sum(!is.na(stats::coef(red)))
-                it$addRow(rowKey = t, values = list(term = termLabel(t, m$lab), chisq = chi,
-                    df = df, p = stats::pchisq(chi, df, lower.tail = FALSE)))
-                sg <- subgroupHR(fit, m$df, t, m$lab, m$terms)
-                for (i in seq_len(NROW(sg)))
-                    st$addRow(rowKey = paste(t, i), values = as.list(sg[i, ]))
-            }
-            if (self$options$showExplanations) {
-                it$setNote("expl", "Likelihood-ratio test for adding the interaction; a small p suggests that the effect of one variable depends on the other.")
-                st$setNote("expl", "Hazard ratio of the first variable within each level (or quartile) of the second; other variables at their reference level or median.")
+                private$.putRow(self$results$intTable, t, list(term = termLabel(t, m$lab),
+                    chisq = chi, df = df, p = stats::pchisq(chi, df, lower.tail = FALSE)))
+                plan <- subgroupPlan(m$df, t, m$lab)
+                if (is.null(plan)) next
+                sg <- subgroupHR(fit, m$df, plan, m$terms)
+                for (i in seq_len(nrow(sg)))
+                    private$.putRow(self$results$subTable, sg$key[i], list(
+                        effect = plan$effect[i], within = plan$within[i],
+                        hr = sg$hr[i], lower = sg$lower[i], upper = sg$upper[i], p = sg$p[i]))
             }
         },
 
-        .fillPH = function(fit, m) {
-            if (!self$options$ph) return(NULL)
+        .fillPH = function(fit) {
             tab <- self$results$phTable
             zph <- tryCatch(survival::cox.zph(fit), error = function(e) NULL)
             if (is.null(zph)) {
                 tab$setNote("err", "The proportional hazards test could not be computed")
-                return(NULL)
+                return()
             }
             z <- zph$table
             for (k in rownames(z))
-                tab$addRow(rowKey = k, values = list(
-                    term = if (k == "GLOBAL") "Global" else termLabel(k, m$lab),
-                    chisq = z[k, "chisq"], df = z[k, "df"], p = z[k, "p"]))
-            if (self$options$showExplanations)
-                tab$setNote("expl", "Test based on Schoenfeld residuals; a small p suggests that the hazard ratio changes over time (non-proportional hazards).")
-            zph
+                private$.putRow(tab, k, list(chisq = z[k, "chisq"], df = z[k, "df"], p = z[k, "p"]))
         },
 
-        .prepareAdjusted = function(fit, m) {
+        # notes follow their options on every run without refilling tables
+        .setNotes = function(m) {
             o <- self$options
-            if (is.null(o$adjVar)) return()
-            img <- self$results$adjPlot
-            if (!o$adjVar %in% o$factors)
-                return(img$setError("The variable for adjusted curves must also be one of the Factors"))
-            if (length(m$strata))
-                return(img$setError("Adjusted curves are not available for stratified models"))
-            var <- names(m$lab)[m$lab == o$adjVar]
-            img$setState(list(fit = fit, df = m$df, var = var,
-                              adjusted = setdiff(unname(m$lab), o$adjVar)))
+            r <- self$results
+            on <- o$showExplanations
+            r$modelTable$setNote("missing", if (m$excluded > 0)
+                sprintf("%d rows with missing values excluded", m$excluded))
+            r$modelTable$setNote("strata", if (length(m$strata))
+                paste("Stratified by", paste(o$strata, collapse = ", ")))
+            r$modelTable$setNote("expl", if (on) paste(
+                "C-index: probability that, of two patients, the one who has the event first",
+                "has the higher predicted risk (0.5 = chance, 1 = perfect)."))
+            r$globalTable$setNote("expl", if (on) "H0: all hazard ratios in the model are 1.")
+            r$coefTable$setNote("expl", if (on) paste(
+                "HR > 1: higher hazard (worse prognosis) than the reference level,",
+                "or per one-unit increase of a covariate.",
+                if (length(m$main) > 1)
+                    "Multivariable HRs are adjusted for the other variables in the model.",
+                if (o$uniMulti) "Univariable: each variable alone; on the reference row, p of the Wald test for the whole variable.",
+                if (o$trend) "p trend: the factor entered as a numeric score (level order); multivariable trend keeps the other variables as in the model.",
+                if (length(m$ints))
+                    "With interactions, main-effect HRs apply at the reference level (or 0) of the interacting variable."))
+            r$intTable$setNote("expl", if (on) "Likelihood-ratio test for adding the interaction; a small p suggests that the effect of one variable depends on the other.")
+            r$subTable$setNote("expl", if (on) "Hazard ratio of the first variable within each level (or quartile) of the second; other variables at their reference level or median.")
+            r$phTable$setNote("expl", if (on) "Test based on Schoenfeld residuals; a small p suggests that the hazard ratio changes over time (non-proportional hazards).")
+        },
+
+        # ---- plot states -----------------------------------------------
+        .phState = function(fit, m) {
+            # one panel per coefficient (the table tests whole terms)
+            zph <- survival::cox.zph(fit, terms = FALSE)
+            cr <- coefRows(fit, m$lab)
+            labs <- stats::setNames(ifelse(nzchar(cr$level), paste0(cr$var, ": ", cr$level), cr$var),
+                                    cr$key)
+            self$results$phPlot$setState(list(zph = zph, labels = labs, coef = stats::coef(fit)))
+        },
+
+        # one plot per factor; curves computed here so the state stays small
+        .adjStates = function(fit, m) {
+            arr <- self$results$adjPlots
+            for (key in arr$itemKeys) {
+                img <- arr$get(key = key)
+                if (!is.null(img$state)) next
+                if (length(m$strata)) {
+                    img$setError("Adjusted curves are not available for stratified models")
+                    next
+                }
+                var <- names(m$lab)[m$lab == key]
+                ac <- adjustedCurves(fit, m$df, var)
+                img$setState(list(curves = ac$curves, km = ac$km,
+                                  adjusted = setdiff(unname(m$lab), key)))
+            }
         },
 
         # ---- plots -----------------------------------------------------
@@ -311,9 +348,11 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
         .adjPlot = function(image, ggtheme, theme, ...) {
             st <- image$state
             if (is.null(st)) return(FALSE)
-            print(adjustedPlot(st$fit, st$df, st$var, self$options$adjVar, st$adjusted,
-                               km = self$options$adjKM, pal = self$options$colours,
+            print(adjustedPlot(st$curves, st$km, st$adjusted, showKM = self$options$adjKM,
+                               pal = self$options$colours,
                                xlab = timeLabel(self$options$timeUnit)))
             TRUE
         })
 )
+
+globalLabels <- c(lr = "Likelihood ratio", wald = "Wald", score = "Score (log-rank)")

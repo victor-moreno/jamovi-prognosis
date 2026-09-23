@@ -57,13 +57,6 @@ options:
       suggested: [ nominal, ordinal ]
       permitted: [ factor ]
 
-    - name: adjVar
-      title: Adjusted curves by
-      type: Variable
-      default: null
-      suggested: [ nominal, ordinal ]
-      permitted: [ factor ]
-
     - name: timeUnit
       title: Time unit
       type: List
@@ -100,18 +93,6 @@ options:
       type: Bool
       default: true
 
-    - name: cBoot
-      title: Optimism-corrected C-index (bootstrap)
-      type: Bool
-      default: false
-
-    - name: bootN
-      title: Bootstrap samples
-      type: Integer
-      min: 20
-      max: 5000
-      default: 200
-
     - name: ph
       title: Proportional hazards test
       type: Bool
@@ -124,6 +105,11 @@ options:
 
     - name: phPlot
       title: Schoenfeld residuals
+      type: Bool
+      default: false
+
+    - name: adjCurves
+      title: Adjusted survival curves
       type: Bool
       default: false
 

@@ -82,13 +82,6 @@ children:
                 name: globalTests
               - type: CheckBox
                 name: ph
-              - type: CheckBox
-                name: cBoot
-                children:
-                  - type: TextBox
-                    name: bootN
-                    format: number
-                    enable: (cBoot)
   - type: CollapseBox
     label: Interactions
     collapsed: true
@@ -142,20 +135,12 @@ children:
               row: 0
             stretchFactor: 1
             children:
-              - type: VariableSupplier
-                persistentItems: false
-                stretchFactor: 1
-                children:
-                  - type: TargetLayoutBox
-                    label: Adjusted curves by
-                    children:
-                      - type: VariablesListBox
-                        name: adjVar
-                        maxItemCount: 1
-                        isTarget: true
               - type: CheckBox
-                name: adjKM
-                enable: (adjVar)
+                name: adjCurves
+                children:
+                  - type: CheckBox
+                    name: adjKM
+                    enable: (adjCurves)
   - type: CollapseBox
     label: Options
     collapsed: true

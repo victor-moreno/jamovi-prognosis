@@ -257,3 +257,8 @@ drawGrob <- function(g) {
     grid::grid.draw(g)
     TRUE
 }
+
+# jmvcore treats NA cells as "not filled" (the table would be recomputed on
+# every run); a blank string counts as filled and renders empty.
+blankNA <- function(values) lapply(values, function(x)
+    if (is.numeric(x) && length(x) == 1 && is.na(x) && !is.nan(x)) "" else x)

@@ -8,7 +8,7 @@ items:
       title: Model summary
       type: Table
       rows: 1
-      clearWith: [ elapsed, event, eventLevel, factors, covs, interactions, strata, cBoot, bootN ]
+      clearWith: [ elapsed, event, eventLevel, factors, covs, interactions, strata ]
       columns:
         - name: n
           title: N
@@ -27,10 +27,6 @@ items:
           title: Upper
           superTitle: 95% CI
           type: number
-        - name: cboot
-          title: Optimism-corrected
-          type: number
-          visible: (cBoot)
 
     - name: globalTable
       title: Global tests
@@ -211,12 +207,16 @@ items:
       visible: (phPlot)
       clearWith: [ elapsed, event, eventLevel, factors, covs, interactions, strata, timeUnit ]
 
-    - name: adjPlot
+    - name: adjPlots
       title: Adjusted survival curves
-      type: Image
-      width: 600
-      height: 450
-      renderFun: .adjPlot
-      visible: (length(adjVar) > 0)
-      clearWith: [ elapsed, event, eventLevel, factors, covs, interactions, strata, adjVar, adjKM, colours, timeUnit ]
+      type: Array
+      visible: (adjCurves)
+      items: (factors)
+      template:
+          title: $key
+          type: Image
+          width: 600
+          height: 450
+          renderFun: .adjPlot
+          clearWith: [ elapsed, event, eventLevel, factors, covs, interactions, strata, adjKM, colours, timeUnit ]
 ...

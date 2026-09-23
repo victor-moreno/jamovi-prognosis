@@ -13,17 +13,15 @@ coxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             covs = NULL,
             interactions = NULL,
             strata = NULL,
-            adjVar = NULL,
             timeUnit = "none",
             uniMulti = FALSE,
             trend = FALSE,
             coefDetails = FALSE,
             globalTests = TRUE,
-            cBoot = FALSE,
-            bootN = 200,
             ph = FALSE,
             forest = FALSE,
             phPlot = FALSE,
+            adjCurves = FALSE,
             adjKM = TRUE,
             colours = "jmv",
             showExplanations = FALSE, ...) {
@@ -82,15 +80,6 @@ coxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "ordinal"),
                 permitted=list(
                     "factor"))
-            private$..adjVar <- jmvcore::OptionVariable$new(
-                "adjVar",
-                adjVar,
-                default=NULL,
-                suggested=list(
-                    "nominal",
-                    "ordinal"),
-                permitted=list(
-                    "factor"))
             private$..timeUnit <- jmvcore::OptionList$new(
                 "timeUnit",
                 timeUnit,
@@ -117,16 +106,6 @@ coxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "globalTests",
                 globalTests,
                 default=TRUE)
-            private$..cBoot <- jmvcore::OptionBool$new(
-                "cBoot",
-                cBoot,
-                default=FALSE)
-            private$..bootN <- jmvcore::OptionInteger$new(
-                "bootN",
-                bootN,
-                min=20,
-                max=5000,
-                default=200)
             private$..ph <- jmvcore::OptionBool$new(
                 "ph",
                 ph,
@@ -138,6 +117,10 @@ coxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             private$..phPlot <- jmvcore::OptionBool$new(
                 "phPlot",
                 phPlot,
+                default=FALSE)
+            private$..adjCurves <- jmvcore::OptionBool$new(
+                "adjCurves",
+                adjCurves,
                 default=FALSE)
             private$..adjKM <- jmvcore::OptionBool$new(
                 "adjKM",
@@ -163,17 +146,15 @@ coxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..covs)
             self$.addOption(private$..interactions)
             self$.addOption(private$..strata)
-            self$.addOption(private$..adjVar)
             self$.addOption(private$..timeUnit)
             self$.addOption(private$..uniMulti)
             self$.addOption(private$..trend)
             self$.addOption(private$..coefDetails)
             self$.addOption(private$..globalTests)
-            self$.addOption(private$..cBoot)
-            self$.addOption(private$..bootN)
             self$.addOption(private$..ph)
             self$.addOption(private$..forest)
             self$.addOption(private$..phPlot)
+            self$.addOption(private$..adjCurves)
             self$.addOption(private$..adjKM)
             self$.addOption(private$..colours)
             self$.addOption(private$..showExplanations)
@@ -186,17 +167,15 @@ coxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         covs = function() private$..covs$value,
         interactions = function() private$..interactions$value,
         strata = function() private$..strata$value,
-        adjVar = function() private$..adjVar$value,
         timeUnit = function() private$..timeUnit$value,
         uniMulti = function() private$..uniMulti$value,
         trend = function() private$..trend$value,
         coefDetails = function() private$..coefDetails$value,
         globalTests = function() private$..globalTests$value,
-        cBoot = function() private$..cBoot$value,
-        bootN = function() private$..bootN$value,
         ph = function() private$..ph$value,
         forest = function() private$..forest$value,
         phPlot = function() private$..phPlot$value,
+        adjCurves = function() private$..adjCurves$value,
         adjKM = function() private$..adjKM$value,
         colours = function() private$..colours$value,
         showExplanations = function() private$..showExplanations$value),
@@ -208,17 +187,15 @@ coxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..covs = NA,
         ..interactions = NA,
         ..strata = NA,
-        ..adjVar = NA,
         ..timeUnit = NA,
         ..uniMulti = NA,
         ..trend = NA,
         ..coefDetails = NA,
         ..globalTests = NA,
-        ..cBoot = NA,
-        ..bootN = NA,
         ..ph = NA,
         ..forest = NA,
         ..phPlot = NA,
+        ..adjCurves = NA,
         ..adjKM = NA,
         ..colours = NA,
         ..showExplanations = NA)
@@ -236,7 +213,7 @@ coxResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         phTable = function() private$.items[["phTable"]],
         forestPlot = function() private$.items[["forestPlot"]],
         phPlot = function() private$.items[["phPlot"]],
-        adjPlot = function() private$.items[["adjPlot"]]),
+        adjPlots = function() private$.items[["adjPlots"]]),
     private = list(),
     public=list(
         initialize=function(options) {
@@ -256,9 +233,7 @@ coxResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "factors",
                     "covs",
                     "interactions",
-                    "strata",
-                    "cBoot",
-                    "bootN"),
+                    "strata"),
                 columns=list(
                     list(
                         `name`="n", 
@@ -281,12 +256,7 @@ coxResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         `name`="cupper", 
                         `title`="Upper", 
                         `superTitle`="95% CI", 
-                        `type`="number"),
-                    list(
-                        `name`="cboot", 
-                        `title`="Optimism-corrected", 
-                        `type`="number", 
-                        `visible`="(cBoot)"))))
+                        `type`="number"))))
             self$add(jmvcore::Table$new(
                 options=options,
                 name="globalTable",
@@ -552,26 +522,29 @@ coxResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "interactions",
                     "strata",
                     "timeUnit")))
-            self$add(jmvcore::Image$new(
+            self$add(jmvcore::Array$new(
                 options=options,
-                name="adjPlot",
+                name="adjPlots",
                 title="Adjusted survival curves",
-                width=600,
-                height=450,
-                renderFun=".adjPlot",
-                visible="(length(adjVar) > 0)",
-                clearWith=list(
-                    "elapsed",
-                    "event",
-                    "eventLevel",
-                    "factors",
-                    "covs",
-                    "interactions",
-                    "strata",
-                    "adjVar",
-                    "adjKM",
-                    "colours",
-                    "timeUnit")))}))
+                visible="(adjCurves)",
+                items="(factors)",
+                template=jmvcore::Image$new(
+                    options=options,
+                    title="$key",
+                    width=600,
+                    height=450,
+                    renderFun=".adjPlot",
+                    clearWith=list(
+                        "elapsed",
+                        "event",
+                        "eventLevel",
+                        "factors",
+                        "covs",
+                        "interactions",
+                        "strata",
+                        "adjKM",
+                        "colours",
+                        "timeUnit"))))}))
 
 coxBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
     "coxBase",
@@ -607,17 +580,15 @@ coxBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param covs .
 #' @param interactions .
 #' @param strata .
-#' @param adjVar .
 #' @param timeUnit .
 #' @param uniMulti .
 #' @param trend .
 #' @param coefDetails .
 #' @param globalTests .
-#' @param cBoot .
-#' @param bootN .
 #' @param ph .
 #' @param forest .
 #' @param phPlot .
+#' @param adjCurves .
 #' @param adjKM .
 #' @param colours .
 #' @param showExplanations .
@@ -631,7 +602,7 @@ coxBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #'   \code{results$phTable} \tab \tab \tab \tab \tab a table \cr
 #'   \code{results$forestPlot} \tab \tab \tab \tab \tab an image \cr
 #'   \code{results$phPlot} \tab \tab \tab \tab \tab an image \cr
-#'   \code{results$adjPlot} \tab \tab \tab \tab \tab an image \cr
+#'   \code{results$adjPlots} \tab \tab \tab \tab \tab an array of images \cr
 #' }
 #'
 #' Tables can be converted to data frames with \code{asDF} or \code{\link{as.data.frame}}. For example:
@@ -650,17 +621,15 @@ cox <- function(
     covs = NULL,
     interactions = NULL,
     strata = NULL,
-    adjVar = NULL,
     timeUnit = "none",
     uniMulti = FALSE,
     trend = FALSE,
     coefDetails = FALSE,
     globalTests = TRUE,
-    cBoot = FALSE,
-    bootN = 200,
     ph = FALSE,
     forest = FALSE,
     phPlot = FALSE,
+    adjCurves = FALSE,
     adjKM = TRUE,
     colours = "jmv",
     showExplanations = FALSE) {
@@ -673,7 +642,6 @@ cox <- function(
     if ( ! missing(factors)) factors <- jmvcore::resolveQuo(jmvcore::enquo(factors))
     if ( ! missing(covs)) covs <- jmvcore::resolveQuo(jmvcore::enquo(covs))
     if ( ! missing(strata)) strata <- jmvcore::resolveQuo(jmvcore::enquo(strata))
-    if ( ! missing(adjVar)) adjVar <- jmvcore::resolveQuo(jmvcore::enquo(adjVar))
     if (missing(data))
         data <- jmvcore::marshalData(
             parent.frame(),
@@ -681,13 +649,11 @@ cox <- function(
             `if`( ! missing(event), event, NULL),
             `if`( ! missing(factors), factors, NULL),
             `if`( ! missing(covs), covs, NULL),
-            `if`( ! missing(strata), strata, NULL),
-            `if`( ! missing(adjVar), adjVar, NULL))
+            `if`( ! missing(strata), strata, NULL))
 
     for (v in event) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
     for (v in factors) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
     for (v in strata) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
-    for (v in adjVar) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
     if (inherits(interactions, "formula")) interactions <- jmvcore::decomposeFormula(interactions)
 
     options <- coxOptions$new(
@@ -698,17 +664,15 @@ cox <- function(
         covs = covs,
         interactions = interactions,
         strata = strata,
-        adjVar = adjVar,
         timeUnit = timeUnit,
         uniMulti = uniMulti,
         trend = trend,
         coefDetails = coefDetails,
         globalTests = globalTests,
-        cBoot = cBoot,
-        bootN = bootN,
         ph = ph,
         forest = forest,
         phPlot = phPlot,
+        adjCurves = adjCurves,
         adjKM = adjKM,
         colours = colours,
         showExplanations = showExplanations)

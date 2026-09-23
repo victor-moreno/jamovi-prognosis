@@ -92,6 +92,7 @@ kmClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
 
         # write a row by key, adding it if .init did not create it
         .putRow = function(tab, key, values) {
+            values <- blankNA(values)
             if (key %in% tab$rowKeys) tab$setRow(rowKey = key, values = values)
             else tab$addRow(rowKey = key, values = values)
         },

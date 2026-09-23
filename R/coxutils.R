@@ -138,44 +138,65 @@ schoenfeldPlot <- function(zph, labels, coef, xlab = "Time") {
         theme(strip.background = element_blank(), strip.text = element_text(hjust = 0))
 }
 
-# AD3: direct standardisation (average of individual predicted curves)
-adjustedPlot <- function(fit, df, var, varLabel, adjusted, km = TRUE, pal = "jmv",
-                         xlab = "Time") {
+# AD3: direct standardisation. Curves are computed in .run (small data
+# frames as plot state, not the fitted model), drawn by adjustedPlot().
+adjustedCurves <- function(fit, df, var) {
     lev <- levels(df[[var]])
-    cols <- paletteCols(length(lev), pal)
     curves <- do.call(rbind, lapply(lev, function(l) {
         nd <- df; nd[[var]] <- factor(l, lev)
         sf <- survival::survfit(fit, newdata = nd)
         data.frame(strata = l, time = c(0, sf$time), surv = c(1, rowMeans(as.matrix(sf$surv))))
     }))
     curves$strata <- factor(curves$strata, lev)
+    km <- kmData(survival::survfit(stats::as.formula(paste("survival::Surv(time, status) ~", var)),
+                                   data = df))[, c("strata", "time", "surv")]
+    list(curves = curves, km = km)
+}
+
+adjustedPlot <- function(curves, km, adjusted, showKM = TRUE, pal = "jmv", xlab = "Time") {
+    cols <- paletteCols(nlevels(curves$strata), pal)
     p <- ggplot(curves, aes(time, surv, colour = strata))
-    if (km) {
-        k <- kmData(survival::survfit(stats::as.formula(paste("survival::Surv(time, status) ~", var)),
-                                      data = df))
-        p <- p + geom_step(data = k, aes(time, surv, colour = strata),
+    if (showKM)
+        p <- p + geom_step(data = km, aes(time, surv, colour = strata),
                            linetype = 2, linewidth = 0.5, alpha = 0.8)
-    }
     p + geom_step(linewidth = 1) +
         scale_colour_manual(values = cols, name = NULL) +
         scale_y_continuous(limits = c(0, 1)) +
         labs(x = xlab, y = "Adjusted survival probability",
              caption = paste0(if (length(adjusted)) paste("Adjusted for", paste(adjusted, collapse = ", "))
                               else "No other variables in the model",
-                              if (km) "   (dashed: unadjusted Kaplan-Meier)" else "")) +
+                              if (showKM) "   (dashed: unadjusted Kaplan-Meier)" else "")) +
         plotTheme() + legendInside("topright") +
         theme(plot.caption = element_text(size = 10, colour = "grey30"))
 }
 
-# Hazard ratios of one variable within levels (or quartiles) of another,
-# from the fitted interaction model: contrast vector c, log HR = c'b.
-subgroupHR <- function(fit, df, term, lab, rhsTerms) {
+# Subgroup rows for a two-way interaction: the effect of the focal variable
+# within each level (or quartile) of the moderator. Planned in .init (row
+# labels), estimated in .run by subgroupHR().
+subgroupPlan <- function(df, term, lab) {
     vars <- strsplit(term, ":", fixed = TRUE)[[1]]
     if (length(vars) != 2) return(NULL)
-    isf <- vars %in% names(fit$xlevels)
+    isf <- vapply(vars, function(v) is.factor(df[[v]]), logical(1))
     ord <- if (!isf[2] && isf[1]) rev(vars) else vars
     focal <- ord[1]; mod <- ord[2]
+    modVals <- if (is.factor(df[[mod]])) levels(df[[mod]])
+               else signif(stats::quantile(df[[mod]], c(0.25, 0.5, 0.75), names = FALSE), 3)
+    focalVals <- if (is.factor(df[[focal]])) levels(df[[focal]])[-1] else NA
+    g <- expand.grid(mv = seq_along(modVals), fv = seq_along(focalVals))
+    data.frame(
+        key = paste(term, g$fv, g$mv),
+        effect = if (is.factor(df[[focal]]))
+                     sprintf("%s: %s – %s", lab[[focal]], focalVals[g$fv], levels(df[[focal]])[1])
+                 else sprintf("%s (per unit)", lab[[focal]]),
+        within = sprintf("%s = %s", lab[[mod]], modVals[g$mv]),
+        focal = focal, mod = mod,
+        fval = as.character(focalVals[g$fv]), mval = as.character(modVals[g$mv]),
+        stringsAsFactors = FALSE)
+}
 
+# log HR = c'b with c the difference of model-matrix rows; other variables
+# at their reference level or median
+subgroupHR <- function(fit, df, plan, rhsTerms) {
     tt <- stats::delete.response(stats::terms(stats::reformulate(rhsTerms)))
     base <- df[1, , drop = FALSE]
     for (v in names(df)) {
@@ -184,30 +205,20 @@ subgroupHR <- function(fit, df, term, lab, rhsTerms) {
     }
     b <- stats::coef(fit); b[is.na(b)] <- 0
     V <- stats::vcov(fit)
-    mm <- function(nd) {
-        x <- stats::model.matrix(tt, nd, xlev = fit$xlevels)
-        x[, names(b), drop = FALSE]
+    mm <- function(nd) stats::model.matrix(tt, nd, xlev = fit$xlevels)[, names(b), drop = FALSE]
+    setv <- function(nd, v, val) {
+        if (is.factor(df[[v]])) nd[[v]][1] <- val else nd[[v]] <- as.numeric(val)
+        nd
     }
-    modVals <- if (is.factor(df[[mod]])) levels(df[[mod]])
-               else signif(stats::quantile(df[[mod]], c(0.25, 0.5, 0.75), names = FALSE), 3)
-    focalVals <- if (is.factor(df[[focal]])) levels(df[[focal]])[-1] else NA
-
-    rows <- list()
-    for (fv in focalVals) for (mv in modVals) {
-        nd0 <- base; nd1 <- base
-        if (is.factor(df[[mod]])) { nd0[[mod]][1] <- mv; nd1[[mod]][1] <- mv }
-        else { nd0[[mod]] <- mv; nd1[[mod]] <- mv }
-        if (is.factor(df[[focal]])) nd1[[focal]][1] <- fv
-        else nd1[[focal]] <- nd0[[focal]] + 1
+    do.call(rbind, lapply(seq_len(nrow(plan)), function(i) {
+        p <- plan[i, ]
+        nd0 <- setv(base, p$mod, p$mval); nd1 <- nd0
+        if (is.factor(df[[p$focal]])) nd1 <- setv(nd1, p$focal, p$fval)
+        else nd1[[p$focal]] <- nd0[[p$focal]] + 1
         cv <- drop(mm(nd1) - mm(nd0))
         est <- sum(cv * b)
         se <- sqrt(drop(t(cv) %*% V %*% cv))
-        rows[[length(rows) + 1]] <- data.frame(
-            effect = if (is.na(fv)) sprintf("%s (per unit)", lab[[focal]])
-                     else sprintf("%s: %s – %s", lab[[focal]], fv, levels(df[[focal]])[1]),
-            within = sprintf("%s = %s", lab[[mod]], mv),
-            hr = exp(est), lower = exp(est - 1.96 * se), upper = exp(est + 1.96 * se),
-            p = 2 * stats::pnorm(-abs(est / se)))
-    }
-    do.call(rbind, rows)
+        data.frame(key = p$key, hr = exp(est), lower = exp(est - 1.96 * se),
+                   upper = exp(est + 1.96 * se), p = 2 * stats::pnorm(-abs(est / se)))
+    }))
 }
