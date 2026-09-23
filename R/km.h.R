@@ -24,7 +24,7 @@ kmOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             medianLine = FALSE,
             markTimes = FALSE,
             pvalPlot = FALSE,
-            palette = "jmv",
+            colours = "jmv",
             xmax = 0,
             xby = 0,
             showExplanations = FALSE, ...) {
@@ -48,8 +48,7 @@ kmOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 suggested=list(
                     "nominal"),
                 permitted=list(
-                    "factor",
-                    "numeric"))
+                    "factor"))
             private$..eventLevel <- jmvcore::OptionLevel$new(
                 "eventLevel",
                 eventLevel,
@@ -128,9 +127,9 @@ kmOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "pvalPlot",
                 pvalPlot,
                 default=FALSE)
-            private$..palette <- jmvcore::OptionList$new(
-                "palette",
-                palette,
+            private$..colours <- jmvcore::OptionList$new(
+                "colours",
+                colours,
                 options=list(
                     "jmv",
                     "set1",
@@ -168,7 +167,7 @@ kmOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..medianLine)
             self$.addOption(private$..markTimes)
             self$.addOption(private$..pvalPlot)
-            self$.addOption(private$..palette)
+            self$.addOption(private$..colours)
             self$.addOption(private$..xmax)
             self$.addOption(private$..xby)
             self$.addOption(private$..showExplanations)
@@ -191,7 +190,7 @@ kmOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         medianLine = function() private$..medianLine$value,
         markTimes = function() private$..markTimes$value,
         pvalPlot = function() private$..pvalPlot$value,
-        palette = function() private$..palette$value,
+        colours = function() private$..colours$value,
         xmax = function() private$..xmax$value,
         xby = function() private$..xby$value,
         showExplanations = function() private$..showExplanations$value),
@@ -213,7 +212,7 @@ kmOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..medianLine = NA,
         ..markTimes = NA,
         ..pvalPlot = NA,
-        ..palette = NA,
+        ..colours = NA,
         ..xmax = NA,
         ..xby = NA,
         ..showExplanations = NA)
@@ -265,11 +264,6 @@ kmResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                         `title`="Censored", 
                         `type`="integer"),
                     list(
-                        `name`="expected", 
-                        `title`="Expected", 
-                        `type`="number", 
-                        `visible`="(group)"),
-                    list(
                         `name`="median", 
                         `title`="Median", 
                         `type`="number"),
@@ -287,7 +281,6 @@ kmResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 options=options,
                 name="survTable",
                 title="Survival at given times",
-                visible="(survTimes)",
                 clearWith=list(
                     "elapsed",
                     "event",
@@ -339,7 +332,8 @@ kmResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "elapsed",
                     "event",
                     "eventLevel",
-                    "group"),
+                    "group",
+                    "tests"),
                 columns=list(
                     list(
                         `name`="test", 
@@ -380,7 +374,7 @@ kmResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "medianLine",
                     "markTimes",
                     "pvalPlot",
-                    "palette",
+                    "colours",
                     "xmax",
                     "xby")))
             self$add(jmvcore::Image$new(
@@ -405,7 +399,7 @@ kmResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "medianLine",
                     "markTimes",
                     "pvalPlot",
-                    "palette",
+                    "colours",
                     "xmax",
                     "xby")))
             self$add(jmvcore::Image$new(
@@ -430,7 +424,7 @@ kmResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "medianLine",
                     "markTimes",
                     "pvalPlot",
-                    "palette",
+                    "colours",
                     "xmax",
                     "xby")))
             self$add(jmvcore::Image$new(
@@ -455,7 +449,7 @@ kmResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "medianLine",
                     "markTimes",
                     "pvalPlot",
-                    "palette",
+                    "colours",
                     "xmax",
                     "xby")))}))
 
@@ -502,7 +496,7 @@ kmBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param medianLine .
 #' @param markTimes .
 #' @param pvalPlot .
-#' @param palette .
+#' @param colours .
 #' @param xmax .
 #' @param xby .
 #' @param showExplanations .
@@ -544,7 +538,7 @@ km <- function(
     medianLine = FALSE,
     markTimes = FALSE,
     pvalPlot = FALSE,
-    palette = "jmv",
+    colours = "jmv",
     xmax = 0,
     xby = 0,
     showExplanations = FALSE) {
@@ -562,6 +556,7 @@ km <- function(
             `if`( ! missing(event), event, NULL),
             `if`( ! missing(group), group, NULL))
 
+    for (v in event) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
     for (v in group) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
 
     options <- kmOptions$new(
@@ -582,7 +577,7 @@ km <- function(
         medianLine = medianLine,
         markTimes = markTimes,
         pvalPlot = pvalPlot,
-        palette = palette,
+        colours = colours,
         xmax = xmax,
         xby = xby,
         showExplanations = showExplanations)

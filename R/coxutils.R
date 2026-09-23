@@ -159,7 +159,7 @@ adjustedPlot <- function(fit, df, var, varLabel, adjusted, km = TRUE, pal = "jmv
                            linetype = 2, linewidth = 0.5, alpha = 0.8)
     }
     p + geom_step(linewidth = 1) +
-        scale_colour_manual(values = cols) +
+        scale_colour_manual(values = cols, name = NULL) +
         scale_y_continuous(limits = c(0, 1)) +
         labs(x = xlab, y = "Adjusted survival probability",
              caption = paste0(if (length(adjusted)) paste("Adjusted for", paste(adjusted, collapse = ", "))

@@ -22,10 +22,6 @@ items:
         - name: censored
           title: Censored
           type: integer
-        - name: expected
-          title: Expected
-          type: number
-          visible: (group)
         - name: median
           title: Median
           type: number
@@ -41,7 +37,6 @@ items:
     - name: survTable
       title: Survival at given times
       type: Table
-      visible: (survTimes)
       clearWith: [ elapsed, event, eventLevel, group, survTimes ]
       columns:
         - name: group
@@ -77,7 +72,7 @@ items:
       title: Tests comparing groups
       type: Table
       visible: (length(group) > 0 && length(tests) > 0)
-      clearWith: [ elapsed, event, eventLevel, group ]
+      clearWith: [ elapsed, event, eventLevel, group, tests ]
       columns:
         - name: test
           title: ''
@@ -100,7 +95,7 @@ items:
       height: 450
       renderFun: .plot
       visible: (kmPlot)
-      clearWith: [ elapsed, event, eventLevel, group, timeUnit, survTimes, tests, ci, censor, riskTable, medianLine, markTimes, pvalPlot, palette, xmax, xby ]
+      clearWith: [ elapsed, event, eventLevel, group, timeUnit, survTimes, tests, ci, censor, riskTable, medianLine, markTimes, pvalPlot, colours, xmax, xby ]
 
     - name: cumEventsPlot
       title: Cumulative incidence
@@ -109,7 +104,7 @@ items:
       height: 450
       renderFun: .plot
       visible: (cumEvents)
-      clearWith: [ elapsed, event, eventLevel, group, timeUnit, survTimes, tests, ci, censor, riskTable, medianLine, markTimes, pvalPlot, palette, xmax, xby ]
+      clearWith: [ elapsed, event, eventLevel, group, timeUnit, survTimes, tests, ci, censor, riskTable, medianLine, markTimes, pvalPlot, colours, xmax, xby ]
 
     - name: cumHazPlot
       title: Cumulative hazard
@@ -118,7 +113,7 @@ items:
       height: 450
       renderFun: .plot
       visible: (cumHaz)
-      clearWith: [ elapsed, event, eventLevel, group, timeUnit, survTimes, tests, ci, censor, riskTable, medianLine, markTimes, pvalPlot, palette, xmax, xby ]
+      clearWith: [ elapsed, event, eventLevel, group, timeUnit, survTimes, tests, ci, censor, riskTable, medianLine, markTimes, pvalPlot, colours, xmax, xby ]
 
     - name: logLogPlot
       title: Log-log plot
@@ -127,5 +122,5 @@ items:
       height: 450
       renderFun: .plot
       visible: (logLog)
-      clearWith: [ elapsed, event, eventLevel, group, timeUnit, survTimes, tests, ci, censor, riskTable, medianLine, markTimes, pvalPlot, palette, xmax, xby ]
+      clearWith: [ elapsed, event, eventLevel, group, timeUnit, survTimes, tests, ci, censor, riskTable, medianLine, markTimes, pvalPlot, colours, xmax, xby ]
 ...

@@ -6,7 +6,7 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
 
         .run = function() {
             o <- self$options
-            if (is.null(o$elapsed) || is.null(o$event) ||
+            if (is.null(o$elapsed) || is.null(o$event) || noEventLevel(o$eventLevel) ||
                 length(o$factors) + length(o$covs) == 0)
                 return()
 
@@ -263,7 +263,7 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
             st <- image$state
             if (is.null(st)) return(FALSE)
             print(adjustedPlot(st$fit, st$df, st$var, self$options$adjVar, st$adjusted,
-                               km = self$options$adjKM, pal = self$options$palette,
+                               km = self$options$adjKM, pal = self$options$colours,
                                xlab = timeLabel(self$options$timeUnit)))
             TRUE
         })

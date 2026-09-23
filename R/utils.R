@@ -4,20 +4,12 @@
 
 # ---- data ---------------------------------------------------------------
 
-# Event indicator: factor with a chosen event level, or numeric 0/1 or 1/2
-# (the codings accepted by survival::Surv). No silent guessing of the level.
-eventIndicator <- function(x, level) {
-    if (is.factor(x) || is.character(x)) {
-        if (is.null(level) || !nzchar(level))
-            jmvcore::reject("Choose the level of the event variable that indicates the event")
-        return(as.integer(as.character(x) == level))
-    }
-    x <- jmvcore::toNumeric(x)
-    v <- unique(x[!is.na(x)])
-    if (all(v %in% c(0, 1))) return(as.integer(x))
-    if (all(v %in% c(1, 2))) return(as.integer(x == 2))
-    jmvcore::reject("A numeric event variable must be coded 0/1 or 1/2; otherwise set it as nominal and choose the event level")
-}
+# Event indicator from the nominal event variable and its chosen level
+# (the UI only accepts factors; no silent guessing of the level)
+eventIndicator <- function(x, level) as.integer(as.character(x) == level)
+
+# TRUE when the event level has not been chosen yet: analyses then wait quietly
+noEventLevel <- function(level) is.null(level) || !nzchar(level)
 
 timeVar <- function(x) {
     x <- jmvcore::toNumeric(x)
@@ -63,7 +55,6 @@ rankTests <- function(time, status, group, weights = "logrank") {
     dj <- sapply(lev, function(l) tabulate(match(time[group == l & status == 1], tt), length(tt)))
     nj <- matrix(nj, ncol = K); dj <- matrix(dj, ncol = K)
     n <- rowSums(nj); d <- rowSums(dj)
-    expected <- colSums(nj * d / n)
     vt <- ifelse(n > 1, d * (n - d) / (n - 1), 0)
     s_left <- c(1, cumprod(1 - d / n))[seq_along(tt)]
 
@@ -93,7 +84,6 @@ rankTests <- function(time, status, group, weights = "logrank") {
         out[[wt]] <- c(chisq = chi, df = df,
                        p = stats::pchisq(chi, df, lower.tail = FALSE))
     }
-    attr(out, "expected") <- stats::setNames(expected, lev)
     out
 }
 
@@ -134,23 +124,23 @@ xBreaks <- function(xmax, by) {
 
 # Legend inside the panel without a box (the KM5 look); corner depends on
 # whether the curves go down (survival) or up (incidence, hazard).
+# The legend title (used for the test p-value) is drawn below the entries.
 legendInside <- function(corner = c("topright", "topleft")) {
     corner <- match.arg(corner)
     pos <- if (corner == "topright") c(0.98, 0.98) else c(0.02, 0.98)
     theme(legend.position = "inside", legend.position.inside = pos,
           legend.justification = c(if (corner == "topright") 1 else 0, 1),
           legend.background = element_blank(), legend.key = element_blank(),
-          legend.title = element_blank(), legend.key.width = grid::unit(1.6, "lines"))
+          legend.title = element_text(size = 11, colour = "grey25"),
+          legend.title.position = "bottom",
+          legend.key.width = grid::unit(1.6, "lines"))
 }
 
-plotTheme <- function() {
-    theme_classic(base_size = 13) +
-        theme(plot.subtitle = element_text(size = 11, colour = "grey25"))
-}
+plotTheme <- function() theme_classic(base_size = 13)
 
 # Survival-type plot (KM6/KM9 style). fun: surv, event, cumhaz, cloglog.
 kmPlot <- function(fit, fun = "surv", ci = FALSE, censor = TRUE, median = FALSE,
-                   at = numeric(), risk = FALSE, subtitle = NULL, pal = "jmv",
+                   at = numeric(), risk = FALSE, pval = NULL, pal = "jmv",
                    xlab = "Time", xmax = 0, by = 0) {
     df  <- kmData(fit)
     lev <- levels(df$strata)
@@ -189,13 +179,18 @@ kmPlot <- function(fit, fun = "surv", ci = FALSE, censor = TRUE, median = FALSE,
     if (median && fun %in% c("surv", "event")) {
         med <- summary(fit)$table
         med <- if (is.matrix(med)) med[, "median"] else med["median"]
-        med <- med[!is.na(med)]
-        if (length(med))
+        keep <- !is.na(med)
+        if (any(keep)) {
+            md <- data.frame(strata = factor(lev[keep], lev), time = med[keep], y = 0)
             p <- p +
-                annotate("segment", x = 0, xend = max(med), y = 0.5, yend = 0.5,
+                annotate("segment", x = 0, xend = max(md$time), y = 0.5, yend = 0.5,
                          linetype = 2, colour = "grey45") +
-                annotate("segment", x = med, xend = med, y = 0.5, yend = 0,
-                         linetype = 2, colour = "grey45")
+                annotate("segment", x = md$time, xend = md$time, y = 0.5, yend = 0,
+                         linetype = 2, colour = "grey45") +
+                geom_label(data = md, aes(label = formatC(time, format = "fg", digits = 3)),
+                           hjust = -0.1, vjust = 0, size = 3.4, label.size = 0,
+                           fill = scales::alpha("white", 0.8), show.legend = FALSE)
+        }
     }
 
     if (length(at) && fun %in% c("surv", "event")) {
@@ -216,9 +211,9 @@ kmPlot <- function(fit, fun = "surv", ci = FALSE, censor = TRUE, median = FALSE,
         scale_x_continuous(breaks = if (fun == "cloglog") waiver() else brks,
                            trans = if (fun == "cloglog") "log10" else "identity",
                            expand = expansion(mult = c(0.04, 0.02))) +
-        scale_colour_manual(values = cols) +
-        scale_fill_manual(values = cols) +
-        labs(x = xlab, y = ylab, subtitle = subtitle) +
+        scale_colour_manual(values = cols, name = pval) +
+        scale_fill_manual(values = cols, name = pval) +
+        labs(x = xlab, y = ylab) +
         plotTheme()
     p <- p + if (fun %in% c("surv", "event"))
                  scale_y_continuous(limits = c(0, 1))
@@ -235,19 +230,19 @@ kmPlot <- function(fit, fun = "surv", ci = FALSE, censor = TRUE, median = FALSE,
                                      else strataNames(as.character(s$strata)), lev),
                      time = s$time, n = s$n.risk)
     tp <- ggplot(rt, aes(time, strata, label = n, colour = strata)) +
-        geom_text(size = 3.5, show.legend = FALSE) +
-        scale_y_discrete(limits = rev(lev)) +
+        geom_text(size = 3.5 + 1 / .pt, show.legend = FALSE) +
+        scale_y_discrete(limits = rev(lev), expand = expansion(add = 0.3)) +
         scale_x_continuous(breaks = brks, expand = expansion(mult = c(0.04, 0.02))) +
         coord_cartesian(xlim = c(0, xmax), clip = "off") +
         scale_colour_manual(values = cols) +
         labs(x = NULL, y = NULL, title = "Number at risk") +
-        theme_minimal(base_size = 12) +
+        theme_minimal(base_size = 13) +
         theme(panel.grid = element_blank(), axis.text.x = element_blank(),
               plot.title = element_text(size = 11, face = "bold"),
               plot.title.position = "plot")
     g <- rbind(ggplotGrob(p), ggplotGrob(tp), size = "max")
     panels <- g$layout$t[grepl("^panel", g$layout$name)]
-    g$heights[panels] <- grid::unit(c(4, 0.28 * length(lev) + 0.3), "null")
+    g$heights[panels] <- grid::unit(c(4, 0.15 * length(lev) + 0.1), "null")
     g
 }
 

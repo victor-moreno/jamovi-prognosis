@@ -131,7 +131,7 @@ children:
               - type: CheckBox
                 name: phPlot
               - type: ComboBox
-                name: palette
+                name: colours
               - type: ComboBox
                 name: timeUnit
           - type: LayoutBox

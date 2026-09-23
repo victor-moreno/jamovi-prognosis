@@ -207,5 +207,5 @@ items:
       height: 450
       renderFun: .adjPlot
       visible: (length(adjVar) > 0)
-      clearWith: [ elapsed, event, eventLevel, factors, covs, interactions, strata, adjVar, adjKM, palette, timeUnit ]
+      clearWith: [ elapsed, event, eventLevel, factors, covs, interactions, strata, adjVar, adjKM, colours, timeUnit ]
 ...

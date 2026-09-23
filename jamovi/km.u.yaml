@@ -111,7 +111,7 @@ children:
                 label: Axes and colours
                 children:
                   - type: ComboBox
-                    name: palette
+                    name: colours
                   - type: TextBox
                     name: xmax
                     format: number

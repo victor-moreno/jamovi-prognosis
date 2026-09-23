@@ -24,7 +24,7 @@ options:
       title: Event
       type: Variable
       suggested: [ nominal ]
-      permitted: [ factor, numeric ]
+      permitted: [ factor ]
 
     - name: eventLevel
       title: Event level
@@ -127,7 +127,7 @@ options:
       type: Bool
       default: true
 
-    - name: palette
+    - name: colours
       title: Palette
       type: List
       options:

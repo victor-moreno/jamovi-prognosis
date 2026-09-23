@@ -11,7 +11,7 @@ It needs no packages beyond those bundled with jamovi: `survival`, `ggplot2`, `g
 - Survival at given times (e.g. `12, 36, 60`): number at risk, cumulative events, and S(t) with 95% CI.
 - Tests: log-rank, Gehan-Breslow, Tarone-Ware, Peto-Peto, and log-rank trend for ordered groups.
 - Plots: survival curve, plus optional cumulative incidence (1 − S), cumulative hazard and log-log plots.
-- Plot options: confidence bands, censor marks, number-at-risk table, median lines, survival marks at the given times, test p-value, palette (jamovi / Set1 / Okabe-Ito), and x-axis end and step.
+- Plot options: confidence bands, censor marks, number-at-risk table, median lines, survival marks at the given times, test p-value (under the legend), median values, palette (jamovi / Set1 / Okabe-Ito), and x-axis end and step.
 
 **Cox regression**
 - Factors, covariates, interaction terms, and strata.
@@ -24,8 +24,7 @@ It needs no packages beyond those bundled with jamovi: `survival`, `ggplot2`, `g
 - Adjusted survival curves: direct standardisation, with an optional unadjusted KM overlay.
 
 ## Coding of the event
-- A **nominal** event variable: choose the event level.
-- A **continuous** event variable must be coded 0/1 or 1/2 (1 = censored, 2 = event, as in `survival::Surv`).
+The event variable must be nominal or ordinal; choose the level that marks the event. A variable coded 0/1 can be used once its measure type is set to nominal. The analysis stays empty until an event level is chosen.
 
 ## Install
 In jamovi, go to Modules (⊕) → Sideload and choose `prognosis_0.1.0.jmo`.

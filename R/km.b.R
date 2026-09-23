@@ -1,25 +1,56 @@
 
+testLabels <- c(logrank = "Log-rank", gehan = "Gehan-Breslow",
+                taroneware = "Tarone-Ware", petopeto = "Peto-Peto",
+                trend = "Log-rank trend")
+
 kmClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
     "kmClass",
     inherit = kmBase,
     private = list(
 
+        # Rows are created here and only filled in .run when a table was
+        # cleared (see clearWith), so plot options leave the tables untouched.
         .init = function() {
-            # taller survival plot when the number-at-risk table is drawn
+            o <- self$results
+            times <- parseTimes(self$options$survTimes)
+            o$survTable$setVisible(length(times) > 0)
+
+            keys <- private$.groupKeys()
+            for (k in keys) {
+                o$summary$addRow(rowKey = k, values = list(group = k))
+                for (t in times)
+                    o$survTable$addRow(rowKey = paste(k, t), values = list(group = k, time = t))
+            }
+            if (length(keys) > 1)
+                for (t in self$options$tests)
+                    o$tests$addRow(rowKey = t, values = list(test = testLabels[[t]]))
+
+            # taller survival plots when the number-at-risk table is drawn
             if (self$options$riskTable) {
-                k <- if (is.null(self$options$group)) 1
-                     else max(1, nlevels(self$data[[self$options$group]]))
-                self$results$kmPlot$setSize(600, 450 + 60 + 22 * k)
-                self$results$cumEventsPlot$setSize(600, 450 + 60 + 22 * k)
+                h <- 450 + 45 + 14 * max(1, length(keys))
+                o$kmPlot$setSize(600, h)
+                o$cumEventsPlot$setSize(600, h)
             }
         },
 
+        # group levels present among usable rows ("All" without a group)
+        .groupKeys = function() {
+            o <- self$options
+            if (is.null(o$group)) return("All")
+            g <- self$data[[o$group]]
+            ok <- !is.na(g)
+            if (!is.null(o$elapsed)) ok <- ok & !is.na(self$data[[o$elapsed]])
+            if (!is.null(o$event)) ok <- ok & !is.na(self$data[[o$event]])
+            levels(droplevels(as.factor(g)[ok]))
+        },
+
         .run = function() {
-            if (is.null(self$options$elapsed) || is.null(self$options$event))
+            o <- self$options
+            if (is.null(o$elapsed) || is.null(o$event) || noEventLevel(o$eventLevel))
                 return()
 
             df <- private$.cleanData()
-            grouped <- !is.null(self$options$group)
+            grouped <- !is.null(o$group)
             form <- if (grouped) survival::Surv(time, status) ~ group
                     else survival::Surv(time, status) ~ 1
             fit <- survival::survfit(form, data = df)
@@ -27,11 +58,12 @@ kmClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
             tests <- NULL
             if (grouped && nlevels(df$group) > 1)
                 tests <- rankTests(df$time, df$status, df$group,
-                                   union("logrank", self$options$tests))
+                                   union("logrank", o$tests))
 
-            private$.fillSummary(fit, df, tests)
-            private$.fillSurvTable(fit)
-            private$.fillTests(tests)
+            if (self$results$summary$isNotFilled()) private$.fillSummary(fit)
+            if (self$results$survTable$isNotFilled()) private$.fillSurvTable(fit)
+            if (self$results$tests$isNotFilled()) private$.fillTests(tests)
+            private$.setNotes()
 
             # plots are refitted from the data at render time
             state <- list(df = df, pval = private$.plotPval(tests))
@@ -49,35 +81,31 @@ kmClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
             df <- df[stats::complete.cases(df), , drop = FALSE]
             if (nrow(df) == 0)
                 jmvcore::reject("No complete rows (time, event and group)")
-            if (n0 > nrow(df))
-                self$results$summary$setNote("missing",
-                    sprintf("%d rows with missing values excluded", n0 - nrow(df)))
+            self$results$summary$setNote("missing",
+                if (n0 > nrow(df)) sprintf("%d rows with missing values excluded", n0 - nrow(df)))
             df
         },
 
-        .fillSummary = function(fit, df, tests) {
+        # write a row by key, adding it if .init did not create it
+        .putRow = function(tab, key, values) {
+            if (key %in% tab$rowKeys) tab$setRow(rowKey = key, values = values)
+            else tab$addRow(rowKey = key, values = values)
+        },
+
+        .fillSummary = function(fit) {
             tab <- self$results$summary
             st <- summary(fit)$table
             if (!is.matrix(st)) st <- t(as.matrix(st))
             keys <- if (is.null(fit$strata)) "All" else strataNames(names(fit$strata))
-            expected <- if (!is.null(tests)) attr(tests, "expected") else NULL
-            for (i in seq_along(keys)) {
-                tab$addRow(rowKey = keys[i], values = list(
+            for (i in seq_along(keys))
+                private$.putRow(tab, keys[i], list(
                     group = keys[i],
                     n = st[i, "n.start"],
                     events = st[i, "events"],
                     censored = st[i, "n.start"] - st[i, "events"],
-                    expected = if (is.null(expected)) NaN else expected[[keys[i]]],
                     median = st[i, "median"],
                     mlower = st[i, "0.95LCL"],
                     mupper = st[i, "0.95UCL"]))
-            }
-            if (self$options$showExplanations)
-                tab$setNote("expl", paste(
-                    "Median: time at which the Kaplan-Meier survival falls to 50%;",
-                    "empty if not reached.",
-                    if (!is.null(expected))
-                        "Expected: events expected in each group if all groups had the same survival (log-rank)."))
         },
 
         .fillSurvTable = function(fit) {
@@ -89,46 +117,45 @@ kmClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
                    else strataNames(as.character(s$strata))
             # summary() gives events per interval; accumulate within group
             cumev <- stats::ave(s$n.event, grp, FUN = cumsum)
-            for (i in seq_along(s$time)) {
-                tab$addRow(rowKey = i, values = list(
+            for (i in seq_along(s$time))
+                private$.putRow(tab, paste(grp[i], s$time[i]), list(
                     group = grp[i], time = s$time[i], nrisk = s$n.risk[i],
                     nevent = cumev[i], surv = s$surv[i],
                     lower = s$lower[i], upper = s$upper[i]))
-            }
-            if (any(s$n.risk == 0))
-                tab$setNote("beyond", "Times with 0 at risk are beyond follow-up; the last estimate is carried forward")
-            if (self$options$showExplanations)
-                tab$setNote("expl", "Survival: Kaplan-Meier probability of being event-free at that time. Events: cumulative events up to that time.")
+            tab$setNote("beyond", if (any(s$n.risk == 0))
+                "Times with 0 at risk are beyond follow-up; the last estimate is carried forward")
         },
 
         .fillTests = function(tests) {
-            sel <- self$options$tests
-            if (is.null(tests) || length(sel) == 0) return()
+            if (is.null(tests)) return()
             tab <- self$results$tests
-            labels <- c(logrank = "Log-rank", gehan = "Gehan-Breslow",
-                        taroneware = "Tarone-Ware", petopeto = "Peto-Peto",
-                        trend = "Log-rank trend")
-            for (t in sel) {
+            for (t in self$options$tests) {
                 r <- tests[[t]]
-                tab$addRow(rowKey = t, values = list(test = labels[[t]],
+                private$.putRow(tab, t, list(test = testLabels[[t]],
                     chisq = r[["chisq"]], df = r[["df"]], p = r[["p"]]))
             }
-            if (self$options$showExplanations)
-                tab$setNote("expl", paste(
-                    "H0: the survival curves are identical.",
-                    "Log-rank weights all event times equally; Gehan-Breslow and Tarone-Ware",
-                    "give more weight to early times, Peto-Peto weights by overall survival.",
-                    "The trend test (1 df) uses the group order as scores."))
+        },
+
+        # notes follow showExplanations without refilling the tables
+        .setNotes = function() {
+            on <- self$options$showExplanations
+            r <- self$results
+            r$summary$setNote("expl", if (on)
+                "Median: time at which the Kaplan-Meier survival falls to 50%; empty if not reached.")
+            r$survTable$setNote("expl", if (on)
+                "Survival: Kaplan-Meier probability of being event-free at that time. Events: cumulative events up to that time.")
+            r$tests$setNote("expl", if (on) paste(
+                "H0: the survival curves are identical.",
+                "Log-rank weights all event times equally; Gehan-Breslow and Tarone-Ware",
+                "give more weight to early times, Peto-Peto weights by overall survival.",
+                "The trend test (1 df) uses the group order as scores."))
         },
 
         .plotPval = function(tests) {
             if (!self$options$pvalPlot || is.null(tests)) return(NULL)
             sel <- self$options$tests
             t <- if (length(sel)) sel[1] else "logrank"
-            labels <- c(logrank = "Log-rank", gehan = "Gehan-Breslow",
-                        taroneware = "Tarone-Ware", petopeto = "Peto-Peto",
-                        trend = "Log-rank trend")
-            paste(labels[[t]], fmtP(tests[[t]][["p"]]))
+            paste(testLabels[[t]], fmtP(tests[[t]][["p"]]))
         },
 
         .plot = function(image, ggtheme, theme, ...) {
@@ -145,7 +172,7 @@ kmClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
                         median = o$medianLine,
                         at = if (o$markTimes) parseTimes(o$survTimes) else numeric(),
                         risk = o$riskTable && fun %in% c("surv", "event"),
-                        subtitle = st$pval, pal = o$palette,
+                        pval = st$pval, pal = o$colours,
                         xlab = timeLabel(o$timeUnit), xmax = o$xmax, by = o$xby)
             drawGrob(g)
         })

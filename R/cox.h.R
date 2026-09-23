@@ -24,7 +24,7 @@ coxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             forest = FALSE,
             phPlot = FALSE,
             adjKM = TRUE,
-            palette = "jmv",
+            colours = "jmv",
             showExplanations = FALSE, ...) {
 
             super$initialize(
@@ -46,8 +46,7 @@ coxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 suggested=list(
                     "nominal"),
                 permitted=list(
-                    "factor",
-                    "numeric"))
+                    "factor"))
             private$..eventLevel <- jmvcore::OptionLevel$new(
                 "eventLevel",
                 eventLevel,
@@ -139,9 +138,9 @@ coxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "adjKM",
                 adjKM,
                 default=TRUE)
-            private$..palette <- jmvcore::OptionList$new(
-                "palette",
-                palette,
+            private$..colours <- jmvcore::OptionList$new(
+                "colours",
+                colours,
                 options=list(
                     "jmv",
                     "set1",
@@ -170,7 +169,7 @@ coxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..forest)
             self$.addOption(private$..phPlot)
             self$.addOption(private$..adjKM)
-            self$.addOption(private$..palette)
+            self$.addOption(private$..colours)
             self$.addOption(private$..showExplanations)
         }),
     active = list(
@@ -192,7 +191,7 @@ coxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         forest = function() private$..forest$value,
         phPlot = function() private$..phPlot$value,
         adjKM = function() private$..adjKM$value,
-        palette = function() private$..palette$value,
+        colours = function() private$..colours$value,
         showExplanations = function() private$..showExplanations$value),
     private = list(
         ..elapsed = NA,
@@ -213,7 +212,7 @@ coxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..forest = NA,
         ..phPlot = NA,
         ..adjKM = NA,
-        ..palette = NA,
+        ..colours = NA,
         ..showExplanations = NA)
 )
 
@@ -549,7 +548,7 @@ coxResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "strata",
                     "adjVar",
                     "adjKM",
-                    "palette",
+                    "colours",
                     "timeUnit")))}))
 
 coxBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
@@ -597,7 +596,7 @@ coxBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param forest .
 #' @param phPlot .
 #' @param adjKM .
-#' @param palette .
+#' @param colours .
 #' @param showExplanations .
 #' @return A results object containing:
 #' \tabular{llllll}{
@@ -639,7 +638,7 @@ cox <- function(
     forest = FALSE,
     phPlot = FALSE,
     adjKM = TRUE,
-    palette = "jmv",
+    colours = "jmv",
     showExplanations = FALSE) {
 
     if ( ! requireNamespace("jmvcore", quietly=TRUE))
@@ -661,6 +660,7 @@ cox <- function(
             `if`( ! missing(strata), strata, NULL),
             `if`( ! missing(adjVar), adjVar, NULL))
 
+    for (v in event) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
     for (v in factors) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
     for (v in strata) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
     for (v in adjVar) if (v %in% names(data)) data[[v]] <- as.factor(data[[v]])
@@ -685,7 +685,7 @@ cox <- function(
         forest = forest,
         phPlot = phPlot,
         adjKM = adjKM,
-        palette = palette,
+        colours = colours,
         showExplanations = showExplanations)
 
     analysis <- coxClass$new(
