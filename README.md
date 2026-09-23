@@ -30,7 +30,15 @@ It needs no packages beyond those bundled with jamovi: `survival`, `ggplot2`, `g
 ## Install
 In jamovi, go to Modules (⊕) → Sideload and choose `prognosis_0.1.0.jmo`.
 
-## Build (developers)
+## Build and install (developers)
+```sh
+bash tools/install.sh                 # desktop and Docker (container "jamovi")
+bash tools/install.sh desktop         # jamovi.app, via jmvtools::install()
+bash tools/install.sh docker [name]   # jmc --install in a running container, then a smoke test
+bash tools/build-jmo.sh current       # release: dist/*_current_R4.6.0_{x64,arm64}.jmo
+bash tools/build-jmo.sh solid         # release: dist/*_solid_R4.5.0_{x64,arm64}.jmo
+```
+Manual steps:
 ```sh
 # regenerate R/*.h.R after editing jamovi/*.yaml
 Rscript -e 'jmvtools::prepare(".")'
