@@ -76,7 +76,8 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
         },
 
         # small formula environment: the fitted model is kept as plot state
-        .formula = function(terms, strata) {
+        # (not named .formula: that is a jmvcore hook used to generate syntax)
+        .coxFormula = function(terms, strata) {
             rhs <- paste(c(terms, if (length(strata))
                                       sprintf("strata(%s)", paste(strata, collapse = ", "))),
                          collapse = " + ")
@@ -88,7 +89,7 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
 
         .fit = function(df, terms, strata) {
             fit <- tryCatch(
-                survival::coxph(private$.formula(terms, strata), data = df, model = TRUE),
+                survival::coxph(private$.coxFormula(terms, strata), data = df, model = TRUE),
                 error = function(e) jmvcore::reject(paste("Model error:", conditionMessage(e))))
             fit
         },
@@ -124,7 +125,7 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
         # Harrell's bootstrap optimism: C(boot model, boot data) - C(boot model, original data)
         .cBoot = function(fit, m, capp) {
             set.seed(1234)
-            f <- private$.formula(m$terms, m$strata)
+            f <- private$.coxFormula(m$terms, m$strata)
             df <- m$df
             tt <- stats::delete.response(stats::terms(stats::reformulate(m$terms)))
             cf <- stats::as.formula(paste("survival::Surv(time, status) ~ lp",
