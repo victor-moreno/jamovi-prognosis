@@ -1,0 +1,13 @@
+.claude
+.cache
+.tmp
+.venv
+.envrc
+node_modules
+.env
+*.zip
+*.tar
+*.tar.gz
+task_plan.md
+findings.md
+progress.md
