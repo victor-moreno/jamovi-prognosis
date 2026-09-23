@@ -1,0 +1,156 @@
+---
+name:  km
+title: Kaplan-Meier
+menuGroup: Prognosis
+version: '0.1.0'
+jas: '1.2'
+
+description:
+    main: Kaplan-Meier survival estimates, median survival, survival at given
+          times and rank tests comparing groups.
+
+options:
+    - name: data
+      type: Data
+
+    - name: elapsed
+      title: Time
+      type: Variable
+      suggested: [ continuous ]
+      permitted: [ numeric ]
+
+    - name: event
+      title: Event
+      type: Variable
+      suggested: [ nominal ]
+      permitted: [ factor, numeric ]
+
+    - name: eventLevel
+      title: Event level
+      type: Level
+      variable: (event)
+      default: null
+
+    - name: group
+      title: Group
+      type: Variable
+      default: null
+      suggested: [ nominal, ordinal ]
+      permitted: [ factor ]
+
+    - name: timeUnit
+      title: Time unit
+      type: List
+      options:
+        - name: none
+          title: (none)
+        - name: days
+          title: days
+        - name: weeks
+          title: weeks
+        - name: months
+          title: months
+        - name: years
+          title: years
+      default: none
+
+    - name: survTimes
+      title: Survival at times
+      type: String
+      default: ''
+
+    - name: tests
+      title: Tests
+      type: NMXList
+      options:
+        - name: logrank
+          title: Log-rank
+        - name: gehan
+          title: Gehan-Breslow
+        - name: taroneware
+          title: Tarone-Ware
+        - name: petopeto
+          title: Peto-Peto
+        - name: trend
+          title: Log-rank trend (ordered groups)
+      default: [ logrank ]
+
+    - name: kmPlot
+      title: Survival curve
+      type: Bool
+      default: true
+
+    - name: cumEvents
+      title: Cumulative incidence (1 - S)
+      type: Bool
+      default: false
+
+    - name: cumHaz
+      title: Cumulative hazard
+      type: Bool
+      default: false
+
+    - name: logLog
+      title: Log-log (PH check)
+      type: Bool
+      default: false
+
+    - name: ci
+      title: Confidence bands
+      type: Bool
+      default: false
+
+    - name: censor
+      title: Censor marks
+      type: Bool
+      default: true
+
+    - name: riskTable
+      title: Number at risk table
+      type: Bool
+      default: false
+
+    - name: medianLine
+      title: Median lines
+      type: Bool
+      default: false
+
+    - name: markTimes
+      title: Mark survival at times
+      type: Bool
+      default: false
+
+    - name: pvalPlot
+      title: Test p-value
+      type: Bool
+      default: false
+
+    - name: palette
+      title: Palette
+      type: List
+      options:
+        - name: jmv
+          title: jamovi
+        - name: set1
+          title: Set1
+        - name: okabe
+          title: Okabe-Ito
+      default: jmv
+
+    - name: xmax
+      title: X-axis end (0 = auto)
+      type: Number
+      min: 0
+      default: 0
+
+    - name: xby
+      title: X-axis step (0 = auto)
+      type: Number
+      min: 0
+      default: 0
+
+    - name: showExplanations
+      title: Show explanations
+      type: Bool
+      default: false
+...

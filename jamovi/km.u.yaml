@@ -1,0 +1,148 @@
+title: Kaplan-Meier
+name: km
+jus: '3.0'
+stage: 0
+compilerMode: tame
+children:
+  - type: VariableSupplier
+    persistentItems: false
+    stretchFactor: 1
+    children:
+      - type: TargetLayoutBox
+        label: Time
+        children:
+          - type: VariablesListBox
+            name: elapsed
+            maxItemCount: 1
+            isTarget: true
+      - type: TargetLayoutBox
+        label: Event
+        children:
+          - type: VariablesListBox
+            name: event
+            maxItemCount: 1
+            isTarget: true
+            fitToGrid: true
+          - type: LevelSelector
+            name: eventLevel
+            enable: (event)
+      - type: TargetLayoutBox
+        label: Group
+        children:
+          - type: VariablesListBox
+            name: group
+            maxItemCount: 1
+            isTarget: true
+  - type: LayoutBox
+    margin: large
+    stretchFactor: 1
+    children:
+      - type: LayoutBox
+        cell:
+          column: 0
+          row: 0
+        stretchFactor: 1
+        children:
+          - type: Label
+            label: Tests
+            children:
+              - type: CheckBox
+                name: tests_logrank
+                optionName: tests
+                optionPart: logrank
+              - type: CheckBox
+                name: tests_gehan
+                optionName: tests
+                optionPart: gehan
+              - type: CheckBox
+                name: tests_taroneware
+                optionName: tests
+                optionPart: taroneware
+              - type: CheckBox
+                name: tests_petopeto
+                optionName: tests
+                optionPart: petopeto
+              - type: CheckBox
+                name: tests_trend
+                optionName: tests
+                optionPart: trend
+      - type: LayoutBox
+        cell:
+          column: 1
+          row: 0
+        stretchFactor: 1
+        children:
+          - type: Label
+            label: Tables
+            children:
+              - type: TextBox
+                name: survTimes
+                format: string
+                width: large
+              - type: ComboBox
+                name: timeUnit
+  - type: CollapseBox
+    label: Plots
+    collapsed: false
+    stretchFactor: 1
+    children:
+      - type: LayoutBox
+        margin: large
+        stretchFactor: 1
+        children:
+          - type: LayoutBox
+            cell:
+              column: 0
+              row: 0
+            stretchFactor: 1
+            children:
+              - type: Label
+                label: Plots
+                children:
+                  - type: CheckBox
+                    name: kmPlot
+                  - type: CheckBox
+                    name: cumEvents
+                  - type: CheckBox
+                    name: cumHaz
+                  - type: CheckBox
+                    name: logLog
+              - type: Label
+                label: Axes and colours
+                children:
+                  - type: ComboBox
+                    name: palette
+                  - type: TextBox
+                    name: xmax
+                    format: number
+                  - type: TextBox
+                    name: xby
+                    format: number
+          - type: LayoutBox
+            cell:
+              column: 1
+              row: 0
+            stretchFactor: 1
+            children:
+              - type: Label
+                label: Show on plots
+                children:
+                  - type: CheckBox
+                    name: ci
+                  - type: CheckBox
+                    name: censor
+                  - type: CheckBox
+                    name: riskTable
+                  - type: CheckBox
+                    name: medianLine
+                  - type: CheckBox
+                    name: markTimes
+                  - type: CheckBox
+                    name: pvalPlot
+  - type: CollapseBox
+    label: Options
+    collapsed: true
+    stretchFactor: 1
+    children:
+      - type: CheckBox
+        name: showExplanations

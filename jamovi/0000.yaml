@@ -1,0 +1,35 @@
+---
+title: prognosis
+name: prognosis
+version: 0.1.0
+jms: '1.0'
+authors:
+  - V. Moreno
+maintainer: V. Moreno <v.moreno@iconcologia.net>
+date: '2026-09-23'
+type: R
+description: >-
+  Survival analysis for prognostic studies: Kaplan-Meier curves with rank tests,
+  and Cox regression with hazard-ratio tables, forest plots,
+  proportional-hazards checks and adjusted survival curves.
+analyses:
+  - title: Kaplan-Meier
+    name: km
+    ns: prognosis
+    menuGroup: Prognosis
+    menuTitle: Kaplan-Meier
+    menuSubtitle: Survival curves and rank tests
+    category: analyses
+    description: >-
+      Kaplan-Meier survival estimates, median survival, survival at given times
+      and rank tests comparing groups.
+  - title: Cox Regression
+    name: cox
+    ns: prognosis
+    menuGroup: Prognosis
+    menuTitle: Cox Regression
+    menuSubtitle: Uni- and multivariable hazard ratios
+usesNative: true
+minApp: 2.3.0
+
+...

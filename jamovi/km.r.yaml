@@ -1,0 +1,131 @@
+---
+name:  km
+title: Kaplan-Meier
+jrs: '1.1'
+
+items:
+    - name: summary
+      title: Survival summary
+      type: Table
+      clearWith: [ elapsed, event, eventLevel, group ]
+      columns:
+        - name: group
+          title: ''
+          type: text
+          visible: (group)
+        - name: n
+          title: N
+          type: integer
+        - name: events
+          title: Events
+          type: integer
+        - name: censored
+          title: Censored
+          type: integer
+        - name: expected
+          title: Expected
+          type: number
+          visible: (group)
+        - name: median
+          title: Median
+          type: number
+        - name: mlower
+          title: Lower
+          superTitle: 95% CI
+          type: number
+        - name: mupper
+          title: Upper
+          superTitle: 95% CI
+          type: number
+
+    - name: survTable
+      title: Survival at given times
+      type: Table
+      visible: (survTimes)
+      clearWith: [ elapsed, event, eventLevel, group, survTimes ]
+      columns:
+        - name: group
+          title: ''
+          type: text
+          combineBelow: true
+          visible: (group)
+        - name: time
+          title: Time
+          type: number
+        - name: nrisk
+          title: At risk
+          type: integer
+        - name: nevent
+          title: Events
+          type: integer
+        - name: surv
+          title: Survival
+          type: number
+          format: pc
+        - name: lower
+          title: Lower
+          superTitle: 95% CI
+          type: number
+          format: pc
+        - name: upper
+          title: Upper
+          superTitle: 95% CI
+          type: number
+          format: pc
+
+    - name: tests
+      title: Tests comparing groups
+      type: Table
+      visible: (length(group) > 0 && length(tests) > 0)
+      clearWith: [ elapsed, event, eventLevel, group ]
+      columns:
+        - name: test
+          title: ''
+          type: text
+        - name: chisq
+          title: χ²
+          type: number
+        - name: df
+          title: df
+          type: integer
+        - name: p
+          title: p
+          type: number
+          format: zto,pvalue
+
+    - name: kmPlot
+      title: Survival curve
+      type: Image
+      width: 600
+      height: 450
+      renderFun: .plot
+      visible: (kmPlot)
+      clearWith: [ elapsed, event, eventLevel, group, timeUnit, survTimes, tests, ci, censor, riskTable, medianLine, markTimes, pvalPlot, palette, xmax, xby ]
+
+    - name: cumEventsPlot
+      title: Cumulative incidence
+      type: Image
+      width: 600
+      height: 450
+      renderFun: .plot
+      visible: (cumEvents)
+      clearWith: [ elapsed, event, eventLevel, group, timeUnit, survTimes, tests, ci, censor, riskTable, medianLine, markTimes, pvalPlot, palette, xmax, xby ]
+
+    - name: cumHazPlot
+      title: Cumulative hazard
+      type: Image
+      width: 600
+      height: 450
+      renderFun: .plot
+      visible: (cumHaz)
+      clearWith: [ elapsed, event, eventLevel, group, timeUnit, survTimes, tests, ci, censor, riskTable, medianLine, markTimes, pvalPlot, palette, xmax, xby ]
+
+    - name: logLogPlot
+      title: Log-log plot
+      type: Image
+      width: 600
+      height: 450
+      renderFun: .plot
+      visible: (logLog)
+      clearWith: [ elapsed, event, eventLevel, group, timeUnit, survTimes, tests, ci, censor, riskTable, medianLine, markTimes, pvalPlot, palette, xmax, xby ]
+...
