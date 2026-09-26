@@ -12,6 +12,9 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
             o <- self$options
             r <- self$results
             if (!hideUnlessReady(r, private$.ready())) return()
+            # jamovi passes .init only the dataset header (0 rows); the row
+            # layout needs the values, else tables stay empty (0 rows = "filled")
+            if (nrow(self$data) == 0) private$.data <- self$readDataset()
             m <- tryCatch(private$.prepare(), error = function(e) NULL)
             if (is.null(m)) return()     # the error is reported by .run
             private$.m <- m

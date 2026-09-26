@@ -16,6 +16,9 @@ kmClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
             if (!hideUnlessReady(o, !is.null(opt$elapsed) && !is.null(opt$event) &&
                                     !noEventLevel(opt$eventLevel)))
                 return()
+            # jamovi passes .init only the dataset header (0 rows); the row
+            # layout needs the values, else tables stay empty (0 rows = "filled")
+            if (nrow(self$data) == 0) private$.data <- self$readDataset()
             times <- parseTimes(opt$survTimes)
             o$survTable$setVisible(length(times) > 0)
 
