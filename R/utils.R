@@ -1,6 +1,9 @@
 # Shared helpers for the prognosis analyses (km, cox).
 # Plotting uses only ggplot2 + gtable (bundled with jamovi) so the module
 # carries no extra dependencies.
+# Helpers take the translator as argument `.` (the analyses pass
+# self$translate): jmvcore's .() needs `self`, and the jamovi string
+# extractor only collects literal strings inside .() calls.
 
 # ---- data ---------------------------------------------------------------
 
@@ -17,14 +20,16 @@ hideUnlessReady <- function(results, ready) {
     ready
 }
 
-timeVar <- function(x) {
+timeVar <- function(x, . = identity) {
     x <- jmvcore::toNumeric(x)
     if (any(x < 0, na.rm = TRUE))
-        jmvcore::reject("The time variable contains negative values")
+        jmvcore::reject(.("The time variable contains negative values"))
     x
 }
 
-timeLabel <- function(unit) if (unit == "none") "Time" else sprintf("Time (%s)", unit)
+# the unit names (days, weeks, ...) are option labels, already in the catalog
+timeLabel <- function(unit, . = identity)
+    if (unit == "none") .("Time") else sprintf(.("Time (%s)"), .(unit))
 
 parseTimes <- function(s) {
     if (is.null(s) || !nzchar(trimws(s))) return(numeric())
@@ -97,8 +102,8 @@ rankTests <- function(time, status, group, weights = "logrank") {
 
 strataNames <- function(x) sub("^[^=]*=", "", x)
 
-kmData <- function(fit) {
-    st <- if (is.null(fit$strata)) rep("All", length(fit$time))
+kmData <- function(fit, . = identity) {
+    st <- if (is.null(fit$strata)) rep(.("All"), length(fit$time))
           else rep(strataNames(names(fit$strata)), fit$strata)
     lev <- unique(st)
     df <- data.frame(strata = st, time = fit$time, surv = fit$surv,
@@ -147,8 +152,8 @@ plotTheme <- function() theme_classic(base_size = 13)
 # Survival-type plot (KM6/KM9 style). fun: surv, event, cumhaz, cloglog.
 kmPlot <- function(fit, fun = "surv", ci = FALSE, censor = TRUE, median = FALSE,
                    at = numeric(), risk = FALSE, pval = NULL, pal = "jmv",
-                   xlab = "Time", xmax = 0, by = 0) {
-    df  <- kmData(fit)
+                   xlab = "Time", xmax = 0, by = 0, . = identity) {
+    df  <- kmData(fit, . = .)
     lev <- levels(df$strata)
     cols <- paletteCols(length(lev), pal)
     if (xmax <= 0) xmax <- max(df$time)
@@ -156,19 +161,19 @@ kmPlot <- function(fit, fun = "surv", ci = FALSE, censor = TRUE, median = FALSE,
 
     if (fun == "surv") {
         df$y <- df$surv; df$ylo <- df$lower; df$yhi <- df$upper
-        ylab <- "Survival probability"
+        ylab <- .("Survival probability")
     } else if (fun == "event") {
         df$y <- 1 - df$surv; df$ylo <- 1 - df$upper; df$yhi <- 1 - df$lower
-        ylab <- "Cumulative incidence"
+        ylab <- .("Cumulative incidence")
     } else if (fun == "cumhaz") {
         df$y <- df$cumhaz; df$ylo <- -log(df$upper); df$yhi <- -log(df$lower)
-        ylab <- "Cumulative hazard"
+        ylab <- .("Cumulative hazard")
     } else {
         df <- df[df$time > 0 & df$surv > 0 & df$surv < 1, ]
         df$y <- log(-log(df$surv)); df$ylo <- NA; df$yhi <- NA
         ci <- FALSE; median <- FALSE; at <- numeric(); risk <- FALSE
-        ylab <- "log(-log survival)"
-        xlab <- paste(xlab, "- log scale")
+        ylab <- .("log(-log survival)")
+        xlab <- paste(xlab, "-", .("log scale"))
     }
 
     p <- ggplot(df, aes(time, y, colour = strata))
@@ -201,7 +206,7 @@ kmPlot <- function(fit, fun = "surv", ci = FALSE, censor = TRUE, median = FALSE,
 
     if (length(at) && fun %in% c("surv", "event")) {
         s <- summary(fit, times = at, extend = TRUE)
-        sd <- data.frame(strata = factor(if (is.null(s$strata)) "All"
+        sd <- data.frame(strata = factor(if (is.null(s$strata)) .("All")
                                          else strataNames(as.character(s$strata)), lev),
                          time = s$time,
                          y = if (fun == "surv") s$surv else 1 - s$surv)
@@ -232,7 +237,7 @@ kmPlot <- function(fit, fun = "surv", ci = FALSE, censor = TRUE, median = FALSE,
 
     # risk table: second ggplot on the same x scale, stacked with gtable
     s <- summary(fit, times = brks, extend = TRUE)
-    rt <- data.frame(strata = factor(if (is.null(s$strata)) "All"
+    rt <- data.frame(strata = factor(if (is.null(s$strata)) .("All")
                                      else strataNames(as.character(s$strata)), lev),
                      time = s$time, n = s$n.risk)
     tp <- ggplot(rt, aes(time, strata, label = n, colour = strata)) +
@@ -241,7 +246,7 @@ kmPlot <- function(fit, fun = "surv", ci = FALSE, censor = TRUE, median = FALSE,
         scale_x_continuous(breaks = brks, expand = expansion(mult = c(0.04, 0.02))) +
         coord_cartesian(xlim = c(0, xmax), clip = "off") +
         scale_colour_manual(values = cols) +
-        labs(x = NULL, y = NULL, title = "Number at risk") +
+        labs(x = NULL, y = NULL, title = .("Number at risk")) +
         theme_minimal(base_size = 13) +
         theme(panel.grid = element_blank(), axis.text.x = element_blank(),
               plot.title = element_text(size = 11, face = "bold"),

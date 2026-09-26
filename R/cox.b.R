@@ -22,17 +22,17 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
             rows <- private$.coefLayout(m)
             if (o$uniMulti)
                 for (col in c("hr", "lower", "upper", "p", "ptrend"))
-                    r$coefTable$getColumn(col)$setSuperTitle("Multivariable")
+                    r$coefTable$getColumn(col)$setSuperTitle(.("Multivariable"))
             for (i in seq_len(nrow(rows)))
                 r$coefTable$addRow(rowKey = rows$key[i],
                                    values = list(var = rows$var[i], level = rows$level[i]))
 
             if (o$globalTests)
-                for (k in names(globalLabels))
-                    r$globalTable$addRow(rowKey = k, values = list(test = globalLabels[[k]]))
+                for (k in names(private$.globalLabels()))
+                    r$globalTable$addRow(rowKey = k, values = list(test = private$.globalLabels()[[k]]))
             for (t in m$ints) {
                 r$intTable$addRow(rowKey = t, values = list(term = termLabel(t, m$lab)))
-                plan <- subgroupPlan(m$df, t, m$lab, m$unit, m$scale)
+                plan <- subgroupPlan(m$df, t, m$lab, m$unit, m$scale, . = self$translate)
                 for (i in seq_len(NROW(plan)))
                     r$subTable$addRow(rowKey = plan$key[i],
                                       values = list(effect = plan$effect[i], within = plan$within[i]))
@@ -40,7 +40,7 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
             if (o$ph) {
                 for (t in m$terms)
                     r$phTable$addRow(rowKey = t, values = list(term = termLabel(t, m$lab)))
-                r$phTable$addRow(rowKey = "GLOBAL", values = list(term = "Global"))
+                r$phTable$addRow(rowKey = "GLOBAL", values = list(term = .("Global")))
             }
 
             nCoef <- sum(!rows$ref)
@@ -49,6 +49,10 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
             r$forestPlot$setSize(700, 90 + 26 * nForest)
             r$phPlot$setSize(700, 60 + 240 * ceiling(nCoef / 2))
         },
+
+        # a method, not a constant: .() translates only inside the analysis
+        .globalLabels = function() c(lr = .("Likelihood ratio"), wald = .("Wald"),
+                                     score = .("Score (log-rank)")),
 
         .ready = function() {
             o <- self$options
@@ -64,7 +68,7 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
             m <- if (is.null(private$.m)) private$.prepare() else private$.m
             fit <- private$.fit(m$df, m$terms, m$strata)
             if (length(fit$coefficients) == 0 || all(is.na(stats::coef(fit))))
-                jmvcore::reject("The model could not be estimated")
+                jmvcore::reject(.("The model could not be estimated"))
 
             uni <- NULL
             getUni <- function() {
@@ -84,7 +88,8 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
 
             # plot states are small data, rebuilt only when a plot was cleared
             if (o$forest && is.null(r$forestPlot$state))
-                r$forestPlot$setState(forestRows(fit, m$terms, m$lab, if (o$uniMulti) getUni(), m$unit))
+                r$forestPlot$setState(forestRows(fit, m$terms, m$lab, if (o$uniMulti) getUni(), m$unit,
+                                                 . = self$translate))
             if (o$phPlot && is.null(r$phPlot$state))
                 private$.phState(fit, m)
             if (o$adjCurves)
@@ -97,7 +102,7 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
             vars <- c(o$factors, o$covs)
             safe <- sprintf("v%d_", seq_along(vars))
             lab <- stats::setNames(vars, safe)
-            df <- data.frame(time = timeVar(self$data[[o$elapsed]]),
+            df <- data.frame(time = timeVar(self$data[[o$elapsed]], . = self$translate),
                              status = eventIndicator(self$data[[o$event]], o$eventLevel))
             for (i in seq_along(vars)) {
                 x <- self$data[[vars[i]]]
@@ -111,12 +116,12 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
             n0 <- nrow(df)
             df <- df[stats::complete.cases(df), , drop = FALSE]
             for (v in names(df)) if (is.factor(df[[v]])) df[[v]] <- droplevels(df[[v]])
-            if (nrow(df) == 0) jmvcore::reject("No complete rows")
-            if (sum(df$status) == 0) jmvcore::reject("There are no events")
+            if (nrow(df) == 0) jmvcore::reject(.("No complete rows"))
+            if (sum(df$status) == 0) jmvcore::reject(.("There are no events"))
             one <- vapply(df, function(x) is.factor(x) && nlevels(x) < 2, logical(1))
             if (any(one)) {
                 nm <- c(lab, if (length(strata)) stats::setNames(o$strata, strata))[names(df)[one]]
-                jmvcore::reject(paste("Only one level (after removing missing values):",
+                jmvcore::reject(paste(.("Only one level (after removing missing values):"),
                                       paste(nm, collapse = ", ")))
             }
 
@@ -127,8 +132,8 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
                 scale[v] <- switch(o$covScale, unit = 1, sd = stats::sd(df[[v]]), custom = o$covMult)
                 df[[v]] <- df[[v]] / scale[[v]]
                 unit[v] <- switch(o$covScale, unit = "per unit",
-                                  sd = sprintf("per SD (%s)", format(signif(scale[[v]], 3))),
-                                  custom = sprintf("per %s", format(scale[[v]])))
+                                  sd = sprintf(.("per SD (%s)"), format(signif(scale[[v]], 3))),
+                                  custom = sprintf(.("per %s"), format(scale[[v]])))
             }
 
             ints <- Filter(function(t) length(t) > 1, o$interactions)
@@ -155,7 +160,8 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
                     isf <- vapply(parts[[i]]$vars, function(v) is.factor(m$df[[v]]), logical(1))
                     # a non-empty level keeps jamovi's row headers aligned
                     out[[length(out) + 1]] <- data.frame(key = cols[i], term = t, var = label,
-                                                         level = coefLevel(parts[[i]]$levels, parts[[i]]$vars, isf, m$unit),
+                                                         level = coefLevel(parts[[i]]$levels, parts[[i]]$vars, isf, m$unit,
+                                                                           . = self$translate),
                                                          ref = FALSE)
                 }
             }
@@ -177,7 +183,7 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
         .fit = function(df, terms, strata) {
             tryCatch(
                 survival::coxph(private$.coxFormula(terms, strata), data = df, model = TRUE),
-                error = function(e) jmvcore::reject(paste("Model error:", conditionMessage(e))))
+                error = function(e) jmvcore::reject(paste(.("Model error:"), conditionMessage(e))))
         },
 
         # univariable fits on the same complete cases as the multivariable model
@@ -229,7 +235,7 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
             s <- summary(fit)
             tests <- list(lr = s$logtest, wald = s$waldtest, score = s$sctest)
             for (k in names(tests))
-                private$.putRow(self$results$globalTable, k, list(test = globalLabels[[k]],
+                private$.putRow(self$results$globalTable, k, list(test = private$.globalLabels()[[k]],
                     chisq = tests[[k]][["test"]], df = tests[[k]][["df"]], p = tests[[k]][["pvalue"]]))
         },
 
@@ -268,7 +274,7 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
                 df <- sum(!is.na(stats::coef(fit))) - sum(!is.na(stats::coef(red)))
                 private$.putRow(self$results$intTable, t, list(term = termLabel(t, m$lab),
                     chisq = chi, df = df, p = stats::pchisq(chi, df, lower.tail = FALSE)))
-                plan <- subgroupPlan(m$df, t, m$lab, m$unit, m$scale)
+                plan <- subgroupPlan(m$df, t, m$lab, m$unit, m$scale, . = self$translate)
                 if (is.null(plan)) next
                 sg <- subgroupHR(fit, m$df, plan, m$terms)
                 for (i in seq_len(nrow(sg)))
@@ -282,7 +288,7 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
             tab <- self$results$phTable
             zph <- tryCatch(survival::cox.zph(fit), error = function(e) NULL)
             if (is.null(zph)) {
-                tab$setNote("err", "The proportional hazards test could not be computed")
+                tab$setNote("err", .("The proportional hazards test could not be computed"))
                 return()
             }
             z <- zph$table
@@ -296,25 +302,24 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
             r <- self$results
             on <- o$showExplanations
             r$modelTable$setNote("missing", if (m$excluded > 0)
-                sprintf("%d rows with missing values excluded", m$excluded))
+                sprintf(.("%d rows with missing values excluded"), m$excluded))
             r$modelTable$setNote("strata", if (length(m$strata))
-                paste("Stratified by", paste(o$strata, collapse = ", ")))
-            r$modelTable$setNote("expl", if (on) paste(
-                "C-index: probability that, of two patients, the one who has the event first",
-                "has the higher predicted risk (0.5 = chance, 1 = perfect)."))
-            r$globalTable$setNote("expl", if (on) "H0: all hazard ratios in the model are 1.")
+                paste(.("Stratified by"), paste(o$strata, collapse = ", ")))
+            # one literal per sentence, so each is a whole msgid for translators
+            r$modelTable$setNote("expl", if (on)
+                .("C-index: probability that, of two patients, the one who has the event first has the higher predicted risk (0.5 = chance, 1 = perfect)."))
+            r$globalTable$setNote("expl", if (on) .("H0: all hazard ratios in the model are 1."))
             r$coefTable$setNote("expl", if (on) paste(
-                "HR > 1: higher hazard (worse prognosis) than the reference level,",
-                "or per one-unit increase of a covariate.",
+                .("HR > 1: higher hazard (worse prognosis) than the reference level, or per one-unit increase of a covariate."),
                 if (length(m$main) > 1)
-                    "Multivariable HRs are adjusted for the other variables in the model.",
-                if (o$uniMulti) "Univariable: each variable alone; on the reference row, p of the Wald test for the whole variable.",
-                if (o$trend) "p trend: the factor entered as a numeric score (level order); multivariable trend keeps the other variables as in the model.",
+                    .("Multivariable HRs are adjusted for the other variables in the model."),
+                if (o$uniMulti) .("Univariable: each variable alone; on the reference row, p of the Wald test for the whole variable."),
+                if (o$trend) .("p trend: the factor entered as a numeric score (level order); multivariable trend keeps the other variables as in the model."),
                 if (length(m$ints))
-                    "With interactions, main-effect HRs apply at the reference level (or 0) of the interacting variable."))
-            r$intTable$setNote("expl", if (on) "Likelihood-ratio test for adding the interaction; a small p suggests that the effect of one variable depends on the other.")
-            r$subTable$setNote("expl", if (on) "Hazard ratio of the first variable within each level (or quartile) of the second; other variables at their reference level or median.")
-            r$phTable$setNote("expl", if (on) "Test based on Schoenfeld residuals; a small p suggests that the hazard ratio changes over time (non-proportional hazards).")
+                    .("With interactions, main-effect HRs apply at the reference level (or 0) of the interacting variable.")))
+            r$intTable$setNote("expl", if (on) .("Likelihood-ratio test for adding the interaction; a small p suggests that the effect of one variable depends on the other."))
+            r$subTable$setNote("expl", if (on) .("Hazard ratio of the first variable within each level (or quartile) of the second; other variables at their reference level or median."))
+            r$phTable$setNote("expl", if (on) .("Test based on Schoenfeld residuals; a small p suggests that the hazard ratio changes over time (non-proportional hazards)."))
         },
 
         # ---- plot states -----------------------------------------------
@@ -334,7 +339,7 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
                 img <- arr$get(key = key)
                 if (!is.null(img$state)) next
                 if (length(m$strata)) {
-                    img$setError("Adjusted curves are not available for stratified models")
+                    img$setError(.("Adjusted curves are not available for stratified models"))
                     next
                 }
                 var <- names(m$lab)[m$lab == key]
@@ -347,14 +352,14 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
         # ---- plots -----------------------------------------------------
         .forestPlot = function(image, ggtheme, theme, ...) {
             if (is.null(image$state)) return(FALSE)
-            print(forestPlot(image$state, uniMulti = self$options$uniMulti))
+            print(forestPlot(image$state, uniMulti = self$options$uniMulti, . = self$translate))
             TRUE
         },
 
         .phPlot = function(image, ggtheme, theme, ...) {
             if (is.null(image$state)) return(FALSE)
             print(schoenfeldPlot(image$state$zph, image$state$labels, image$state$coef,
-                                 xlab = timeLabel(self$options$timeUnit)))
+                                 xlab = timeLabel(self$options$timeUnit, . = self$translate)))
             TRUE
         },
 
@@ -363,9 +368,8 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
             if (is.null(st)) return(FALSE)
             print(adjustedPlot(st$curves, st$km, st$adjusted, showKM = self$options$adjKM,
                                pal = self$options$colours,
-                               xlab = timeLabel(self$options$timeUnit)))
+                               xlab = timeLabel(self$options$timeUnit, . = self$translate), . = self$translate))
             TRUE
         })
 )
 
-globalLabels <- c(lr = "Likelihood ratio", wald = "Wald", score = "Score (log-rank)")

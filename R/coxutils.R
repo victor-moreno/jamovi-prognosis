@@ -11,10 +11,10 @@ coefParts <- function(nm, safe) {
 
 # Level label of a coefficient: its factor levels plus the unit of any scaled
 # covariate in it ("per unit" alone for an unscaled continuous term)
-coefLevel <- function(levels, vars, isf, unit) {
+coefLevel <- function(levels, vars, isf, unit, . = identity) {
     u <- if (is.null(unit)) character() else setdiff(unique(unit[vars[!isf]]), "per unit")
     lev <- paste(c(levels[isf], u), collapse = " × ")
-    if (nzchar(lev)) lev else "per unit"
+    if (nzchar(lev)) lev else .("per unit")
 }
 
 termLabel <- function(term, lab) paste(lab[strsplit(term, ":", fixed = TRUE)[[1]]], collapse = " × ")
@@ -39,7 +39,7 @@ coefRows <- function(fit, lab) {
 }
 
 # Rows for the forest plot: variable header, reference level and each level
-forestRows <- function(fit, terms, lab, uni = NULL, unit = NULL) {
+forestRows <- function(fit, terms, lab, uni = NULL, unit = NULL, . = identity) {
     cr <- coefRows(fit, lab)
     out <- list()
     add <- function(label, r = NULL, ref = FALSE, key = NA) {
@@ -68,15 +68,15 @@ forestRows <- function(fit, terms, lab, uni = NULL, unit = NULL) {
             add(termLabel(t, lab))
             for (i in seq_len(nrow(rt)))
                 cp <- coefParts(rt$key[i], names(lab))
-                add(paste0("    ", coefLevel(cp$levels, cp$vars, cp$vars %in% names(fit$xlevels), unit)),
+                add(paste0("    ", coefLevel(cp$levels, cp$vars, cp$vars %in% names(fit$xlevels), unit, . = .)),
                     rt[i, ], key = rt$key[i])
         }
     }
     do.call(rbind, out)
 }
 
-fmtHR <- function(hr, lo, hi, p, ref) {
-    ifelse(ref, "Reference",
+fmtHR <- function(hr, lo, hi, p, ref, . = identity) {
+    ifelse(ref, .("Reference"),
     ifelse(is.na(hr), "",
            sprintf("%.2f (%.2f-%.2f)   %s", hr, lo, hi,
                    ifelse(p < 0.001, "<0.001", sprintf("%.3f", p)))))
@@ -91,26 +91,28 @@ forestTheme <- function() {
 }
 
 # FO4 (multivariable only) or FO5 (univariable vs multivariable)
-forestPlot <- function(r, uniMulti = FALSE, col = "#1B4F8A") {
-    header <- if (uniMulti) "HR uni | multi" else sprintf("%-19s %s", "HR (95% CI)", "p")
+forestPlot <- function(r, uniMulti = FALSE, col = "#1B4F8A", . = identity) {
+    header <- if (uniMulti) .("HR uni | multi") else sprintf("%-19s %s", .("HR (95% CI)"), "p")
     text <- if (uniMulti)
-        ifelse(r$ref, "Reference", ifelse(is.na(r$hr), "",
+        ifelse(r$ref, .("Reference"), ifelse(is.na(r$hr), "",
                paste0(ifelse(is.na(r$hr_u), "  -  ", sprintf("%5.2f", r$hr_u)),
                       " | ", sprintf("%.2f", r$hr))))
-    else fmtHR(r$hr, r$lo, r$hi, r$p, r$ref)
+    else fmtHR(r$hr, r$lo, r$hi, r$p, r$ref, . = .)
     n <- nrow(r)
     y <- rev(seq_len(n))
     lab <- data.frame(y = c(n + 1, y), label = c("", r$label), text = c(header, text))
 
+    # legend labels are translated; colours are matched by those labels
+    uLab <- .("Univariable"); mLab <- .("Multivariable")
     if (uniMulti) {
-        m <- data.frame(y = y - 0.15, hr = r$hr, lo = r$lo, hi = r$hi, model = "Multivariable", ref = r$ref)
-        u <- data.frame(y = y + 0.15, hr = r$hr_u, lo = r$lo_u, hi = r$hi_u, model = "Univariable", ref = r$ref)
+        m <- data.frame(y = y - 0.15, hr = r$hr, lo = r$lo, hi = r$hi, model = mLab, ref = r$ref)
+        u <- data.frame(y = y + 0.15, hr = r$hr_u, lo = r$lo_u, hi = r$hi_u, model = uLab, ref = r$ref)
         pts <- rbind(u, m)
-        pts$model <- factor(pts$model, c("Univariable", "Multivariable"))
-        cols <- c(Univariable = "grey55", Multivariable = col)
+        pts$model <- factor(pts$model, c(uLab, mLab))
+        cols <- stats::setNames(c("grey55", col), c(uLab, mLab))
     } else {
-        pts <- data.frame(y = y, hr = r$hr, lo = r$lo, hi = r$hi, model = "Multivariable", ref = r$ref)
-        cols <- c(Multivariable = col)
+        pts <- data.frame(y = y, hr = r$hr, lo = r$lo, hi = r$hi, model = mLab, ref = r$ref)
+        cols <- stats::setNames(col, mLab)
     }
     refs <- data.frame(y = y[r$ref], hr = 1)
     est <- pts[!pts$ref & !is.na(pts$hr), ]
@@ -126,7 +128,7 @@ forestPlot <- function(r, uniMulti = FALSE, col = "#1B4F8A") {
         scale_y_continuous(breaks = lab$y, labels = lab$label, limits = c(0.4, n + 1.4),
                            expand = expansion(add = 0),
                            sec.axis = dup_axis(labels = lab$text, name = NULL)) +
-        labs(x = "Hazard ratio (log scale)", y = NULL) +
+        labs(x = .("Hazard ratio (log scale)"), y = NULL) +
         forestTheme()
     p + if (uniMulti) theme(legend.position = "top") else theme(legend.position = "none")
 }
@@ -165,19 +167,21 @@ adjustedCurves <- function(fit, df, var) {
     list(curves = curves, km = km)
 }
 
-adjustedPlot <- function(curves, km, adjusted, showKM = TRUE, pal = "jmv", xlab = "Time") {
+adjustedPlot <- function(curves, km, adjusted, showKM = TRUE, pal = "jmv", xlab = "Time",
+                         . = identity) {
     cols <- paletteCols(nlevels(curves$strata), pal)
     p <- ggplot(curves, aes(time, surv, colour = strata))
     if (showKM)
         p <- p + geom_step(data = km, aes(time, surv, colour = strata),
                            linetype = 2, linewidth = 0.5, alpha = 0.8)
+    # parentheses are added outside .(): the extractor skips strings fully in parentheses
     p + geom_step(linewidth = 1) +
         scale_colour_manual(values = cols, name = NULL) +
         scale_y_continuous(limits = c(0, 1)) +
-        labs(x = xlab, y = "Adjusted survival probability",
-             caption = paste0(if (length(adjusted)) paste("Adjusted for", paste(adjusted, collapse = ", "))
-                              else "No other variables in the model",
-                              if (showKM) "   (dashed: unadjusted Kaplan-Meier)" else "")) +
+        labs(x = xlab, y = .("Adjusted survival probability"),
+             caption = paste0(if (length(adjusted)) paste(.("Adjusted for"), paste(adjusted, collapse = ", "))
+                              else .("No other variables in the model"),
+                              if (showKM) paste0("   (", .("dashed: unadjusted Kaplan-Meier"), ")") else "")) +
         plotTheme() + legendInside("topright") +
         theme(plot.caption = element_text(size = 10, colour = "grey30"))
 }
@@ -185,7 +189,7 @@ adjustedPlot <- function(curves, km, adjusted, showKM = TRUE, pal = "jmv", xlab 
 # Subgroup rows for a two-way interaction: the effect of the focal variable
 # within each level (or quartile) of the moderator. Planned in .init (row
 # labels), estimated in .run by subgroupHR().
-subgroupPlan <- function(df, term, lab, unit, scale) {
+subgroupPlan <- function(df, term, lab, unit, scale, . = identity) {
     vars <- strsplit(term, ":", fixed = TRUE)[[1]]
     if (length(vars) != 2) return(NULL)
     isf <- vapply(vars, function(v) is.factor(df[[v]]), logical(1))
@@ -200,7 +204,9 @@ subgroupPlan <- function(df, term, lab, unit, scale) {
         key = paste(term, g$fv, g$mv),
         effect = if (is.factor(df[[focal]]))
                      sprintf("%s: %s – %s", lab[[focal]], focalVals[g$fv], levels(df[[focal]])[1])
-                 else sprintf("%s (%s)", lab[[focal]], unit[[focal]]),
+                 else sprintf("%s (%s)", lab[[focal]],
+                              # "per unit" is the internal marker of an unscaled covariate
+                              if (unit[[focal]] == "per unit") .("per unit") else unit[[focal]]),
         within = sprintf("%s = %s", lab[[mod]], modVals[g$mv]),
         focal = focal, mod = mod,
         fval = as.character(focalVals[g$fv]),

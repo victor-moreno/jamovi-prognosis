@@ -1,4 +1,6 @@
 # prognosis: ggplot2 is used unqualified in the plot helpers
 import(ggplot2)
+# .() translates output strings (jamovi/i18n/*.po) inside the analyses
+importFrom(jmvcore, .)
 export(km)
 export(cox)

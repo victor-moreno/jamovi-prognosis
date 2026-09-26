@@ -1,0 +1,721 @@
+msgid ""
+msgstr ""
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2021-07-26 12:08:06+01000\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"Language: ca\n"
+
+#: R/cox.b.R
+#: R/km.b.R
+msgid "%d rows with missing values excluded"
+msgstr "%d files amb valors perduts excloses"
+
+#: cox/results/modelTable.columns.superTitle
+#: cox/results/coefTable.columns.superTitle
+#: cox/results/subTable.columns.superTitle
+#: km/results/summary.columns.superTitle
+#: km/results/survTable.columns.superTitle
+msgid "95% CI"
+msgstr "IC 95%"
+
+#: R/cox.b.R
+msgid "Adjusted curves are not available for stratified models"
+msgstr "Les corbes ajustades no estan disponibles per a models estratificats"
+
+#: R/coxutils.R
+msgid "Adjusted for"
+msgstr "Ajustat per"
+
+#: cox/options/adjCurves.title
+#: cox/results/adjPlots.title
+msgid "Adjusted survival curves"
+msgstr "Corbes de supervivència ajustades"
+
+#: R/coxutils.R
+msgid "Adjusted survival probability"
+msgstr "Probabilitat de supervivència ajustada"
+
+#: R/km.b.R
+#: R/utils.R
+msgid "All"
+msgstr "Tots"
+
+#: km/results/survTable.columns.title
+msgid "At risk"
+msgstr "En risc"
+
+#: km/ui[2][0][0][1].label
+msgid "Axes and colours"
+msgstr "Eixos i colors"
+
+#: cox/results/modelTable.columns.title
+msgid "C-index"
+msgstr "Índex C"
+
+#: R/cox.b.R
+msgid ""
+"C-index: probability that, of two patients, the one who has the event first "
+"has the higher predicted risk (0.5 = chance, 1 = perfect)."
+msgstr ""
+"Índex C: probabilitat que, de dos pacients, el que presenta abans "
+"l'esdeveniment tingui el risc predit més alt (0.5 = atzar, 1 = perfecte)."
+
+#: km/options/censor.title
+msgid "Censor marks"
+msgstr "Marques de censura"
+
+#: km/results/summary.columns.title
+msgid "Censored"
+msgstr "Censurats"
+
+#: km/options/ci.title
+msgid "Confidence bands"
+msgstr "Bandes de confiança"
+
+#: cox/options/covs.title
+#: cox/ui[0][3].label
+msgid "Covariates"
+msgstr "Covariables"
+
+#: package/analyses/cox.description
+#: cox/options.description.main
+msgid ""
+"Cox proportional hazards regression with univariable and multivariable "
+"hazard ratios, model tests, proportional-hazards checks and adjusted "
+"survival curves."
+msgstr ""
+"Regressió de Cox de riscos proporcionals amb hazard ratios univariables i "
+"multivariables, proves del model, comprovació de riscos proporcionals i "
+"corbes de supervivència ajustades."
+
+#: package/analyses/cox.title
+#: package/analyses/cox.menuTitle
+#: cox/options.title
+#: cox/ui.title
+#: cox/results.title
+msgid "Cox Regression"
+msgstr "Regressió de Cox"
+
+#: R/utils.R
+#: km/options/cumHaz.title
+#: km/results/cumHazPlot.title
+msgid "Cumulative hazard"
+msgstr "Risc acumulat"
+
+#: R/utils.R
+#: km/results/cumEventsPlot.title
+msgid "Cumulative incidence"
+msgstr "Incidència acumulada"
+
+#: km/options/cumEvents.title
+msgid "Cumulative incidence (1 - S)"
+msgstr "Incidència acumulada (1 - S)"
+
+#: R/coxutils.R
+msgid "dashed: unadjusted Kaplan-Meier"
+msgstr "discontínua: Kaplan-Meier sense ajustar"
+
+#: cox/options/timeUnit/days.title
+#: km/options/timeUnit/days.title
+msgid "days"
+msgstr "dies"
+
+#: cox/results/globalTable.columns.title
+#: cox/results/intTable.columns.title
+#: cox/results/phTable.columns.title
+#: km/results/tests.columns.title
+msgid "df"
+msgstr "gl"
+
+#: cox/results/subTable.columns.title
+msgid "Effect of"
+msgstr "Efecte de"
+
+#: cox/options/event.title
+#: cox/ui[0][1].label
+#: km/options/event.title
+#: km/ui[0][1].label
+msgid "Event"
+msgstr "Esdeveniment"
+
+#: cox/options/eventLevel.title
+#: km/options/eventLevel.title
+msgid "Event level"
+msgstr "Nivell de l'esdeveniment"
+
+#: cox/results/modelTable.columns.title
+#: km/results/summary.columns.title
+#: km/results/survTable.columns.title
+msgid "Events"
+msgstr "Esdeveniments"
+
+#: cox/options/factors.title
+#: cox/ui[0][2].label
+msgid "Factors"
+msgstr "Factors"
+
+#: cox/options/forest.title
+#: cox/results/forestPlot.title
+msgid "Forest plot"
+msgstr "Forest plot"
+
+#: R/km.b.R
+#: km/options/tests/gehan.title
+msgid "Gehan-Breslow"
+msgstr "Gehan-Breslow"
+
+#: R/cox.b.R
+msgid "Global"
+msgstr "Global"
+
+#: cox/results/globalTable.title
+msgid "Global tests"
+msgstr "Proves globals"
+
+#: cox/options/globalTests.title
+msgid "Global tests (LR, Wald, score)"
+msgstr "Proves globals (RV, Wald, score)"
+
+#: km/options/group.title
+#: km/ui[0][2].label
+msgid "Group"
+msgstr "Grup"
+
+#: R/cox.b.R
+msgid "H0: all hazard ratios in the model are 1."
+msgstr "H0: tots els hazard ratios del model són 1."
+
+#: R/km.b.R
+msgid "H0: the survival curves are identical."
+msgstr "H0: les corbes de supervivència són idèntiques."
+
+#: R/coxutils.R
+msgid "Hazard ratio (log scale)"
+msgstr "Hazard ratio (escala logarítmica)"
+
+#: R/cox.b.R
+msgid ""
+"Hazard ratio of the first variable within each level (or quartile) of the "
+"second; other variables at their reference level or median."
+msgstr ""
+"Hazard ratio de la primera variable dins de cada nivell (o quartil) de la "
+"segona; les altres variables al seu nivell de referència o mediana."
+
+#: cox/ui[1][0][0].label
+#: cox/results/coefTable.title
+msgid "Hazard ratios"
+msgstr "Hazard ratios"
+
+#: cox/results/subTable.title
+msgid "Hazard ratios within subgroups"
+msgstr "Hazard ratios dins de subgrups"
+
+#: cox/results/coefTable.columns.title
+#: cox/results/subTable.columns.title
+msgid "HR"
+msgstr "HR"
+
+#: R/coxutils.R
+msgid "HR (95% CI)"
+msgstr "HR (IC 95%)"
+
+#: R/cox.b.R
+msgid ""
+"HR > 1: higher hazard (worse prognosis) than the reference level, or per "
+"one-unit increase of a covariate."
+msgstr ""
+"HR > 1: risc més alt (pitjor pronòstic) que el nivell de referència, o per "
+"cada augment d'una unitat d'una covariable."
+
+#: cox/options/covScale.title
+msgid "HR for covariates"
+msgstr "HR de les covariables"
+
+#: R/coxutils.R
+msgid "HR uni | multi"
+msgstr "HR uni | multi"
+
+#: cox/options/interactions.title
+#: cox/ui[2]/interactionSupplier[0].label
+msgid "Interaction terms"
+msgstr "Termes d'interacció"
+
+#: cox/results/intTable.title
+msgid "Interaction tests"
+msgstr "Proves d'interacció"
+
+#: cox/ui[2].label
+msgid "Interactions"
+msgstr "Interaccions"
+
+#: cox/options/colours/jmv.title
+#: km/options/colours/jmv.title
+msgid "jamovi"
+msgstr "jamovi"
+
+#: package/analyses/km.title
+#: package/analyses/km.menuTitle
+#: km/options.title
+#: km/ui.title
+#: km/results.title
+msgid "Kaplan-Meier"
+msgstr "Kaplan-Meier"
+
+#: package/analyses/km.description
+#: km/options.description.main
+msgid ""
+"Kaplan-Meier survival estimates, median survival, survival at given times "
+"and rank tests comparing groups."
+msgstr ""
+"Estimacions de supervivència de Kaplan-Meier, mediana de supervivència, "
+"supervivència a temps donats i proves de rangs per comparar grups."
+
+#: R/cox.b.R
+msgid "Likelihood ratio"
+msgstr "Raó de versemblança"
+
+#: R/cox.b.R
+msgid ""
+"Likelihood-ratio test for adding the interaction; a small p suggests that "
+"the effect of one variable depends on the other."
+msgstr ""
+"Prova de raó de versemblança en afegir la interacció; una p petita suggereix "
+"que l'efecte d'una variable depèn de l'altra."
+
+#: R/utils.R
+msgid "log scale"
+msgstr "escala logarítmica"
+
+#: km/options/logLog.title
+msgid "Log-log (PH check)"
+msgstr "Log-log (comprovació de RP)"
+
+#: km/results/logLogPlot.title
+msgid "Log-log plot"
+msgstr "Gràfic log-log"
+
+#: R/km.b.R
+#: km/options/tests/logrank.title
+msgid "Log-rank"
+msgstr "Log-rank"
+
+#: R/km.b.R
+msgid "Log-rank trend"
+msgstr "Tendència log-rank"
+
+#: km/options/tests/trend.title
+msgid "Log-rank trend (ordered groups)"
+msgstr "Tendència log-rank (grups ordenats)"
+
+#: R/km.b.R
+msgid ""
+"Log-rank weights all event times equally; Gehan-Breslow and Tarone-Ware give "
+"more weight to early times, Peto-Peto weights by overall survival."
+msgstr ""
+"El log-rank pondera igual tots els temps d'esdeveniment; Gehan-Breslow i "
+"Tarone-Ware donen més pes als temps inicials, Peto-Peto pondera per la "
+"supervivència global."
+
+#: R/utils.R
+msgid "log(-log survival)"
+msgstr "log(-log supervivència)"
+
+#: cox/results/modelTable.columns.title
+#: cox/results/coefTable.columns.title
+#: cox/results/subTable.columns.title
+#: km/results/summary.columns.title
+#: km/results/survTable.columns.title
+msgid "Lower"
+msgstr "Inferior"
+
+#: km/options/markTimes.title
+msgid "Mark survival at times"
+msgstr "Marcar la supervivència als temps"
+
+#: km/results/summary.columns.title
+msgid "Median"
+msgstr "Mediana"
+
+#: km/options/medianLine.title
+msgid "Median lines"
+msgstr "Línies de la mediana"
+
+#: R/km.b.R
+msgid ""
+"Median: time at which the Kaplan-Meier survival falls to 50%; empty if not "
+"reached."
+msgstr ""
+"Mediana: temps en què la supervivència de Kaplan-Meier baixa al 50%; buida "
+"si no s'assoleix."
+
+#: cox/ui[1][1][0].label
+msgid "Model"
+msgstr "Model"
+
+#: R/cox.b.R
+msgid "Model error:"
+msgstr "Error del model:"
+
+#: cox/results/modelTable.title
+msgid "Model summary"
+msgstr "Resum del model"
+
+#: cox/ui[2]/interactionSupplier.label
+msgid "Model variables"
+msgstr "Variables del model"
+
+#: cox/options/timeUnit/months.title
+#: km/options/timeUnit/months.title
+msgid "months"
+msgstr "mesos"
+
+#: R/cox.b.R
+#: R/coxutils.R
+msgid "Multivariable"
+msgstr "Multivariable"
+
+#: R/cox.b.R
+msgid "Multivariable HRs are adjusted for the other variables in the model."
+msgstr "Els HR multivariables estan ajustats per les altres variables del model."
+
+#: R/cox.b.R
+msgid "No complete rows"
+msgstr "No hi ha files completes"
+
+#: R/km.b.R
+msgid "No complete rows (time, event and group)"
+msgstr "No hi ha files completes (temps, esdeveniment i grup)"
+
+#: R/coxutils.R
+msgid "No other variables in the model"
+msgstr "No hi ha altres variables al model"
+
+#: R/utils.R
+msgid "Number at risk"
+msgstr "Nombre en risc"
+
+#: km/options/riskTable.title
+msgid "Number at risk table"
+msgstr "Taula del nombre en risc"
+
+#: cox/options/colours/okabe.title
+#: km/options/colours/okabe.title
+msgid "Okabe-Ito"
+msgstr "Okabe-Ito"
+
+#: R/cox.b.R
+msgid "Only one level (after removing missing values):"
+msgstr "Només un nivell (després d'eliminar els valors perduts):"
+
+#: cox/ui[4].label
+#: km/ui[3].label
+msgid "Options"
+msgstr "Opcions"
+
+#: cox/options/adjKM.title
+msgid "Overlay unadjusted Kaplan-Meier"
+msgstr "Superposar Kaplan-Meier sense ajustar"
+
+#: cox/results/coefTable.columns.title
+msgid "p trend"
+msgstr "p tendència"
+
+#: R/cox.b.R
+msgid ""
+"p trend: the factor entered as a numeric score (level order); multivariable "
+"trend keeps the other variables as in the model."
+msgstr ""
+"p tendència: el factor entra com a puntuació numèrica (ordre dels nivells); "
+"la tendència multivariable manté les altres variables com al model."
+
+#: cox/options/colours.title
+#: km/options/colours.title
+msgid "Palette"
+msgstr "Paleta"
+
+#: R/cox.b.R
+msgid "per %s"
+msgstr "per %s"
+
+#: cox/options/covScale/sd.title
+msgid "per 1 SD"
+msgstr "per 1 DE"
+
+#: R/cox.b.R
+msgid "per SD (%s)"
+msgstr "per DE (%s)"
+
+#: R/coxutils.R
+#: cox/options/covScale/unit.title
+msgid "per unit"
+msgstr "per unitat"
+
+#: cox/options/covScale/custom.title
+msgid "per value below"
+msgstr "pel valor indicat a sota"
+
+#: R/km.b.R
+#: km/options/tests/petopeto.title
+msgid "Peto-Peto"
+msgstr "Peto-Peto"
+
+#: cox/ui[3].label
+#: km/ui[2].label
+#: km/ui[2][0][0][0].label
+msgid "Plots"
+msgstr "Gràfics"
+
+#: package.title
+msgid "prognosis"
+msgstr "prognosis"
+
+#: package/analyses/km.menuGroup
+#: package/analyses/cox.menuGroup
+#: cox/options.menuGroup
+#: km/options.menuGroup
+msgid "Prognosis"
+msgstr "Pronòstic"
+
+#: cox/options/ph.title
+#: cox/results/phTable.title
+msgid "Proportional hazards test"
+msgstr "Prova de riscos proporcionals"
+
+#: R/coxutils.R
+msgid "Reference"
+msgstr "Referència"
+
+#: cox/options/phPlot.title
+#: cox/results/phPlot.title
+msgid "Schoenfeld residuals"
+msgstr "Residus de Schoenfeld"
+
+#: R/cox.b.R
+msgid "Score (log-rank)"
+msgstr "Score (log-rank)"
+
+#: cox/results/coefTable.columns.title
+msgid "SE"
+msgstr "EE"
+
+#: cox/options/colours/set1.title
+#: km/options/colours/set1.title
+msgid "Set1"
+msgstr "Set1"
+
+#: cox/options/showExplanations.title
+#: km/options/showExplanations.title
+msgid "Show explanations"
+msgstr "Mostrar explicacions"
+
+#: km/ui[2][0][1][0].label
+msgid "Show on plots"
+msgstr "Mostrar als gràfics"
+
+#: cox/options/strata.title
+#: cox/ui[0][4].label
+msgid "Strata"
+msgstr "Estrats"
+
+#: R/cox.b.R
+msgid "Stratified by"
+msgstr "Estratificat per"
+
+#: km/results/survTable.columns.title
+msgid "Survival"
+msgstr "Supervivència"
+
+#: package.description
+msgid ""
+"Survival analysis for prognostic studies: Kaplan-Meier curves with rank "
+"tests, and Cox regression with hazard-ratio tables, forest plots, "
+"proportional-hazards checks and adjusted survival curves."
+msgstr ""
+"Anàlisi de supervivència per a estudis pronòstics: corbes de Kaplan-Meier "
+"amb proves de rangs, i regressió de Cox amb taules de hazard ratios, forest "
+"plots, comprovació de riscos proporcionals i corbes de supervivència "
+"ajustades."
+
+#: km/results/survTable.title
+msgid "Survival at given times"
+msgstr "Supervivència a temps donats"
+
+#: km/options/survTimes.title
+msgid "Survival at times"
+msgstr "Supervivència als temps"
+
+#: km/options/kmPlot.title
+#: km/results/kmPlot.title
+msgid "Survival curve"
+msgstr "Corba de supervivència"
+
+#: package/analyses/km.menuSubtitle
+msgid "Survival curves and rank tests"
+msgstr "Corbes de supervivència i proves de rangs"
+
+#: R/utils.R
+msgid "Survival probability"
+msgstr "Probabilitat de supervivència"
+
+#: km/results/summary.title
+msgid "Survival summary"
+msgstr "Resum de supervivència"
+
+#: R/km.b.R
+msgid ""
+"Survival: Kaplan-Meier probability of being event-free at that time. Events: "
+"cumulative events up to that time."
+msgstr ""
+"Supervivència: probabilitat de Kaplan-Meier d'estar lliure d'esdeveniment en "
+"aquell temps. Esdeveniments: esdeveniments acumulats fins a aquell temps."
+
+#: km/ui[1][1][0].label
+msgid "Tables"
+msgstr "Taules"
+
+#: R/km.b.R
+#: km/options/tests/taroneware.title
+msgid "Tarone-Ware"
+msgstr "Tarone-Ware"
+
+#: R/cox.b.R
+msgid ""
+"Test based on Schoenfeld residuals; a small p suggests that the hazard ratio "
+"changes over time (non-proportional hazards)."
+msgstr ""
+"Prova basada en els residus de Schoenfeld; una p petita suggereix que el "
+"hazard ratio canvia amb el temps (riscos no proporcionals)."
+
+#: km/options/pvalPlot.title
+msgid "Test p-value"
+msgstr "Valor p de la prova"
+
+#: km/options/tests.title
+#: km/ui[1][0][0].label
+msgid "Tests"
+msgstr "Proves"
+
+#: km/results/tests.title
+msgid "Tests comparing groups"
+msgstr "Proves de comparació de grups"
+
+#: R/cox.b.R
+msgid "The model could not be estimated"
+msgstr "No s'ha pogut estimar el model"
+
+#: R/cox.b.R
+msgid "The proportional hazards test could not be computed"
+msgstr "No s'ha pogut calcular la prova de riscos proporcionals"
+
+#: R/utils.R
+msgid "The time variable contains negative values"
+msgstr "La variable de temps conté valors negatius"
+
+#: R/km.b.R
+msgid "The trend test (1 df) uses the group order as scores."
+msgstr "La prova de tendència (1 gl) fa servir l'ordre dels grups com a puntuacions."
+
+#: R/cox.b.R
+msgid "There are no events"
+msgstr "No hi ha esdeveniments"
+
+#: R/utils.R
+#: cox/options/elapsed.title
+#: cox/ui[0][0].label
+#: km/options/elapsed.title
+#: km/ui[0][0].label
+#: km/results/survTable.columns.title
+msgid "Time"
+msgstr "Temps"
+
+#: R/utils.R
+msgid "Time (%s)"
+msgstr "Temps (%s)"
+
+#: cox/options/timeUnit.title
+#: km/options/timeUnit.title
+msgid "Time unit"
+msgstr "Unitat de temps"
+
+#: R/km.b.R
+msgid ""
+"Times with 0 at risk are beyond follow-up; the last estimate is carried "
+"forward"
+msgstr "Els temps amb 0 en risc superen el seguiment; es manté l'última estimació"
+
+#: cox/options/trend.title
+msgid "Trend test (p)"
+msgstr "Prova de tendència (p)"
+
+#: package/analyses/cox.menuSubtitle
+msgid "Uni- and multivariable hazard ratios"
+msgstr "Hazard ratios uni- i multivariables"
+
+#: R/coxutils.R
+#: cox/results/coefTable.columns.superTitle
+msgid "Univariable"
+msgstr "Univariable"
+
+#: cox/options/uniMulti.title
+msgid "Univariable and multivariable"
+msgstr "Univariable i multivariable"
+
+#: R/cox.b.R
+msgid ""
+"Univariable: each variable alone; on the reference row, p of the Wald test "
+"for the whole variable."
+msgstr ""
+"Univariable: cada variable sola; a la fila de referència, p de la prova de "
+"Wald per a tota la variable."
+
+#: cox/results/modelTable.columns.title
+#: cox/results/coefTable.columns.title
+#: cox/results/subTable.columns.title
+#: km/results/summary.columns.title
+#: km/results/survTable.columns.title
+msgid "Upper"
+msgstr "Superior"
+
+#: cox/options/covMult.title
+msgid "Value"
+msgstr "Valor"
+
+#: R/cox.b.R
+msgid "Wald"
+msgstr "Wald"
+
+#: cox/options/timeUnit/weeks.title
+#: km/options/timeUnit/weeks.title
+msgid "weeks"
+msgstr "setmanes"
+
+#: R/cox.b.R
+msgid ""
+"With interactions, main-effect HRs apply at the reference level (or 0) of "
+"the interacting variable."
+msgstr ""
+"Amb interaccions, els HR dels efectes principals s'apliquen al nivell de "
+"referència (o 0) de la variable que interactua."
+
+#: cox/results/subTable.columns.title
+msgid "Within"
+msgstr "Dins de"
+
+#: km/options/xmax.title
+msgid "X-axis end (0 = auto)"
+msgstr "Final de l'eix X (0 = auto)"
+
+#: km/options/xby.title
+msgid "X-axis step (0 = auto)"
+msgstr "Pas de l'eix X (0 = auto)"
+
+#: cox/options/timeUnit/years.title
+#: km/options/timeUnit/years.title
+msgid "years"
+msgstr "anys"
+
+#: cox/options/coefDetails.title
+msgid "β, SE and z"
+msgstr "β, EE i z"

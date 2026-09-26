@@ -1,8 +1,4 @@
 
-testLabels <- c(logrank = "Log-rank", gehan = "Gehan-Breslow",
-                taroneware = "Tarone-Ware", petopeto = "Peto-Peto",
-                trend = "Log-rank trend")
-
 kmClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
     "kmClass",
     inherit = kmBase,
@@ -24,13 +20,14 @@ kmClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
 
             keys <- private$.groupKeys()
             for (k in keys) {
-                o$summary$addRow(rowKey = k, values = list(group = k))
+                o$summary$addRow(rowKey = k, values = list(group = private$.groupLabel(k)))
                 for (t in times)
-                    o$survTable$addRow(rowKey = paste(k, t), values = list(group = k, time = t))
+                    o$survTable$addRow(rowKey = paste(k, t),
+                                       values = list(group = private$.groupLabel(k), time = t))
             }
             if (length(keys) > 1)
                 for (t in self$options$tests)
-                    o$tests$addRow(rowKey = t, values = list(test = testLabels[[t]]))
+                    o$tests$addRow(rowKey = t, values = list(test = private$.testLabels()[[t]]))
 
             # taller survival plots when the number-at-risk table is drawn
             if (self$options$riskTable) {
@@ -50,6 +47,14 @@ kmClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
             if (!is.null(o$event)) ok <- ok & !is.na(self$data[[o$event]])
             levels(droplevels(as.factor(g)[ok]))
         },
+
+        # a method, not a constant: .() translates only inside the analysis
+        .testLabels = function() c(logrank = .("Log-rank"), gehan = .("Gehan-Breslow"),
+                                   taroneware = .("Tarone-Ware"), petopeto = .("Peto-Peto"),
+                                   trend = .("Log-rank trend")),
+
+        # "All" is the row key without a group; only the label is translated
+        .groupLabel = function(k) if (identical(k, "All")) .("All") else k,
 
         .run = function() {
             o <- self$options
@@ -80,16 +85,16 @@ kmClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
 
         .cleanData = function() {
             o <- self$options
-            df <- data.frame(time = timeVar(self$data[[o$elapsed]]),
+            df <- data.frame(time = timeVar(self$data[[o$elapsed]], . = self$translate),
                              status = eventIndicator(self$data[[o$event]], o$eventLevel))
             if (!is.null(o$group))
                 df$group <- droplevels(as.factor(self$data[[o$group]]))
             n0 <- nrow(df)
             df <- df[stats::complete.cases(df), , drop = FALSE]
             if (nrow(df) == 0)
-                jmvcore::reject("No complete rows (time, event and group)")
+                jmvcore::reject(.("No complete rows (time, event and group)"))
             self$results$summary$setNote("missing",
-                if (n0 > nrow(df)) sprintf("%d rows with missing values excluded", n0 - nrow(df)))
+                if (n0 > nrow(df)) sprintf(.("%d rows with missing values excluded"), n0 - nrow(df)))
             df
         },
 
@@ -107,7 +112,7 @@ kmClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
             keys <- if (is.null(fit$strata)) "All" else strataNames(names(fit$strata))
             for (i in seq_along(keys))
                 private$.putRow(tab, keys[i], list(
-                    group = keys[i],
+                    group = private$.groupLabel(keys[i]),
                     n = st[i, "n.start"],
                     events = st[i, "events"],
                     censored = st[i, "n.start"] - st[i, "events"],
@@ -127,11 +132,11 @@ kmClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
             cumev <- stats::ave(s$n.event, grp, FUN = cumsum)
             for (i in seq_along(s$time))
                 private$.putRow(tab, paste(grp[i], s$time[i]), list(
-                    group = grp[i], time = s$time[i], nrisk = s$n.risk[i],
+                    group = private$.groupLabel(grp[i]), time = s$time[i], nrisk = s$n.risk[i],
                     nevent = cumev[i], surv = s$surv[i],
                     lower = s$lower[i], upper = s$upper[i]))
             tab$setNote("beyond", if (any(s$n.risk == 0))
-                "Times with 0 at risk are beyond follow-up; the last estimate is carried forward")
+                .("Times with 0 at risk are beyond follow-up; the last estimate is carried forward"))
         },
 
         .fillTests = function(tests) {
@@ -139,7 +144,7 @@ kmClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
             tab <- self$results$tests
             for (t in self$options$tests) {
                 r <- tests[[t]]
-                private$.putRow(tab, t, list(test = testLabels[[t]],
+                private$.putRow(tab, t, list(test = private$.testLabels()[[t]],
                     chisq = r[["chisq"]], df = r[["df"]], p = r[["p"]]))
             }
         },
@@ -149,21 +154,21 @@ kmClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
             on <- self$options$showExplanations
             r <- self$results
             r$summary$setNote("expl", if (on)
-                "Median: time at which the Kaplan-Meier survival falls to 50%; empty if not reached.")
+                .("Median: time at which the Kaplan-Meier survival falls to 50%; empty if not reached."))
             r$survTable$setNote("expl", if (on)
-                "Survival: Kaplan-Meier probability of being event-free at that time. Events: cumulative events up to that time.")
+                .("Survival: Kaplan-Meier probability of being event-free at that time. Events: cumulative events up to that time."))
+            # one literal per sentence, so each is a whole msgid for translators
             r$tests$setNote("expl", if (on) paste(
-                "H0: the survival curves are identical.",
-                "Log-rank weights all event times equally; Gehan-Breslow and Tarone-Ware",
-                "give more weight to early times, Peto-Peto weights by overall survival.",
-                "The trend test (1 df) uses the group order as scores."))
+                .("H0: the survival curves are identical."),
+                .("Log-rank weights all event times equally; Gehan-Breslow and Tarone-Ware give more weight to early times, Peto-Peto weights by overall survival."),
+                .("The trend test (1 df) uses the group order as scores.")))
         },
 
         .plotPval = function(tests) {
             if (!self$options$pvalPlot || is.null(tests)) return(NULL)
             sel <- self$options$tests
             t <- if (length(sel)) sel[1] else "logrank"
-            paste(testLabels[[t]], fmtP(tests[[t]][["p"]]))
+            paste(private$.testLabels()[[t]], fmtP(tests[[t]][["p"]]))
         },
 
         .plot = function(image, ggtheme, theme, ...) {
@@ -181,7 +186,8 @@ kmClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
                         at = if (o$markTimes) parseTimes(o$survTimes) else numeric(),
                         risk = o$riskTable && fun %in% c("surv", "event"),
                         pval = st$pval, pal = o$colours,
-                        xlab = timeLabel(o$timeUnit), xmax = o$xmax, by = o$xby)
+                        xlab = timeLabel(o$timeUnit, . = self$translate), xmax = o$xmax, by = o$xby,
+                        . = self$translate)
             drawGrob(g)
         })
 )
