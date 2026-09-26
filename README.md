@@ -31,7 +31,14 @@ The options, tables, notes and plots are available in English, Spanish and Catal
 The event variable must be nominal or ordinal; choose the level that marks the event. A variable coded 0/1 can be used once its measure type is set to nominal. The analysis stays empty until an event level is chosen.
 
 ## Install
-In jamovi, go to Modules (⊕) → Sideload and choose `prognosis_0.1.0.jmo`.
+Prebuilt `.jmo` files are attached to the [Releases](../../releases) page — four per version, one for each combination of jamovi series and CPU:
+
+| your jamovi | Apple silicon | Intel / AMD |
+| --- | --- | --- |
+| **current** (bundles R 4.6.0) | `prognosis_<version>_current_R4.6.0_arm64.jmo` | `prognosis_<version>_current_R4.6.0_x64.jmo` |
+| **solid** (bundles R 4.5.0) | `prognosis_<version>_solid_R4.5.0_arm64.jmo` | `prognosis_<version>_solid_R4.5.0_x64.jmo` |
+
+The same file works on macOS, Windows and Linux: jamovi checks the R version and the CPU, not the operating system (see Help → About). In jamovi, go to Modules (⊕) → Sideload and choose the `.jmo`.
 
 ## Build and install (developers)
 ```sh
