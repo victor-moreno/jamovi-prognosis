@@ -59,5 +59,7 @@ This module was designed and built together with Claude Code, over several round
 
 Ideas come from the jamovi modules deathwatch (AGPL-3; no code copied), jYS and jsurvival (GPL ≥ 2). The interaction-builder JavaScript is adapted from jsurvival. Kaplan-Meier estimates and Cox models use the R package `survival` by Terry Therneau.
 
+This module has been developed with support of the Instituto de Salud Carlos III (ISCIII), “Programa FORTALECE del Ministerio de Ciencia e Innovación”, through the project number FORT23/00032 and the Consortium for Biomedical Research in Epidemiology and Public Health (CIBERESP), action Genrisk.
+
 ## Licence
 GPL (>= 3).

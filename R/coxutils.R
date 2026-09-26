@@ -196,8 +196,9 @@ subgroupPlan <- function(df, term, lab, unit, scale, . = identity) {
     ord <- if (!isf[2] && isf[1]) rev(vars) else vars
     focal <- ord[1]; mod <- ord[2]
     modVals <- if (is.factor(df[[mod]])) levels(df[[mod]])
-               # quartiles shown in original units (df holds scaled covariates)
-               else signif(stats::quantile(df[[mod]], c(0.25, 0.5, 0.75), names = FALSE) * scale[[mod]], 3)
+               # quartiles shown in original units (df holds scaled covariates);
+               # unique(): tied quartiles (discrete covariates) would repeat a row
+               else unique(signif(stats::quantile(df[[mod]], c(0.25, 0.5, 0.75), names = FALSE) * scale[[mod]], 3))
     focalVals <- if (is.factor(df[[focal]])) levels(df[[focal]])[-1] else NA
     g <- expand.grid(mv = seq_along(modVals), fv = seq_along(focalVals))
     data.frame(
