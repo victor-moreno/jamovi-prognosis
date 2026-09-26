@@ -32,7 +32,7 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
                     r$globalTable$addRow(rowKey = k, values = list(test = globalLabels[[k]]))
             for (t in m$ints) {
                 r$intTable$addRow(rowKey = t, values = list(term = termLabel(t, m$lab)))
-                plan <- subgroupPlan(m$df, t, m$lab)
+                plan <- subgroupPlan(m$df, t, m$lab, m$unit, m$scale)
                 for (i in seq_len(NROW(plan)))
                     r$subTable$addRow(rowKey = plan$key[i],
                                       values = list(effect = plan$effect[i], within = plan$within[i]))
@@ -84,7 +84,7 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
 
             # plot states are small data, rebuilt only when a plot was cleared
             if (o$forest && is.null(r$forestPlot$state))
-                r$forestPlot$setState(forestRows(fit, m$terms, m$lab, if (o$uniMulti) getUni()))
+                r$forestPlot$setState(forestRows(fit, m$terms, m$lab, if (o$uniMulti) getUni(), m$unit))
             if (o$phPlot && is.null(r$phPlot$state))
                 private$.phState(fit, m)
             if (o$adjCurves)
@@ -120,10 +120,21 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
                                       paste(nm, collapse = ", ")))
             }
 
+            # HR per 1 SD or per a given value: covariates are divided by the
+            # scale before fitting, so every estimate uses the same unit
+            scale <- unit <- c()
+            for (v in safe[vars %in% o$covs]) {
+                scale[v] <- switch(o$covScale, unit = 1, sd = stats::sd(df[[v]]), custom = o$covMult)
+                df[[v]] <- df[[v]] / scale[[v]]
+                unit[v] <- switch(o$covScale, unit = "per unit",
+                                  sd = sprintf("per SD (%s)", format(signif(scale[[v]], 3))),
+                                  custom = sprintf("per %s", format(scale[[v]])))
+            }
+
             ints <- Filter(function(t) length(t) > 1, o$interactions)
             ints <- vapply(ints, function(t) paste(safe[match(unlist(t), vars)], collapse = ":"), "")
             list(df = df, lab = lab, main = safe, terms = c(safe, ints), ints = ints,
-                 strata = strata, excluded = n0 - nrow(df))
+                 strata = strata, excluded = n0 - nrow(df), scale = scale, unit = unit)
         },
 
         # Rows of the hazard-ratio table, from the model matrix (same names
@@ -142,10 +153,9 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
                                                          level = levels(m$df[[t]])[1], ref = TRUE)
                 for (i in which(term == t)) {
                     isf <- vapply(parts[[i]]$vars, function(v) is.factor(m$df[[v]]), logical(1))
-                    lev <- paste(parts[[i]]$levels[isf], collapse = " × ")
                     # a non-empty level keeps jamovi's row headers aligned
                     out[[length(out) + 1]] <- data.frame(key = cols[i], term = t, var = label,
-                                                         level = if (nzchar(lev)) lev else "per unit",
+                                                         level = coefLevel(parts[[i]]$levels, parts[[i]]$vars, isf, m$unit),
                                                          ref = FALSE)
                 }
             }
@@ -258,7 +268,7 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
                 df <- sum(!is.na(stats::coef(fit))) - sum(!is.na(stats::coef(red)))
                 private$.putRow(self$results$intTable, t, list(term = termLabel(t, m$lab),
                     chisq = chi, df = df, p = stats::pchisq(chi, df, lower.tail = FALSE)))
-                plan <- subgroupPlan(m$df, t, m$lab)
+                plan <- subgroupPlan(m$df, t, m$lab, m$unit, m$scale)
                 if (is.null(plan)) next
                 sg <- subgroupHR(fit, m$df, plan, m$terms)
                 for (i in seq_len(nrow(sg)))

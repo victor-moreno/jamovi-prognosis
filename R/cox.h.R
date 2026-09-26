@@ -16,6 +16,8 @@ coxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             timeUnit = "none",
             uniMulti = FALSE,
             trend = FALSE,
+            covScale = "unit",
+            covMult = 10,
             coefDetails = FALSE,
             globalTests = TRUE,
             ph = FALSE,
@@ -98,6 +100,19 @@ coxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "trend",
                 trend,
                 default=FALSE)
+            private$..covScale <- jmvcore::OptionList$new(
+                "covScale",
+                covScale,
+                options=list(
+                    "unit",
+                    "sd",
+                    "custom"),
+                default="unit")
+            private$..covMult <- jmvcore::OptionNumber$new(
+                "covMult",
+                covMult,
+                min=0.000001,
+                default=10)
             private$..coefDetails <- jmvcore::OptionBool$new(
                 "coefDetails",
                 coefDetails,
@@ -149,6 +164,8 @@ coxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..timeUnit)
             self$.addOption(private$..uniMulti)
             self$.addOption(private$..trend)
+            self$.addOption(private$..covScale)
+            self$.addOption(private$..covMult)
             self$.addOption(private$..coefDetails)
             self$.addOption(private$..globalTests)
             self$.addOption(private$..ph)
@@ -170,6 +187,8 @@ coxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         timeUnit = function() private$..timeUnit$value,
         uniMulti = function() private$..uniMulti$value,
         trend = function() private$..trend$value,
+        covScale = function() private$..covScale$value,
+        covMult = function() private$..covMult$value,
         coefDetails = function() private$..coefDetails$value,
         globalTests = function() private$..globalTests$value,
         ph = function() private$..ph$value,
@@ -190,6 +209,8 @@ coxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..timeUnit = NA,
         ..uniMulti = NA,
         ..trend = NA,
+        ..covScale = NA,
+        ..covMult = NA,
         ..coefDetails = NA,
         ..globalTests = NA,
         ..ph = NA,
@@ -301,7 +322,9 @@ coxResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "interactions",
                     "strata",
                     "uniMulti",
-                    "trend"),
+                    "trend",
+                    "covScale",
+                    "covMult"),
                 columns=list(
                     list(
                         `name`="var", 
@@ -427,7 +450,9 @@ coxResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "factors",
                     "covs",
                     "interactions",
-                    "strata"),
+                    "strata",
+                    "covScale",
+                    "covMult"),
                 columns=list(
                     list(
                         `name`="effect", 
@@ -504,7 +529,9 @@ coxResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "covs",
                     "interactions",
                     "strata",
-                    "uniMulti")))
+                    "uniMulti",
+                    "covScale",
+                    "covMult")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="phPlot",
@@ -521,7 +548,9 @@ coxResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "covs",
                     "interactions",
                     "strata",
-                    "timeUnit")))
+                    "timeUnit",
+                    "covScale",
+                    "covMult")))
             self$add(jmvcore::Array$new(
                 options=options,
                 name="adjPlots",
@@ -583,6 +612,8 @@ coxBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param timeUnit .
 #' @param uniMulti .
 #' @param trend .
+#' @param covScale .
+#' @param covMult .
 #' @param coefDetails .
 #' @param globalTests .
 #' @param ph .
@@ -624,6 +655,8 @@ cox <- function(
     timeUnit = "none",
     uniMulti = FALSE,
     trend = FALSE,
+    covScale = "unit",
+    covMult = 10,
     coefDetails = FALSE,
     globalTests = TRUE,
     ph = FALSE,
@@ -667,6 +700,8 @@ cox <- function(
         timeUnit = timeUnit,
         uniMulti = uniMulti,
         trend = trend,
+        covScale = covScale,
+        covMult = covMult,
         coefDetails = coefDetails,
         globalTests = globalTests,
         ph = ph,

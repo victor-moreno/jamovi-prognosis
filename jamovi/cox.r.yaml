@@ -51,7 +51,7 @@ items:
     - name: coefTable
       title: Hazard ratios
       type: Table
-      clearWith: [ elapsed, event, eventLevel, factors, covs, interactions, strata, uniMulti, trend ]
+      clearWith: [ elapsed, event, eventLevel, factors, covs, interactions, strata, uniMulti, trend, covScale, covMult ]
       columns:
         - name: var
           title: ''
@@ -144,7 +144,7 @@ items:
       title: Hazard ratios within subgroups
       type: Table
       visible: (length(interactions) > 0)
-      clearWith: [ elapsed, event, eventLevel, factors, covs, interactions, strata ]
+      clearWith: [ elapsed, event, eventLevel, factors, covs, interactions, strata, covScale, covMult ]
       columns:
         - name: effect
           title: Effect of
@@ -196,7 +196,7 @@ items:
       height: 400
       renderFun: .forestPlot
       visible: (forest)
-      clearWith: [ elapsed, event, eventLevel, factors, covs, interactions, strata, uniMulti ]
+      clearWith: [ elapsed, event, eventLevel, factors, covs, interactions, strata, uniMulti, covScale, covMult ]
 
     - name: phPlot
       title: Schoenfeld residuals
@@ -205,7 +205,7 @@ items:
       height: 450
       renderFun: .phPlot
       visible: (phPlot)
-      clearWith: [ elapsed, event, eventLevel, factors, covs, interactions, strata, timeUnit ]
+      clearWith: [ elapsed, event, eventLevel, factors, covs, interactions, strata, timeUnit, covScale, covMult ]
 
     - name: adjPlots
       title: Adjusted survival curves

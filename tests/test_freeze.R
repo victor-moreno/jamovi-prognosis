@@ -31,6 +31,7 @@ restore(coxClass, coxOptions, base, list(colours = "set1"), "cox: colours", ct)
 restore(coxClass, coxOptions, base, list(showExplanations = TRUE), "cox: explanations", ct)
 restore(coxClass, coxOptions, base, list(uniMulti = TRUE), "cox: uniMulti (clears HR)", ct)
 restore(coxClass, coxOptions, base, list(coefDetails = TRUE), "cox: beta/SE/z", ct)
+restore(coxClass, coxOptions, base, list(covScale = "sd"), "cox: covScale (clears HR)", ct)
 kb <- list(elapsed = "time_m", event = "status_f", eventLevel = "Dead", group = "ecog",
            survTimes = "6, 12, 60", tests = c("logrank", "gehan"))
 kt <- c("summary", "survTable", "tests")

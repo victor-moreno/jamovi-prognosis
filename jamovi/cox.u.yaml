@@ -69,6 +69,12 @@ children:
                 name: trend
               - type: CheckBox
                 name: coefDetails
+              - type: ComboBox
+                name: covScale
+              - type: TextBox
+                name: covMult
+                format: number
+                enable: (covScale:custom)
       - type: LayoutBox
         cell:
           column: 1

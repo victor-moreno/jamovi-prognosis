@@ -9,6 +9,14 @@ coefParts <- function(nm, safe) {
     list(vars = unname(v), levels = unname(substring(parts, nchar(v) + 1)))
 }
 
+# Level label of a coefficient: its factor levels plus the unit of any scaled
+# covariate in it ("per unit" alone for an unscaled continuous term)
+coefLevel <- function(levels, vars, isf, unit) {
+    u <- if (is.null(unit)) character() else setdiff(unique(unit[vars[!isf]]), "per unit")
+    lev <- paste(c(levels[isf], u), collapse = " × ")
+    if (nzchar(lev)) lev else "per unit"
+}
+
 termLabel <- function(term, lab) paste(lab[strsplit(term, ":", fixed = TRUE)[[1]]], collapse = " × ")
 
 # One row per coefficient: display labels plus estimates
@@ -31,7 +39,7 @@ coefRows <- function(fit, lab) {
 }
 
 # Rows for the forest plot: variable header, reference level and each level
-forestRows <- function(fit, terms, lab, uni = NULL) {
+forestRows <- function(fit, terms, lab, uni = NULL, unit = NULL) {
     cr <- coefRows(fit, lab)
     out <- list()
     add <- function(label, r = NULL, ref = FALSE, key = NA) {
@@ -52,11 +60,15 @@ forestRows <- function(fit, terms, lab, uni = NULL) {
             for (i in seq_len(nrow(rt)))
                 add(paste0("    ", rt$level[i]), rt[i, ], key = rt$key[i])
         } else if (!grepl(":", t, fixed = TRUE)) {
-            add(lab[[t]], rt[1, ], key = rt$key[1])
+            # show the covariate unit only when HRs are scaled
+            u <- if (!is.null(unit) && t %in% names(unit)) unit[[t]] else "per unit"
+            add(if (u == "per unit") lab[[t]] else sprintf("%s (%s)", lab[[t]], u),
+                rt[1, ], key = rt$key[1])
         } else {
             add(termLabel(t, lab))
             for (i in seq_len(nrow(rt)))
-                add(paste0("    ", if (nzchar(rt$level[i])) rt$level[i] else "per unit"),
+                cp <- coefParts(rt$key[i], names(lab))
+                add(paste0("    ", coefLevel(cp$levels, cp$vars, cp$vars %in% names(fit$xlevels), unit)),
                     rt[i, ], key = rt$key[i])
         }
     }
@@ -173,24 +185,26 @@ adjustedPlot <- function(curves, km, adjusted, showKM = TRUE, pal = "jmv", xlab 
 # Subgroup rows for a two-way interaction: the effect of the focal variable
 # within each level (or quartile) of the moderator. Planned in .init (row
 # labels), estimated in .run by subgroupHR().
-subgroupPlan <- function(df, term, lab) {
+subgroupPlan <- function(df, term, lab, unit, scale) {
     vars <- strsplit(term, ":", fixed = TRUE)[[1]]
     if (length(vars) != 2) return(NULL)
     isf <- vapply(vars, function(v) is.factor(df[[v]]), logical(1))
     ord <- if (!isf[2] && isf[1]) rev(vars) else vars
     focal <- ord[1]; mod <- ord[2]
     modVals <- if (is.factor(df[[mod]])) levels(df[[mod]])
-               else signif(stats::quantile(df[[mod]], c(0.25, 0.5, 0.75), names = FALSE), 3)
+               # quartiles shown in original units (df holds scaled covariates)
+               else signif(stats::quantile(df[[mod]], c(0.25, 0.5, 0.75), names = FALSE) * scale[[mod]], 3)
     focalVals <- if (is.factor(df[[focal]])) levels(df[[focal]])[-1] else NA
     g <- expand.grid(mv = seq_along(modVals), fv = seq_along(focalVals))
     data.frame(
         key = paste(term, g$fv, g$mv),
         effect = if (is.factor(df[[focal]]))
                      sprintf("%s: %s – %s", lab[[focal]], focalVals[g$fv], levels(df[[focal]])[1])
-                 else sprintf("%s (per unit)", lab[[focal]]),
+                 else sprintf("%s (%s)", lab[[focal]], unit[[focal]]),
         within = sprintf("%s = %s", lab[[mod]], modVals[g$mv]),
         focal = focal, mod = mod,
-        fval = as.character(focalVals[g$fv]), mval = as.character(modVals[g$mv]),
+        fval = as.character(focalVals[g$fv]),
+        mval = as.character(if (is.factor(df[[mod]])) modVals[g$mv] else modVals[g$mv] / scale[[mod]]),
         stringsAsFactors = FALSE)
 }
 

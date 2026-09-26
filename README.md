@@ -18,6 +18,7 @@ It needs no packages beyond those bundled with jamovi: `survival`, `ggplot2`, `g
 - Model summary: N, events, and C-index with 95% CI.
 - Global tests: likelihood ratio, Wald and score.
 - Hazard ratios with 95% CI and p, with reference-level rows. Options: univariable and multivariable side by side (with the univariable Wald p per variable), p for trend, and β, SE and z columns.
+- Covariate HRs per unit, per 1 SD, or per a given value (e.g. per 10 years). The covariates are divided by the scale before fitting, so the HR table, univariable fits, subgroup HRs and forest plot use the same unit; model tests and p-values do not change.
 - Interactions: likelihood-ratio test per term, and hazard ratios within subgroups.
 - Proportional hazards test (Schoenfeld) with an optional residual plot.
 - Forest plot (multivariable, or univariable vs multivariable).

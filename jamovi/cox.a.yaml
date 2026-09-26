@@ -83,6 +83,24 @@ options:
       type: Bool
       default: false
 
+    - name: covScale
+      title: HR for covariates
+      type: List
+      options:
+        - name: unit
+          title: per unit
+        - name: sd
+          title: per 1 SD
+        - name: custom
+          title: per value below
+      default: unit
+
+    - name: covMult
+      title: Value
+      type: Number
+      min: 0.000001
+      default: 10
+
     - name: coefDetails
       title: β, SE and z
       type: Bool
