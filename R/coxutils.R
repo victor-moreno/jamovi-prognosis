@@ -66,10 +66,12 @@ forestRows <- function(fit, terms, lab, uni = NULL, unit = NULL, . = identity) {
                 rt[1, ], key = rt$key[1])
         } else {
             add(termLabel(t, lab))
-            for (i in seq_len(nrow(rt)))
+            # braces: one forest row per interaction coefficient, not only the last
+            for (i in seq_len(nrow(rt))) {
                 cp <- coefParts(rt$key[i], names(lab))
                 add(paste0("    ", coefLevel(cp$levels, cp$vars, cp$vars %in% names(fit$xlevels), unit, . = .)),
                     rt[i, ], key = rt$key[i])
+            }
         }
     }
     do.call(rbind, out)

@@ -1,7 +1,7 @@
 Package: prognosis
 Type: Package
 Title: Survival Analysis for Prognostic Studies
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: person("V.", "Moreno", email = "v.moreno@iconcologia.net", role = c("aut", "cre"))
 Description: Kaplan-Meier estimation with rank tests, and Cox proportional
     hazards regression, with compact output for teaching and reporting.

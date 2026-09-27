@@ -13,28 +13,21 @@
 # Uses jmc --build, not --install: a release build must not disturb the modules
 # installed in either app. Use tools/install.sh for that.
 set -euo pipefail
+source "$(dirname "$0")/_module.sh"
 
 SERIES="${1:-}"
-
 case "$SERIES" in
-  current) APP=/Applications/jamovi.app ;;
-  solid)   APP=/Applications/jamovi-solid.app ;;
+  current) APP="${JAMOVI_CURRENT_APP:-/Applications/jamovi.app}" ;;
+  solid)   APP="${JAMOVI_SOLID_APP:-/Applications/jamovi-solid.app}" ;;
   *) echo "usage: build-jmo.sh {solid|current}" >&2; exit 1 ;;
 esac
-
 [ -d "$APP" ] || { echo "error: $APP is not installed" >&2; exit 1; }
 
 STAMP="$(sed -n 's/^JAMOVI_R_VERSION=//p' "$APP/Contents/Resources/env.conf" | tr -d '"[:space:]')"
 R_VERSION="${STAMP%-*}"
 [ -n "$R_VERSION" ] || { echo "error: no JAMOVI_R_VERSION in $APP" >&2; exit 1; }
 
-# prognosis is the module itself (no subfolder as in jmvplus)
-ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-MODULE_DIR="$ROOT"
-MODULE="$(awk -F': *' '$1 == "Package" { print $2; exit }' "$MODULE_DIR/DESCRIPTION")"
-VERSION="$(awk -F': *' '$1 == "Version" { print $2; exit }' "$MODULE_DIR/DESCRIPTION")"
 SOURCE="$MODULE_DIR/${MODULE}_${VERSION}.jmo"
-
 NODE="$(Rscript --vanilla -e 'cat(system.file("node-darwin", "bin", "node", package = "node"))')"
 JMC="$(Rscript --vanilla -e 'cat(system.file("node_modules", "jamovi-compiler", "index.js", package = "jmvtools"))')"
 [ -x "$NODE" ] && [ -f "$JMC" ] || { echo "error: jmvtools/node not available to Rscript" >&2; exit 1; }

@@ -106,7 +106,9 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
                              status = eventIndicator(self$data[[o$event]], o$eventLevel))
             for (i in seq_along(vars)) {
                 x <- self$data[[vars[i]]]
-                df[[safe[i]]] <- if (vars[i] %in% o$factors) as.factor(x) else jmvcore::toNumeric(x)
+                # ordinal variables arrive as ordered factors; unordered keeps
+                # treatment contrasts (level vs reference), not polynomial .L/.Q
+                df[[safe[i]]] <- if (vars[i] %in% o$factors) factor(x, ordered = FALSE) else jmvcore::toNumeric(x)
             }
             strata <- character()
             for (i in seq_along(o$strata)) {

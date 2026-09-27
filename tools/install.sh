@@ -1,55 +1,52 @@
 #!/usr/bin/env bash
-# Build and install prognosis into jamovi desktop and/or a running jamovi Docker
-# container.
+# Build and install the module into jamovi desktop and/or a running jamovi
+# Docker container, then run tools/smoke.R (if present) against the install.
 #
 #   bash tools/install.sh              both targets, whichever are available
 #   bash tools/install.sh desktop
 #   bash tools/install.sh docker [container]     (default container: jamovi)
 #
 # The desktop target uses whichever R `Rscript` resolves to (respecting
-# ~/.Rprofile, which appends jamovi.app's bundled module library). R here is
-# managed by rig: pick the active R version with `rig default <version>` before
-# running this if needed; it must match the R version jamovi.app itself
-# bundles, or jmvcore segfaults on load.
+# ~/.Rprofile, which may append jamovi.app's bundled module library). With rig,
+# pick the active R with `rig default <version>` first: it must match the R that
+# jamovi.app bundles, or rlang (behind jmvcore) fails to load.
 set -euo pipefail
+source "$(dirname "$0")/_module.sh"
 
 TARGET="${1:-both}"
 CONTAINER="${2:-jamovi}"
+ARTIFACT="$MODULE_DIR/${MODULE}_${VERSION}.jmo"
+SMOKE="$ROOT/tools/smoke.R"
 
-# prognosis is the module itself (no subfolder as in jmvplus)
-HERE="$(cd "$(dirname "$0")/.." && pwd)"
-MODULE="$(awk -F': *' '$1 == "Package" { print $2; exit }' "$HERE/DESCRIPTION")"
-VERSION="$(awk -F': *' '$1 == "Version" { print $2; exit }' "$HERE/DESCRIPTION")"
-ARTIFACT="$HERE/${MODULE}_${VERSION}.jmo"
+# R preamble for the smoke test: jamovi's base library and the installed module first
+smoke_preamble() {
+  printf '.libPaths(c("%s", "%s", .libPaths()))\n' "$1" "$2"
+  printf 'suppressPackageStartupMessages(library("%s", character.only = TRUE))\n' "$MODULE"
+}
 
 # ── desktop ──────────────────────────────────────────────────────────────────
 install_desktop() {
-  local APP APP_R LOG
-  APP=/Applications/jamovi.app
-  APP_R="$APP/Contents/Frameworks/R.framework/Versions/Current/Resources/bin/R"
-  [ -x "$APP_R" ] || { echo "error: no R inside $APP" >&2; return 1; }
+  local APP LOG MODDIR OLD i
+  APP="${JAMOVI_CURRENT_APP:-/Applications/jamovi.app}"
+  [ -d "$APP" ] || { echo "!! desktop: $APP is not installed — skipping"; return 0; }
 
-  echo ">> desktop: building $MODULE with $(Rscript -e 'cat(R.version.string)')"
-  cd "$HERE"
+  MODDIR="$HOME/Library/Application Support/jamovi/modules/$MODULE"
+  # the Built: stamp of any copy already installed; the new one must differ
+  OLD="$(grep '^Built:' "$MODDIR/R/$MODULE/DESCRIPTION" 2>/dev/null || true)"
 
-  # log kept inside the project, not the system /tmp
-  mkdir -p "$HERE/.tmp"
-  LOG="$(mktemp "$HERE/.tmp/install.XXXXXX")"
-  Rscript -e 'jmvtools::install()' 2>&1 | tee "$LOG" | grep -vE '^\s*$' || true
+  echo ">> desktop: building $MODULE $VERSION with $(Rscript -e 'cat(R.version.string)')"
+  LOG="$(mktemp "$ROOT/.tmp/install.XXXXXX")"
+  ( cd "$MODULE_DIR" && Rscript -e 'jmvtools::install()' ) 2>&1 | tee "$LOG" | grep -vE '^\s*$' || true
 
-  # jmvtools::install() can report errors on stdout while exiting successfully.
-  # It can also claim installation succeeded after a SingletonLock failure.
-  [ -f "$ARTIFACT" ] || {
-    echo "error: jmvtools did not produce $ARTIFACT" >&2
-    rm -f "$LOG"; return 1
-  }
-  if grep -q 'SingletonLock' "$LOG"; then
+  # jmvtools::install() reports errors on stdout and still exits 0, and it can
+  # claim success after failing to drive jamovi.app. Judge by the artifacts.
+  [ -f "$ARTIFACT" ] || { echo "error: jmvtools did not produce $ARTIFACT" >&2; rm -f "$LOG"; return 1; }
+  if grep -qE 'SingletonLock|sandbox initialization failed|GPU process isn.t usable' "$LOG"; then
     echo
-    echo "!! jamovi.app could not be driven (SingletonLock denied)."
-    echo "!! The .jmo was still built. Install it by hand:"
-    echo "!!   jamovi -> Modules -> Install from file -> $ARTIFACT"
-    rm -f "$LOG"
-    return 0
+    echo "!! jamovi.app could not be driven (already open, or a sandboxed session)."
+    echo "!! The .jmo was built. Install it by hand:"
+    echo "!!   jamovi -> Modules -> jamovi library -> Sideload -> $ARTIFACT"
+    rm -f "$LOG"; return 0
   fi
   if ! grep -q 'Module installed successfully' "$LOG"; then
     echo "error: jmvtools::install() did not install the module (see above)" >&2
@@ -57,29 +54,42 @@ install_desktop() {
   fi
   rm -f "$LOG"
 
-  local MODDIR="$HOME/Library/Application Support/jamovi/modules/$MODULE"
-  # jamovi unpacks the module shortly after jmvtools reports success; wait for it
-  local i
-  for i in $(seq 1 20); do
-    [ -d "$MODDIR" ] && break
+  # jamovi unpacks the module shortly AFTER jmvtools reports success. Waiting for the
+  # directory is not enough when an older copy is installed: the smoke test would load
+  # the old copy (measured: a new analysis "is not an exported object"). Wait for a new
+  # Built: stamp instead.
+  local NEW=""
+  for i in $(seq 1 60); do
+    NEW="$(grep '^Built:' "$MODDIR/R/$MODULE/DESCRIPTION" 2>/dev/null || true)"
+    [ -n "$NEW" ] && [ "$NEW" != "$OLD" ] && break
     sleep 1
   done
-  if [ -d "$MODDIR" ]; then
-    echo ">> desktop: installed at $MODDIR"
-  else
-    echo "!! desktop: install reported success but $MODDIR does not exist."
-    echo "!! Install $ARTIFACT by hand (Modules -> Install from file)."
+  if [ -z "$NEW" ] || [ "$NEW" = "$OLD" ]; then
+    echo "!! desktop: jamovi has not replaced the installed copy of $MODULE after 60 s;"
+    echo "!! restart jamovi or sideload $ARTIFACT by hand"
     return 1
+  fi
+  echo ">> desktop: installed at $MODDIR (${NEW#Built: })"
+
+  if [ -f "$SMOKE" ]; then
+    echo ">> desktop: smoke test"
+    { smoke_preamble "$APP/Contents/Resources/modules/base/R" "$MODDIR/R"; cat "$SMOKE"; } \
+      | Rscript --vanilla -
   fi
 }
 
 # ── docker ───────────────────────────────────────────────────────────────────
 install_docker() {
+  # A sandbox that cannot read ~/.docker/config.json makes the CLI print a
+  # warning and list nothing, which looks like "no container". Use a writable config.
+  if [ -z "${DOCKER_CONFIG:-}" ] && ! [ -r "$HOME/.docker/config.json" ]; then
+    export DOCKER_CONFIG="$ROOT/.tmp/dockercfg"; mkdir -p "$DOCKER_CONFIG"
+  fi
+  command -v docker >/dev/null || { echo "!! docker: no docker CLI — skipping"; return 0; }
   if ! docker ps --format '{{.Names}}' 2>/dev/null | grep -qx "$CONTAINER"; then
     echo "!! docker: container '$CONTAINER' is not running — skipping"
     return 0
   fi
-
   if ! docker exec "$CONTAINER" sh -c 'command -v jmc >/dev/null 2>&1'; then
     echo "!! docker: jmc is not in the container." >&2
     echo "!! Install the jamovi compiler in the image before using this target." >&2
@@ -87,65 +97,38 @@ install_docker() {
   fi
 
   echo ">> docker: copying source into $CONTAINER"
+  local PARTS=(DESCRIPTION NAMESPACE R jamovi)
+  [ -d "$MODULE_DIR/data" ] && PARTS+=(data)
+  [ -d "$MODULE_DIR/inst" ] && PARTS+=(inst)
   # --no-mac-metadata/--no-xattrs: AppleDouble ._ files otherwise land in the
   # container and jmc tries to compile them.
-  tar --no-mac-metadata --no-xattrs -C "$HERE" -cf - DESCRIPTION NAMESPACE R jamovi \
+  tar --no-mac-metadata --no-xattrs -C "$MODULE_DIR" -cf - "${PARTS[@]}" \
     | docker exec -i "$CONTAINER" sh -c \
         "rm -rf /tmp/$MODULE-src && mkdir -p /tmp/$MODULE-src && tar -C /tmp/$MODULE-src -xf -"
 
   echo ">> docker: jmc --install"
-  docker exec -i -e MODULE="$MODULE" "$CONTAINER" bash -s <<'INCONTAINER'
+  # --skip-deps: dependencies must already resolve from jamovi's base library;
+  # set JMC_SKIP_DEPS=no for a module that needs packages jamovi does not bundle.
+  docker exec -i -e MODULE="$MODULE" -e SKIP="${JMC_SKIP_DEPS:-yes}" "$CONTAINER" bash -s <<'INCONTAINER'
 set -euo pipefail
 source /usr/lib/jamovi/bin/env.conf 2>/dev/null || true
 RHOME="${R_HOME:-$(R RHOME 2>/dev/null || true)}"
 [ -n "$RHOME" ] || { echo "   error: no R in the container" >&2; exit 1; }
-RLIBS=/usr/lib/jamovi/modules/base/R
-
-jmc --install "/tmp/$MODULE-src" \
-    --to /usr/lib/jamovi/modules \
-    --rhome "$RHOME" \
-    --rlibs "$RLIBS" \
-    --patch-version --skip-deps
-
+FLAGS=(--to /usr/lib/jamovi/modules --rhome "$RHOME" --rlibs /usr/lib/jamovi/modules/base/R --patch-version)
+[ "$SKIP" = yes ] && FLAGS+=(--skip-deps)
+jmc --install "/tmp/$MODULE-src" "${FLAGS[@]}"
 [ -f "/usr/lib/jamovi/modules/$MODULE/jamovi.yaml" ] || {
   echo "   error: jmc did not install $MODULE" >&2; exit 1; }
 INCONTAINER
 
   echo ">> docker: restarting $CONTAINER to load the module"
   docker restart "$CONTAINER" >/dev/null
-  echo ">> docker: smoke test (km and cox against survival)"
-  docker exec -i "$CONTAINER" bash -s <<'INCONTAINER'
-set -euo pipefail
-Rscript --vanilla -e '
-    .libPaths(c(
-        "/usr/lib/jamovi/modules/base/R",
-        "/usr/lib/jamovi/modules/prognosis/R",
-        .libPaths()
-    ))
-    library(prognosis)
-
-    d <- survival::lung
-    d <- d[!is.na(d$ph.ecog) & d$ph.ecog < 3, ]
-    d$event <- factor(d$status, 1:2, c("Alive", "Dead"))
-    d$ecog <- factor(d$ph.ecog)
-    d$sex <- factor(d$sex, 1:2, c("Male", "Female"))
-
-    km <- prognosis::km(data = d, elapsed = "time", event = "event",
-                        eventLevel = "Dead", group = "ecog")
-    lr <- km$tests$asDF$chisq[1]
-    ref <- survival::survdiff(survival::Surv(time, status) ~ ecog, data = d)$chisq
-    stopifnot(isTRUE(all.equal(lr, ref)))
-
-    cx <- prognosis::cox(data = d, elapsed = "time", event = "event",
-                         eventLevel = "Dead", factors = c("sex", "ecog"), covs = "age")
-    ct <- cx$coefTable$asDF
-    hr <- ct$hr[!is.na(ct$lower)]    # reference-level rows have HR 1 and a blank CI
-    fit <- survival::coxph(survival::Surv(time, status) ~ sex + ecog + age, data = d)
-    stopifnot(isTRUE(all.equal(unname(hr), unname(exp(coef(fit))))))
-    cat(sprintf("   smoke test passed: log-rank chi2 %.2f, %d hazard ratios\n", lr, length(hr)))
-'
-INCONTAINER
-  echo ">> docker: installed $MODULE; open Prognosis -> Kaplan-Meier to verify"
+  if [ -f "$SMOKE" ]; then
+    echo ">> docker: smoke test"
+    { smoke_preamble /usr/lib/jamovi/modules/base/R "/usr/lib/jamovi/modules/$MODULE/R"; cat "$SMOKE"; } \
+      | docker exec -i "$CONTAINER" bash -c 'source /usr/lib/jamovi/bin/env.conf 2>/dev/null || true; Rscript --vanilla -'
+  fi
+  echo ">> docker: installed $MODULE $VERSION"
 }
 
 case "$TARGET" in

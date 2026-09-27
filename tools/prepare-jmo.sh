@@ -3,7 +3,7 @@
 # Metadata-only: it rewrites jamovi's compatibility stamp and rebuilds no R code.
 #
 #   bash tools/prepare-jmo.sh current 4.6.0
-#   bash tools/prepare-jmo.sh solid 4.5.0 path/to/prognosis_0.1.0.jmo
+#   bash tools/prepare-jmo.sh solid 4.5.0 path/to/<module>_<version>.jmo
 #
 # TWO artifacts per series cover every operating system. jamovi's only
 # compatibility gate is an exact string compare of the artifact's rVersion
@@ -11,16 +11,12 @@
 # the CPU but no OS component.
 #
 # Safe only for a module with no compiled code; the guard below enforces that.
-# prognosis is pure R (survival, ggplot2 and gtable come from jamovi itself).
+# A module that bundles compiled code needs a real build on each CPU instead.
 set -euo pipefail
+source "$(dirname "$0")/_module.sh"
 
 SERIES="${1:-}"
 R_VERSION="${2:-}"
-
-ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-MODULE_DIR="$ROOT"
-MODULE="$(awk -F': *' '$1 == "Package" { print $2; exit }' "$MODULE_DIR/DESCRIPTION")"
-VERSION="$(awk -F': *' '$1 == "Version" { print $2; exit }' "$MODULE_DIR/DESCRIPTION")"
 SOURCE="${3:-$MODULE_DIR/${MODULE}_${VERSION}.jmo}"
 
 usage() { echo "usage: prepare-jmo.sh {solid|current} R_VERSION [source.jmo]" >&2; }
@@ -55,7 +51,7 @@ if [ -n "$BUILT" ] && [ "$BUILT" != "$R_VERSION" ]; then
   echo "!! stamped for R $R_VERSION. It will load with a warning on the target." >&2
 fi
 
-mkdir -p "$ROOT/dist" "$ROOT/.tmp"
+mkdir -p "$ROOT/dist"
 
 for ARCH in x64 arm64; do
   TARGET="${R_VERSION}-${ARCH}"

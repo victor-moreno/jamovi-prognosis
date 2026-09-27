@@ -7,7 +7,7 @@ It needs no packages beyond those bundled with jamovi: `survival`, `ggplot2`, `g
 ## Analyses (menu: Prognosis)
 
 **Kaplan-Meier**
-- Survival summary: N, events, censored, expected events (log-rank), and median with 95% CI.
+- Survival summary: N, events, censored, and median survival with 95% CI.
 - Survival at given times (e.g. `12, 36, 60`): number at risk, cumulative events, and S(t) with 95% CI.
 - Tests: log-rank, Gehan-Breslow, Tarone-Ware, Peto-Peto, and log-rank trend for ordered groups.
 - Plots: survival curve, plus optional cumulative incidence (1 − S), cumulative hazard and log-log plots.
@@ -44,10 +44,13 @@ The same file works on macOS, Windows and Linux: jamovi checks the R version and
 ```sh
 bash tools/install.sh                 # desktop and Docker (container "jamovi")
 bash tools/install.sh desktop         # jamovi.app, via jmvtools::install()
-bash tools/install.sh docker [name]   # jmc --install in a running container, then a smoke test
+bash tools/install.sh docker [name]   # jmc --install in a running container
 bash tools/build-jmo.sh current       # release: dist/*_current_R4.6.0_{x64,arm64}.jmo
 bash tools/build-jmo.sh solid         # release: dist/*_solid_R4.5.0_{x64,arm64}.jmo
+bash tools/release.sh                 # build all four and publish one GitHub release
+sh tools/tutorial_redo.sh             # re-render the tutorial from scratch
 ```
+After each install, `tools/smoke.R` checks the installed module against `survival` (log-rank χ², Cox HRs with an ordinal factor). The other checks in `tests/` run against a scratch install: `R CMD INSTALL -l .tmp/lib .`, then `Rscript tests/<file>.R`.
 Manual steps:
 ```sh
 # regenerate R/*.h.R after editing jamovi/*.yaml
