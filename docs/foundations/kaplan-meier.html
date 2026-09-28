@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="The product-limit estimator by hand, its confidence interval, median survival and survival at fixed times.">
+
+<title>Kaplan-Meier: estimating the survival curve – Survival analysis</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../foundations/logrank.html" rel="next">
+<link href="../foundations/what-is-survival.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b85bc7c33db8c58e0ec93c3465666fed.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-e5e84f5a70260acdabf710505354887c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-4143a9d5f9d8f9deb4202a6d60211dcc.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-e5e84f5a70260acdabf710505354887c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Survival analysis</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="../index.html" aria-current="page"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../foundations/what-is-survival.html"> 
+<span class="menu-text">Foundations</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../worked/km-example.html"> 
+<span class="menu-text">Worked examples</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../further/reporting.html"> 
+<span class="menu-text">Reporting</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../references.html"> 
+<span class="menu-text">References</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../foundations/what-is-survival.html">Foundations</a></li><li class="breadcrumb-item"><a href="../foundations/kaplan-meier.html">Kaplan-Meier: estimating the survival curve</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Survival analysis for prognostic studies</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../foundations/what-is-survival.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Time-to-event data and censoring</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../foundations/kaplan-meier.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Kaplan-Meier: estimating the survival curve</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../foundations/logrank.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Comparing curves: the log-rank test</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../foundations/cox.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Cox regression</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Worked examples in jamovi</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../worked/km-example.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Kaplan-Meier in jamovi</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../worked/cox-example.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Cox regression in jamovi</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../worked/assumptions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Checking proportional hazards</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../worked/interactions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Interactions: does one effect depend on another?</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../worked/adjusted-curves.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Adjusted survival curves</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Further</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../further/reporting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Reporting a survival analysis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../further/glossary.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Glossary</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-idea-survive-one-step-at-a-time" id="toc-the-idea-survive-one-step-at-a-time" class="nav-link active" data-scroll-target="#the-idea-survive-one-step-at-a-time">The idea: survive one step at a time</a></li>
+  <li><a href="#by-hand-ten-patients" id="toc-by-hand-ten-patients" class="nav-link" data-scroll-target="#by-hand-ten-patients">By hand: ten patients</a></li>
+  <li><a href="#how-precise-is-the-curve" id="toc-how-precise-is-the-curve" class="nav-link" data-scroll-target="#how-precise-is-the-curve">How precise is the curve?</a></li>
+  <li><a href="#median-survival" id="toc-median-survival" class="nav-link" data-scroll-target="#median-survival">Median survival</a></li>
+  <li><a href="#survival-at-fixed-times" id="toc-survival-at-fixed-times" class="nav-link" data-scroll-target="#survival-at-fixed-times">Survival at fixed times</a></li>
+  <li><a href="#four-views-of-the-same-curve" id="toc-four-views-of-the-same-curve" class="nav-link" data-scroll-target="#four-views-of-the-same-curve">Four views of the same curve</a></li>
+  <li><a href="#reading-any-kaplan-meier-plot-critically" id="toc-reading-any-kaplan-meier-plot-critically" class="nav-link" data-scroll-target="#reading-any-kaplan-meier-plot-critically">Reading any Kaplan-Meier plot critically</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../foundations/what-is-survival.html">Foundations</a></li><li class="breadcrumb-item"><a href="../foundations/kaplan-meier.html">Kaplan-Meier: estimating the survival curve</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Kaplan-Meier: estimating the survival curve</h1>
+</div>
+
+<div>
+  <div class="description">
+    The product-limit estimator by hand, its confidence interval, median survival and survival at fixed times.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="the-idea-survive-one-step-at-a-time" class="level2">
+<h2 class="anchored" data-anchor-id="the-idea-survive-one-step-at-a-time">The idea: survive one step at a time</h2>
+<p>The probability of surviving two years is the probability of surviving the first year, times the probability of surviving the second year <em>given</em> that you survived the first. The Kaplan-Meier estimator <span class="citation" data-cites="kaplan1958">(<a href="#ref-kaplan1958" role="doc-biblioref">Kaplan and Meier 1958</a>)</span> applies this idea at every time an event happens. At each event time <span class="math inline">\(t_j\)</span> it looks only at the <span class="math inline">\(n_j\)</span> patients still <strong>at risk</strong> (alive and under observation just before <span class="math inline">\(t_j\)</span>), counts the <span class="math inline">\(d_j\)</span> events, and estimates the chance of getting through that moment as <span class="math inline">\(1 - d_j/n_j\)</span>. The survival curve is the product of these factors:</p>
+<p><span class="math display">\[\widehat S(t) = \prod_{t_j \le t} \left(1 - \frac{d_j}{n_j}\right)\]</span></p>
+<p>Censored patients never contribute a factor. They count in the number at risk up to their censoring time and then leave the risk set. This is how the method uses each patient for exactly as long as they were observed.</p>
+</section>
+<section id="by-hand-ten-patients" class="level2">
+<h2 class="anchored" data-anchor-id="by-hand-ten-patients">By hand: ten patients</h2>
+<p>Here are ten patients, times in months, a <code>+</code> marking a censored time:</p>
+<p>2, 4, 5+, 6, 8, 10+, 12, 14, 21+, 30</p>
+<div class="cell">
+<div id="tbl-km-hand" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-km-hand-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: The Kaplan-Meier calculation for the ten patients. The confidence interval is the one the module reports (next section).
+</figcaption>
+<div aria-describedby="tbl-km-hand-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="cell caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">Month</th>
+<th style="text-align: right;">At risk</th>
+<th style="text-align: right;">Deaths</th>
+<th style="text-align: right;">Censored</th>
+<th style="text-align: left;">1 − d/n</th>
+<th style="text-align: right;">S(t)</th>
+<th style="text-align: left;">95% CI</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">9/10 = 0.900</td>
+<td style="text-align: right;">0.900</td>
+<td style="text-align: left;">0.732–1.000</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">8/9 = 0.889</td>
+<td style="text-align: right;">0.800</td>
+<td style="text-align: left;">0.587–1.000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">0.800</td>
+<td style="text-align: left;">0.587–1.000</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">6/7 = 0.857</td>
+<td style="text-align: right;">0.686</td>
+<td style="text-align: left;">0.445–1.000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">5/6 = 0.833</td>
+<td style="text-align: right;">0.571</td>
+<td style="text-align: left;">0.326–1.000</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">0.571</td>
+<td style="text-align: left;">0.326–1.000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">3/4 = 0.750</td>
+<td style="text-align: right;">0.429</td>
+<td style="text-align: left;">0.193–0.951</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">2/3 = 0.667</td>
+<td style="text-align: right;">0.286</td>
+<td style="text-align: left;">0.092–0.884</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;">0.286</td>
+<td style="text-align: left;">0.092–0.884</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">0/1 = 0.000</td>
+<td style="text-align: right;">0.000</td>
+<td style="text-align: left;"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>Follow the rows. At month 2 all 10 patients are at risk and one dies: <span class="math inline">\(\widehat S = 9/10 = 0.9\)</span>. At month 4, 9 are at risk and one dies: <span class="math inline">\(\widehat S = 0.9 \times 8/9 = 0.8\)</span>. The patient censored at month 5 does not change the curve, but from then on only 7 patients are at risk, so the death at month 6 multiplies the curve by <span class="math inline">\(6/7\)</span>, not by <span class="math inline">\(7/8\)</span>. And so on, until the last patient dies at month 30 and the curve reaches 0.</p>
+<p>Notice what the naive calculation would say: 7 of the 10 patients died, so “30% survival”. But the three censored patients were followed for 5, 10 and 21 months only. The Kaplan-Meier estimate of survival at 21 months is 0.286, and it is 0 after the last death at month 30, because the one patient still at risk then died.</p>
+<p>This is what the module draws for these ten patients:</p>
+<div id="fig-km-toy" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-km-toy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell" data-jamovi="r$kmPlot">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="kaplan-meier_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="1600"></p>
+</figure>
+</div>
+</div>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-km-toy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: <em>Prognosis → Kaplan-Meier</em> with the ten patients, <em>Median lines</em> ticked. The curve steps down at each death; the crosses are the censored times; the dashed line marks the median.
+</figcaption>
+</figure>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Deaths and censoring at the same time">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Deaths and censoring at the same time
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>When a death and a censoring happen at the same recorded time, the convention is that the death came first: the censored patient is still counted at risk at that time. With several deaths at one time, <span class="math inline">\(d_j\)</span> is simply larger than 1.</p>
+</div>
+</div>
+</section>
+<section id="how-precise-is-the-curve" class="level2">
+<h2 class="anchored" data-anchor-id="how-precise-is-the-curve">How precise is the curve?</h2>
+<p>Each factor <span class="math inline">\(1 - d_j/n_j\)</span> is estimated from the patients at risk at that moment, so the curve becomes less precise as that number shrinks. <strong>Greenwood’s formula</strong> <span class="citation" data-cites="greenwood1926">(<a href="#ref-greenwood1926" role="doc-biblioref">Greenwood 1926</a>)</span> gives the variance of <span class="math inline">\(\log \widehat S(t)\)</span> by adding up a contribution from each event time:</p>
+<p><span class="math display">\[\widehat{\operatorname{var}}\bigl[\log \widehat S(t)\bigr] = \sum_{t_j \le t} \frac{d_j}{n_j\,(n_j - d_j)}\]</span></p>
+<p>The module (through the R survival package) builds the 95% confidence interval on the log scale and transforms it back:</p>
+<p><span class="math display">\[\widehat S(t)\,\exp\Bigl(\pm 1.96\,\sqrt{\widehat{\operatorname{var}}\bigl[\log \widehat S(t)\bigr]}\Bigr)\]</span></p>
+<p>with an upper limit above 1 cut to 1. The interval is asymmetric and widens quickly when few patients remain at risk, as in the last rows of <a href="#tbl-km-hand" class="quarto-xref">Table&nbsp;1</a>. On a plot, the <strong>confidence band</strong> (option <em>Confidence bands</em>) shows where the curve is still informative. At the right end of a curve, where only a handful of patients are at risk, the steps are large and the band is wide: do not read much into the tail of a Kaplan-Meier curve.</p>
+</section>
+<section id="median-survival" class="level2">
+<h2 class="anchored" data-anchor-id="median-survival">Median survival</h2>
+<p>The <strong>median survival</strong> is the first time at which <span class="math inline">\(\widehat S(t)\)</span> drops to 0.5 or below. It is preferred to the mean because survival times are skewed and the mean cannot be estimated when the curve does not reach 0. Its 95% CI comes from the confidence band: it runs from the time the lower limit of the band crosses 0.5 to the time the upper limit does <span class="citation" data-cites="brookmeyer1982">(<a href="#ref-brookmeyer1982" role="doc-biblioref">Brookmeyer and Crowley 1982</a>)</span>. An upper limit can be missing when the band never gets down to 0.5: for the ten patients the median is 12 months, and its 95% CI runs from 6 months to <em>not reached</em>, because the upper limit of the band never falls to 0.5 (<a href="#tbl-km-hand" class="quarto-xref">Table&nbsp;1</a>).</p>
+<p>If fewer than half of the patients have had the event by the end of follow-up, the median is <strong>not reached</strong>, and the module leaves the cell empty. That is information, not a failure: report survival at fixed times instead.</p>
+</section>
+<section id="survival-at-fixed-times" class="level2">
+<h2 class="anchored" data-anchor-id="survival-at-fixed-times">Survival at fixed times</h2>
+<p>“One-year survival 41 %” is <span class="math inline">\(\widehat S(12)\)</span>, read off the curve at 12 months. In the module, type the times in <strong>Survival at times</strong> (for example <code>6, 12, 24</code>) and the table gives, for each group and time, the number still at risk, the cumulative number of events, <span class="math inline">\(\widehat S(t)\)</span> and its CI. These are the numbers clinicians quote, and they need no assumption about the shape of the curve.</p>
+<p>A time beyond the last follow-up of a group has 0 patients at risk. The curve is then carried forward from the last observed value, and the module adds a note to the table; those rows are not estimates.</p>
+</section>
+<section id="four-views-of-the-same-curve" class="level2">
+<h2 class="anchored" data-anchor-id="four-views-of-the-same-curve">Four views of the same curve</h2>
+<p>The Kaplan-Meier module can draw the estimate in four ways (section <em>Plots</em>):</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Plot</th>
+<th>Shows</th>
+<th>Use it to …</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Survival curve</td>
+<td><span class="math inline">\(\widehat S(t)\)</span></td>
+<td>show survival; the standard figure</td>
+</tr>
+<tr class="even">
+<td>Cumulative incidence (1 − S)</td>
+<td><span class="math inline">\(1 - \widehat S(t)\)</span></td>
+<td>show how the proportion with the event grows (for relapse, infection …)</td>
+</tr>
+<tr class="odd">
+<td>Cumulative hazard</td>
+<td><span class="math inline">\(\widehat H(t) = -\log \widehat S(t)\)</span></td>
+<td>see how the hazard changes: a straight line means a constant hazard</td>
+</tr>
+<tr class="even">
+<td>Log-log (PH check)</td>
+<td><span class="math inline">\(\log(-\log \widehat S(t))\)</span> against log time</td>
+<td>check the proportional-hazards assumption of Cox regression: the curves of two groups should be parallel</td>
+</tr>
+</tbody>
+</table>
+<p>The <a href="../worked/km-example.html">KM worked example</a> shows all four for the ECOG groups.</p>
+<div class="callout callout-style-default callout-warning callout-titled" title="Competing risks">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Competing risks
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><span class="math inline">\(1 - \widehat S(t)\)</span> is the probability of the event by time <span class="math inline">\(t\)</span> only if every patient would eventually have it. For death from any cause that is true. For an event such as <em>death from cancer</em>, patients who die of something else are not “censored” in the usual sense: they can no longer have the event. Treating them as censored overestimates the cumulative incidence; this needs competing-risks methods <span class="citation" data-cites="austin2016">(<a href="#ref-austin2016" role="doc-biblioref">Austin et al. 2016</a>)</span>, which this module does not provide.</p>
+</div>
+</div>
+</section>
+<section id="reading-any-kaplan-meier-plot-critically" class="level2">
+<h2 class="anchored" data-anchor-id="reading-any-kaplan-meier-plot-critically">Reading any Kaplan-Meier plot critically</h2>
+<ol type="1">
+<li><strong>Check the number at risk</strong> under the plot <span class="citation" data-cites="pocock2002 morris2019">(<a href="#ref-pocock2002" role="doc-biblioref">Pocock et al. 2002</a>; <a href="#ref-morris2019" role="doc-biblioref">Morris et al. 2019</a>)</span>. Differences at the right end, with few patients left, are unreliable.</li>
+<li><strong>Look at the whole curve, not only the median.</strong> Two groups can have the same median and very different early or late survival.</li>
+<li><strong>Ask how long patients were followed</strong>, and whether losses to follow-up could be informative (see <a href="../foundations/what-is-survival.html#censoring">Censoring</a>).</li>
+<li><strong>Check the axes.</strong> The y-axis should go from 0 to 1 (or 0 to 100%); a truncated axis exaggerates differences.</li>
+</ol>
+<blockquote class="blockquote">
+<p>Next: <a href="../foundations/logrank.html">Comparing curves: the log-rank test</a></p>
+</blockquote>
+
+
+
+</section>
+
+<a onclick="window.scrollTo(0, 0); return false;" role="button" id="quarto-back-to-top"><i class="bi bi-arrow-up"></i> Back to top</a><div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" role="list">
+<div id="ref-austin2016" class="csl-entry" role="listitem">
+Austin, Peter C., Douglas S. Lee, and Jason P. Fine. 2016. <span>“Introduction to the Analysis of Survival Data in the Presence of Competing Risks.”</span> <em>Circulation</em> 133 (6): 601–9. <a href="https://doi.org/10.1161/CIRCULATIONAHA.115.017719">https://doi.org/10.1161/CIRCULATIONAHA.115.017719</a>.
+</div>
+<div id="ref-brookmeyer1982" class="csl-entry" role="listitem">
+Brookmeyer, Ron, and John Crowley. 1982. <span>“A Confidence Interval for the Median Survival Time.”</span> <em>Biometrics</em> 38 (1): 29–41. <a href="https://doi.org/10.2307/2530286">https://doi.org/10.2307/2530286</a>.
+</div>
+<div id="ref-greenwood1926" class="csl-entry" role="listitem">
+Greenwood, Major. 1926. <span>“The Natural Duration of Cancer.”</span> <em>Reports on Public Health and Medical Subjects</em> 33: 1–26.
+</div>
+<div id="ref-kaplan1958" class="csl-entry" role="listitem">
+Kaplan, E. L., and Paul Meier. 1958. <span>“Nonparametric Estimation from Incomplete Observations.”</span> <em>Journal of the American Statistical Association</em> 53 (282): 457–81. <a href="https://doi.org/10.1080/01621459.1958.10501452">https://doi.org/10.1080/01621459.1958.10501452</a>.
+</div>
+<div id="ref-morris2019" class="csl-entry" role="listitem">
+Morris, Tim P., Christopher I. Jarvis, William Cragg, Patrick P. J. Phillips, Babak Choodari-Oskooei, and Matthew R. Sydes. 2019. <span>“Proposals on <span>Kaplan-Meier</span> Plots in Medical Research and a Survey of Stakeholder Views: <span>KMunicate</span>.”</span> <em>BMJ Open</em> 9 (9): e030215. <a href="https://doi.org/10.1136/bmjopen-2019-030215">https://doi.org/10.1136/bmjopen-2019-030215</a>.
+</div>
+<div id="ref-pocock2002" class="csl-entry" role="listitem">
+Pocock, Stuart J., Tim C. Clayton, and Douglas G. Altman. 2002. <span>“Survival Plots of Time-to-Event Outcomes in Clinical Trials: Good Practice and Pitfalls.”</span> <em>The Lancet</em> 359 (9318): 1686–89. <a href="https://doi.org/10.1016/S0140-6736(02)08594-X">https://doi.org/10.1016/S0140-6736(02)08594-X</a>.
+</div>
+</div></section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../foundations/what-is-survival.html" class="pagination-link" aria-label="Time-to-event data and censoring">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Time-to-event data and censoring</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../foundations/logrank.html" class="pagination-link" aria-label="Comparing curves: the log-rank test">
+        <span class="nav-page-text">Comparing curves: the log-rank test</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Tutorial for the prognosis jamovi module · V. Moreno</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>

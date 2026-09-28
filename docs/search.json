@@ -1,0 +1,848 @@
+[
+  {
+    "objectID": "references.html",
+    "href": "references.html",
+    "title": "References",
+    "section": "",
+    "text": "The teaching data are the lung dataset of the R package survival (Therneau 2026), from Loprinzi et al. (1994).\n\n\nAustin, Peter C., Douglas S. Lee, and Jason P. Fine. 2016. “Introduction to the Analysis of Survival Data in the Presence of Competing Risks.” Circulation 133 (6): 601–9. https://doi.org/10.1161/CIRCULATIONAHA.115.017719.\n\n\nBland, J. Martin, and Douglas G. Altman. 1998. “Survival Probabilities (the Kaplan-Meier Method).” BMJ 317 (7172): 1572. https://doi.org/10.1136/bmj.317.7172.1572.\n\n\nBland, J. Martin, and Douglas G. Altman. 2004. “The Logrank Test.” BMJ 328 (7447): 1073. https://doi.org/10.1136/bmj.328.7447.1073.\n\n\nBradburn, M. J., T. G. Clark, S. B. Love, and D. G. Altman. 2003a. “Survival Analysis Part II: Multivariate Data Analysis – an Introduction to Concepts and Methods.” British Journal of Cancer 89 (3): 431–36. https://doi.org/10.1038/sj.bjc.6601119.\n\n\nBradburn, M. J., T. G. Clark, S. B. Love, and D. G. Altman. 2003b. “Survival Analysis Part III: Multivariate Data Analysis – Choosing a Model and Assessing Its Adequacy and Fit.” British Journal of Cancer 89 (4): 605–11. https://doi.org/10.1038/sj.bjc.6601120.\n\n\nBrookes, Sara T., Elise Whitely, Matthias Egger, George Davey Smith, Paul A. Mulheran, and Tim J. Peters. 2004. “Subgroup Analyses in Randomized Trials: Risks of Subgroup-Specific Analyses; Power and Sample Size for the Interaction Test.” Journal of Clinical Epidemiology 57 (3): 229–36. https://doi.org/10.1016/j.jclinepi.2003.08.009.\n\n\nBrookmeyer, Ron, and John Crowley. 1982. “A Confidence Interval for the Median Survival Time.” Biometrics 38 (1): 29–41. https://doi.org/10.2307/2530286.\n\n\nClark, T. G., M. J. Bradburn, S. B. Love, and D. G. Altman. 2003. “Survival Analysis Part I: Basic Concepts and First Analyses.” British Journal of Cancer 89 (2): 232–38. https://doi.org/10.1038/sj.bjc.6601118.\n\n\nCollins, Gary S., Johannes B. Reitsma, Douglas G. Altman, and Karel G. M. Moons. 2015. “Transparent Reporting of a Multivariable Prediction Model for Individual Prognosis or Diagnosis (TRIPOD): The TRIPOD Statement.” BMJ 350: g7594. https://doi.org/10.1136/bmj.g7594.\n\n\nCox, D. R. 1972. “Regression Models and Life-Tables.” Journal of the Royal Statistical Society: Series B (Methodological) 34 (2): 187–202. https://doi.org/10.1111/j.2517-6161.1972.tb00899.x.\n\n\nElm, Erik von, Douglas G. Altman, Matthias Egger, Stuart J. Pocock, Peter C. Gøtzsche, and Jan P. Vandenbroucke. 2007. “The Strengthening the Reporting of Observational Studies in Epidemiology (STROBE) Statement: Guidelines for Reporting Observational Studies.” The Lancet 370 (9596): 1453–57. https://doi.org/10.1016/S0140-6736(07)61602-X.\n\n\nGehan, Edmund A. 1965. “A Generalized Wilcoxon Test for Comparing Arbitrarily Singly-Censored Samples.” Biometrika 52 (1-2): 203–24. https://doi.org/10.1093/biomet/52.1-2.203.\n\n\nGrambsch, Patricia M., and Terry M. Therneau. 1994. “Proportional Hazards Tests and Diagnostics Based on Weighted Residuals.” Biometrika 81 (3): 515–26. https://doi.org/10.1093/biomet/81.3.515.\n\n\nGreenwood, Major. 1926. “The Natural Duration of Cancer.” Reports on Public Health and Medical Subjects 33: 1–26.\n\n\nHarrell, Frank E., Robert M. Califf, David B. Pryor, Kerry L. Lee, and Robert A. Rosati. 1982. “Evaluating the Yield of Medical Tests.” JAMA 247 (18): 2543–46. https://doi.org/10.1001/jama.1982.03320430047030.\n\n\nHarrell, Frank E., Kerry L. Lee, and Daniel B. Mark. 1996. “Multivariable Prognostic Models: Issues in Developing Models, Evaluating Assumptions and Adequacy, and Measuring and Reducing Errors.” Statistics in Medicine 15 (4): 361–87. https://doi.org/10.1002/(SICI)1097-0258(19960229)15:4&lt;361::AID-SIM168&gt;3.0.CO;2-4.\n\n\nHernán, Miguel A. 2010. “The Hazards of Hazard Ratios.” Epidemiology 21 (1): 13–15. https://doi.org/10.1097/EDE.0b013e3181c1ea43.\n\n\nKaplan, E. L., and Paul Meier. 1958. “Nonparametric Estimation from Incomplete Observations.” Journal of the American Statistical Association 53 (282): 457–81. https://doi.org/10.1080/01621459.1958.10501452.\n\n\nLoprinzi, C. L., J. A. Laurie, H. S. Wieand, et al. 1994. “Prospective Evaluation of Prognostic Variables from Patient-Completed Questionnaires. North Central Cancer Treatment Group.” Journal of Clinical Oncology 12 (3): 601–7. https://doi.org/10.1200/JCO.1994.12.3.601.\n\n\nMakuch, Robert W. 1982. “Adjusted Survival Curve Estimation Using Covariates.” Journal of Chronic Diseases 35 (6): 437–43. https://doi.org/10.1016/0021-9681(82)90058-3.\n\n\nMantel, Nathan. 1966. “Evaluation of Survival Data and Two New Rank Order Statistics Arising in Its Consideration.” Cancer Chemotherapy Reports 50 (3): 163–70.\n\n\nMcShane, Lisa M., Douglas G. Altman, Willi Sauerbrei, Sheila E. Taube, Massimo Gion, and Gary M. Clark. 2005. “Reporting Recommendations for Tumor Marker Prognostic Studies (REMARK).” Journal of the National Cancer Institute 97 (16): 1180–84. https://doi.org/10.1093/jnci/dji237.\n\n\nMorris, Tim P., Christopher I. Jarvis, William Cragg, Patrick P. J. Phillips, Babak Choodari-Oskooei, and Matthew R. Sydes. 2019. “Proposals on Kaplan-Meier Plots in Medical Research and a Survey of Stakeholder Views: KMunicate.” BMJ Open 9 (9): e030215. https://doi.org/10.1136/bmjopen-2019-030215.\n\n\nOken, Martin M., Richard H. Creech, Douglass C. Tormey, et al. 1982. “Toxicity and Response Criteria of the Eastern Cooperative Oncology Group.” American Journal of Clinical Oncology 5 (6): 649–56. https://doi.org/10.1097/00000421-198212000-00014.\n\n\nPeduzzi, Peter, John Concato, Alvan R. Feinstein, and Theodore R. Holford. 1995. “Importance of Events Per Independent Variable in Proportional Hazards Regression Analysis II. Accuracy and Precision of Regression Estimates.” Journal of Clinical Epidemiology 48 (12): 1503–10. https://doi.org/10.1016/0895-4356(95)00048-8.\n\n\nPeto, Richard, and Julian Peto. 1972. “Asymptotically Efficient Rank Invariant Test Procedures.” Journal of the Royal Statistical Society: Series A (General) 135 (2): 185–207. https://doi.org/10.2307/2344317.\n\n\nPocock, Stuart J., Tim C. Clayton, and Douglas G. Altman. 2002. “Survival Plots of Time-to-Event Outcomes in Clinical Trials: Good Practice and Pitfalls.” The Lancet 359 (9318): 1686–89. https://doi.org/10.1016/S0140-6736(02)08594-X.\n\n\nRoyston, Patrick, and Mahesh K. B. Parmar. 2013. “Restricted Mean Survival Time: An Alternative to the Hazard Ratio for the Design and Analysis of Randomized Trials with a Time-to-Event Outcome.” BMC Medical Research Methodology 13: 152. https://doi.org/10.1186/1471-2288-13-152.\n\n\nSchoenfeld, David. 1982. “Partial Residuals for the Proportional Hazards Regression Model.” Biometrika 69 (1): 239–41. https://doi.org/10.1093/biomet/69.1.239.\n\n\nStensrud, Mats J., and Miguel A. Hernán. 2020. “Why Test for Proportional Hazards?” JAMA 323 (14): 1401–2. https://doi.org/10.1001/jama.2020.1267.\n\n\nTarone, Robert E., and James Ware. 1977. “On Distribution-Free Tests for Equality of Survival Distributions.” Biometrika 64 (1): 156–60. https://doi.org/10.1093/biomet/64.1.156.\n\n\nTherneau, Terry M. 2026. A Package for Survival Analysis in R. https://CRAN.R-project.org/package=survival.\n\n\nTherneau, Terry M., and Patricia M. Grambsch. 2000. Modeling Survival Data: Extending the Cox Model. Statistics for Biology and Health. Springer. https://doi.org/10.1007/978-1-4757-3294-8.\n\n\nVittinghoff, Eric, and Charles E. McCulloch. 2007. “Relaxing the Rule of Ten Events Per Variable in Logistic and Cox Regression.” American Journal of Epidemiology 165 (6): 710–18. https://doi.org/10.1093/aje/kwk052.\n\n\n\n\n\n Back to top",
+    "crumbs": [
+      "Home",
+      "Further",
+      "References"
+    ]
+  },
+  {
+    "objectID": "further/reporting.html",
+    "href": "further/reporting.html",
+    "title": "Reporting a survival analysis",
+    "section": "",
+    "text": "A survival analysis can only be judged if the reader knows how the times were defined and how much information lies behind each number. Reporting guidelines exist for observational studies in general (STROBE, Elm et al. (2007)), for prognostic marker studies (REMARK, McShane et al. (2005)) and for prediction models (TRIPOD, Collins et al. (2015)). The checklist below covers what they ask for in the analyses of this tutorial.",
+    "crumbs": [
+      "Home",
+      "Further",
+      "Reporting a survival analysis"
+    ]
+  },
+  {
+    "objectID": "further/reporting.html#checklist",
+    "href": "further/reporting.html#checklist",
+    "title": "Reporting a survival analysis",
+    "section": "Checklist",
+    "text": "Checklist\nMethods\n\nThe time origin and the event, defined precisely (for example “overall survival: time from diagnosis to death from any cause”).\nHow and when patients were censored (alive at the last contact, end of the study), and the date of closing the follow-up.\nThe candidate variables, how continuous variables were entered (per unit, per 10 years …), the reference level of each factor, and how variables were chosen for the multivariable model.\nHow missing data were handled (the module uses complete cases).\nThe methods: Kaplan-Meier with log-transformed confidence intervals, log-rank test (and trend test for ordered groups), Cox regression, how proportional hazards were checked.\nThe software and versions.\n\nResults\n\nNumber of patients, number of events, and the median follow-up (reverse Kaplan-Meier).\nMedian survival and survival at clinically relevant times, each with a 95% CI.\nThe test comparing groups, with its statistic, df and p-value.\nHazard ratios with 95% CI, univariable and multivariable, with the number of patients and events in the model.\nThe result of the proportional-hazards check.\nFor interactions: the interaction test, and HRs within subgroups only if it supports them.\n\nFigures\n\nKaplan-Meier curves with the number at risk under the time axis, the y-axis from 0 to 1 (or 0–100%), and follow-up cut where few patients remain (Pocock et al. 2002; Morris et al. 2019).\nConfidence bands, or CIs at key times, so that the reader sees the uncertainty.",
+    "crumbs": [
+      "Home",
+      "Further",
+      "Reporting a survival analysis"
+    ]
+  },
+  {
+    "objectID": "further/reporting.html#a-template",
+    "href": "further/reporting.html#a-template",
+    "title": "Reporting a survival analysis",
+    "section": "A template",
+    "text": "A template\nThe following paragraphs report the worked examples of this tutorial. Numbers come from the module; replace the software versions with yours (jamovi shows its own version under About jamovi, and the module’s version in the jamovi library of installed modules).\n\nStatistical analysis. Overall survival was defined as the time from enrolment to death from any cause; patients alive at the last contact were censored. Survival was estimated with the Kaplan-Meier method, with 95% confidence intervals computed on the log scale, and follow-up was summarised with the reverse Kaplan-Meier method. Survival was compared between ECOG performance status groups with the log-rank test and the log-rank test for trend. Hazard ratios (HR) were estimated with Cox proportional hazards regression, univariable and adjusted for sex, age (per 10 years) and ECOG performance status (reference: ECOG 0); the proportional hazards assumption was assessed with scaled Schoenfeld residuals (Grambsch and Therneau 1994). Analyses used jamovi (version …) with the prognosis module (version 0.1.1), which uses the R package survival (Therneau 2026).\n\n\nResults. Of 226 patients, 163 died during a median follow-up of 19.3 months. Median survival was 12.9, 10.1 and 6.5 months for ECOG 0, 1 and 2, and 1-year survival 54%, 43% and 21% (log-rank p &lt; 0.001; trend p &lt; 0.001). In the multivariable Cox model (Table 2), ECOG 1 and 2 were associated with higher mortality than ECOG 0 (HR 1.51, 95% CI 1.02–2.23, and 2.47, 95% CI 1.58–3.86), and women had lower mortality than men (HR 0.58, 95% CI 0.42–0.81). The crude association of age (HR per 10 years 1.20, 95% CI 1.00–1.44) weakened after adjustment (HR 1.11, 95% CI 0.93–1.34). There was no evidence against proportional hazards (global test p = 0.288).\n\nTable 2 is the module’s hazard ratio table with Univariable and multivariable on, as you would copy it from jamovi (right-click the table → Copy, then paste into your word processor):\n\n\n\nHazard ratios\n\n\n\n\n\nUnivariable\nMultivariable\n\n\n\n\nHR\nLower\nUpper\np\np trend\nHR\nLower\nUpper\np\np trend\n\n\n\n\nsex\nMale\n1.000\n\n\n.002\n.002\n1.000\n\n\n\n.001\n\n\n\nFemale\n0.596\n0.429\n0.828\n.002\n\n0.579\n0.417\n0.806\n.001\n\n\n\necog\nECOG 0\n1.000\n\n\n&lt; .001\n&lt; .001\n1.000\n\n\n\n&lt; .001\n\n\n\nECOG 1\n1.446\n0.979\n2.134\n.064\n\n1.507\n1.019\n2.228\n.040\n\n\n\n\nECOG 2\n2.498\n1.608\n3.878\n&lt; .001\n\n2.465\n1.577\n3.855\n&lt; .001\n\n\n\nage\nper 10\n1.203\n1.004\n1.442\n.046\n\n1.114\n0.928\n1.337\n.247\n\n\n\n\n\n\n\n\nAdd a footnote with the number of patients and events, what the model was adjusted for, and what the p on the reference rows means (the test for the whole variable).",
+    "crumbs": [
+      "Home",
+      "Further",
+      "Reporting a survival analysis"
+    ]
+  },
+  {
+    "objectID": "further/reporting.html#common-mistakes",
+    "href": "further/reporting.html#common-mistakes",
+    "title": "Reporting a survival analysis",
+    "section": "Common mistakes",
+    "text": "Common mistakes\n\nNo number at risk under a Kaplan-Meier plot, or curves drawn to the last patient, where the steps are huge and the estimates meaningless.\n“Median survival not reached” reported as a number, or survival at a time beyond the follow-up.\nOnly p-values, no hazard ratios or survival probabilities with CIs.\nUnivariable screening (“variables with p &lt; 0.05 entered the multivariable model”) without saying so; it biases the results and should be justified.\nToo many variables for the number of events.\nSubgroup claims without an interaction test (see the subgroup fallacy).\nHazard ratios described as risks: “a 42% lower risk of death” for HR = 0.58 is common but loose; “a 42% lower hazard (rate) of death” is correct.\nCensoring the wrong patients: for overall survival, deaths from any cause are events, not censored observations.",
+    "crumbs": [
+      "Home",
+      "Further",
+      "Reporting a survival analysis"
+    ]
+  },
+  {
+    "objectID": "foundations/what-is-survival.html",
+    "href": "foundations/what-is-survival.html",
+    "title": "Time-to-event data and censoring",
+    "section": "",
+    "text": "Every time-to-event analysis starts by fixing three things, and a paper that does not state them clearly cannot be interpreted:\n\nThe time origin: when the clock starts. Diagnosis, surgery, randomisation, start of treatment. It should be a moment that is defined in the same way for every patient.\nThe event: what stops the clock. Death from any cause (overall survival), relapse or death (disease-free or progression-free survival), graft failure, hospital discharge.\nThe time scale and unit: days, months or years since the origin.\n\nFor each patient we then observe a pair \\((t_i, \\delta_i)\\): the time \\(t_i\\) from the origin to the end of observation, and an indicator \\(\\delta_i\\) that says whether observation ended because the event happened (\\(\\delta_i = 1\\)) or for some other reason (\\(\\delta_i = 0\\)). In the teaching dataset these are the columns time (months) and event (dead or alive).",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "Time-to-event data and censoring"
+    ]
+  },
+  {
+    "objectID": "foundations/what-is-survival.html#three-things-define-a-survival-time",
+    "href": "foundations/what-is-survival.html#three-things-define-a-survival-time",
+    "title": "Time-to-event data and censoring",
+    "section": "",
+    "text": "Every time-to-event analysis starts by fixing three things, and a paper that does not state them clearly cannot be interpreted:\n\nThe time origin: when the clock starts. Diagnosis, surgery, randomisation, start of treatment. It should be a moment that is defined in the same way for every patient.\nThe event: what stops the clock. Death from any cause (overall survival), relapse or death (disease-free or progression-free survival), graft failure, hospital discharge.\nThe time scale and unit: days, months or years since the origin.\n\nFor each patient we then observe a pair \\((t_i, \\delta_i)\\): the time \\(t_i\\) from the origin to the end of observation, and an indicator \\(\\delta_i\\) that says whether observation ended because the event happened (\\(\\delta_i = 1\\)) or for some other reason (\\(\\delta_i = 0\\)). In the teaching dataset these are the columns time (months) and event (dead or alive).",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "Time-to-event data and censoring"
+    ]
+  },
+  {
+    "objectID": "foundations/what-is-survival.html#censoring",
+    "href": "foundations/what-is-survival.html#censoring",
+    "title": "Time-to-event data and censoring",
+    "section": "Censoring",
+    "text": "Censoring\nA patient whose observation ends before the event is censored. Their survival time is not missing: we know it is longer than \\(t_i\\). This is called right censoring, because the true time lies somewhere to the right of what we saw. It happens for ordinary reasons:\n\nthe study ends (administrative censoring): patients recruited late have been followed for a short time only;\nloss to follow-up: the patient moves away or stops attending;\nwithdrawal, or an event that makes further observation impossible.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigure 1: Eight hypothetical patients. Left: they enter a study at different dates and the study closes at month 15 (dashed line). Right: the same patients with each clock started at entry, which is how survival data are analysed. Dots are deaths; crosses are censored follow-up (patient 6 was lost to follow-up, the others were alive when the study closed).\n\n\n\nThe key assumption of every method in this tutorial is non-informative censoring: patients who are censored at a given time must have the same prospects as those who remain under observation. Administrative censoring is usually harmless. Loss to follow-up may not be: if the sickest patients stop coming to the clinic, the patients who remain look healthier than the cohort really is, and survival is overestimated. No statistical method can repair this. Keep loss to follow-up low and report how much there was.",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "Time-to-event data and censoring"
+    ]
+  },
+  {
+    "objectID": "foundations/what-is-survival.html#why-the-usual-methods-fail",
+    "href": "foundations/what-is-survival.html#why-the-usual-methods-fail",
+    "title": "Time-to-event data and censoring",
+    "section": "Why the usual methods fail",
+    "text": "Why the usual methods fail\nSuppose you want the typical survival of the 226 patients. Some obvious shortcuts all give the wrong answer:\n\n\n\n\n\n\n\n\n\nApproach\nMedian (months)\n\n\n\n\nMedian of all observed times (censored treated as deaths)\n8.6\n\n\nMedian time of the patients who died (censored dropped)\n7.5\n\n\nKaplan-Meier median (next page)\n10.2\n\n\n\n\n\nTreating a censored time as if the patient had died underestimates survival: the patient lived longer. Dropping censored patients also underestimates it, because the patients still alive at the end of the study are often the long survivors. And the proportion who died, 163/226 = 72%, is not a probability of anything: it depends on how long each patient happened to be followed. A t-test or a linear regression of time has the same problems. Logistic regression of “dead at 12 months” works only for patients followed for at least 12 months and ignores when the deaths happened.\nSurvival methods use each patient for exactly as long as they were observed, and no longer.",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "Time-to-event data and censoring"
+    ]
+  },
+  {
+    "objectID": "foundations/what-is-survival.html#three-ways-to-describe-the-same-survival",
+    "href": "foundations/what-is-survival.html#three-ways-to-describe-the-same-survival",
+    "title": "Time-to-event data and censoring",
+    "section": "Three ways to describe the same survival",
+    "text": "Three ways to describe the same survival\n\nThe survival function \\(S(t)\\)\n\\[S(t) = P(T &gt; t)\\]\nis the probability of being event-free beyond time \\(t\\). It starts at \\(S(0) = 1\\) and can only go down. “Two-year survival is 12 %” is a statement about \\(S(24 \\text{ months})\\). The median survival is the time at which \\(S(t)\\) falls to 0.5. The Kaplan-Meier curve is an estimate of \\(S(t)\\).\n\n\nThe hazard \\(h(t)\\)\nThe hazard is the rate at which events happen at time \\(t\\) among the patients who are still event-free just before \\(t\\):\n\\[h(t) = \\lim_{\\Delta t \\to 0} \\frac{P(t \\le T &lt; t + \\Delta t \\mid T \\ge t)}{\\Delta t}\\]\nThink of it as the death rate of the patients still alive at that moment, for example “3% per month at month 6”. The hazard can rise, fall or stay constant over time, and its shape tells a clinical story (Figure 2): the risk after surgery is highest in the first days, the risk of death with age increases, and the risk of a chronic disease may be constant.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigure 2: Three hazard shapes (left) and the survival curves they produce (right). A constant hazard of 5% per month gives the exponential curve \\(S(t) = e^{-0.05t}\\). A decreasing hazard makes the curve drop fast early and then flatten; an increasing hazard does the opposite.\n\n\n\nA hazard is a rate, not a probability, so it has a unit (per month, per year) and can be larger than 1. The ratio of two hazards, the hazard ratio (HR), has no unit; it is what Cox regression estimates.\n\n\nThe cumulative hazard \\(H(t)\\)\n\\[H(t) = \\int_0^t h(u)\\,du, \\qquad S(t) = e^{-H(t)}\\]\nadds the hazard up over time. With a constant hazard \\(h\\), \\(H(t) = h\\,t\\). \\(H(t)\\) can be read roughly as the expected number of events a patient would have had by time \\(t\\) if the event could repeat.\n\n\n\n\n\n\nTipWhat to remember\n\n\n\n\n\\(S(t)\\), \\(h(t)\\) and \\(H(t)\\) are three descriptions of the same thing: know one and you know the others. If two groups differ in one, they differ in all three.\n\\(S(t)\\) is the easiest to explain to patients. Hazards are what the models work with.\nThe Kaplan-Meier module draws four views of the same estimate: \\(S(t)\\), the cumulative incidence \\(1 - S(t)\\), the cumulative hazard \\(H(t)\\), and \\(\\log(-\\log S(t)) = \\log H(t)\\).\n\n\n\n\nNext: Kaplan-Meier: estimating the survival curve",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "Time-to-event data and censoring"
+    ]
+  },
+  {
+    "objectID": "foundations/logrank.html",
+    "href": "foundations/logrank.html",
+    "title": "Comparing curves: the log-rank test",
+    "section": "",
+    "text": "Two Kaplan-Meier curves differ in a sample. Is the difference larger than chance would produce if the two groups really had the same survival? We cannot compare mean survival times (censoring), and comparing survival at one chosen time wastes most of the data. The log-rank test (Mantel 1966; Peto and Peto 1972) uses the whole curve with a simple idea: at every time a death happens, compare the number of deaths in each group with the number we would expect if the groups did not differ.",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "Comparing curves: the log-rank test"
+    ]
+  },
+  {
+    "objectID": "foundations/logrank.html#the-question",
+    "href": "foundations/logrank.html#the-question",
+    "title": "Comparing curves: the log-rank test",
+    "section": "",
+    "text": "Two Kaplan-Meier curves differ in a sample. Is the difference larger than chance would produce if the two groups really had the same survival? We cannot compare mean survival times (censoring), and comparing survival at one chosen time wastes most of the data. The log-rank test (Mantel 1966; Peto and Peto 1972) uses the whole curve with a simple idea: at every time a death happens, compare the number of deaths in each group with the number we would expect if the groups did not differ.",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "Comparing curves: the log-rank test"
+    ]
+  },
+  {
+    "objectID": "foundations/logrank.html#observed-and-expected-deaths",
+    "href": "foundations/logrank.html#observed-and-expected-deaths",
+    "title": "Comparing curves: the log-rank test",
+    "section": "Observed and expected deaths",
+    "text": "Observed and expected deaths\nTake one event time \\(t_j\\). Just before it, \\(n_{Aj}\\) patients of group A and \\(n_{Bj}\\) of group B are at risk (\\(n_j\\) in total), and \\(d_j\\) of them die. If the groups had the same hazard, each patient at risk would be equally likely to be one of the deaths, so group A would expect a share of the deaths proportional to its share of the risk set:\n\\[E_{Aj} = d_j \\,\\frac{n_{Aj}}{n_j}\\]\nThis is a 2×2 table (group × died or not) at each event time. Adding up over all event times gives the observed deaths \\(O_A = \\sum_j d_{Aj}\\) and the expected deaths \\(E_A = \\sum_j E_{Aj}\\). The variance of \\(O_A - E_A\\) also adds up, with a contribution from each table:\n\\[V_j = \\frac{n_{Aj}\\, n_{Bj}\\, d_j\\,(n_j - d_j)}{n_j^2\\,(n_j - 1)}, \\qquad\n  \\chi^2 = \\frac{(O_A - E_A)^2}{\\sum_j V_j}\\]\nUnder the null hypothesis of equal survival, \\(\\chi^2\\) follows a chi-square distribution with 1 degree of freedom.",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "Comparing curves: the log-rank test"
+    ]
+  },
+  {
+    "objectID": "foundations/logrank.html#by-hand-the-ten-patients-in-two-groups",
+    "href": "foundations/logrank.html#by-hand-the-ten-patients-in-two-groups",
+    "title": "Comparing curves: the log-rank test",
+    "section": "By hand: the ten patients in two groups",
+    "text": "By hand: the ten patients in two groups\nSplit the ten patients of the Kaplan-Meier page into two groups:\n\nGroup A: 6, 10+, 14, 21+, 30\nGroup B: 2, 4, 5+, 8, 12\n\n\n\n\n\nTable 1: One row per event time: patients at risk in each group, deaths, deaths expected in group A, and the variance contribution.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nMonth\nAt risk A\nAt risk B\nDeaths\nDeaths A (O)\nExpected A (E)\nV\n\n\n\n\n2\n5\n5\n1\n0\n0.500\n0.250\n\n\n4\n5\n4\n1\n0\n0.556\n0.247\n\n\n6\n5\n2\n1\n1\n0.714\n0.204\n\n\n8\n4\n2\n1\n0\n0.667\n0.222\n\n\n12\n3\n1\n1\n0\n0.750\n0.188\n\n\n14\n3\n0\n1\n1\n1.000\n0.000\n\n\n30\n1\n0\n1\n1\n1.000\n0.000\n\n\nTotal\n\n\n7\n3\n5.187\n1.111\n\n\n\n\n\n\n\n\nGroup A had \\(O_A = 3\\) deaths where \\(E_A = 5.187\\) were expected: fewer deaths than expected, so better survival. The statistic is\n\\[\\chi^2 = \\frac{(3 - 5.187)^2}{1.111} = 4.304, \\qquad\np = 0.038\\]\nThe module gives the same result:\n\n\n\nTests comparing groups\n\n\n\n\n\nχ²\ndf\np\n\n\n\n\nLog-rank\n4.30\n1\n.038\n\n\n\n\n\n\n\nTwo things to notice in Table 1. First, the rows at months 14 and 30 contribute nothing to the variance: only group A is left at risk, so there is nothing to compare. Second, the test is driven by the whole sequence of deaths, not by any single time point.\n\n\n\n\n\n\nNoteSeveral groups\n\n\n\nWith \\(K\\) groups the same observed-minus-expected sums are formed for each group, and the statistic has \\(K - 1\\) degrees of freedom. A small p-value then says that at least one curve differs from the others, not which one.",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "Comparing curves: the log-rank test"
+    ]
+  },
+  {
+    "objectID": "foundations/logrank.html#weighted-versions",
+    "href": "foundations/logrank.html#weighted-versions",
+    "title": "Comparing curves: the log-rank test",
+    "section": "Weighted versions",
+    "text": "Weighted versions\nThe log-rank test gives every event time the same weight. Its relatives give each 2×2 table a weight \\(w_j\\) and use \\(\\sum_j w_j (O_{Aj} - E_{Aj})\\) instead. All are valid tests of the same null hypothesis; they differ in which differences they detect best.\n\n\n\n\n\n\n\n\nTest\nWeight \\(w_j\\)\nMost sensitive to differences …\n\n\n\n\nLog-rank (Mantel 1966; Peto and Peto 1972)\n1\nspread over the whole follow-up, as under proportional hazards\n\n\nGehan-Breslow (Gehan 1965)\n\\(n_j\\), the number at risk\nearly, when many patients are at risk\n\n\nTarone-Ware (Tarone and Ware 1977)\n\\(\\sqrt{n_j}\\)\nin between the two\n\n\nPeto-Peto (Peto and Peto 1972)\nthe pooled survival \\(\\widehat S(t_j^-)\\)\nearly; less affected than Gehan-Breslow by different censoring in the groups\n\n\n\nOn the teaching data, by ECOG group:\n\n\n\nTests comparing groups\n\n\n\n\n\nχ²\ndf\np\n\n\n\n\nLog-rank\n18.0\n2\n&lt; .001\n\n\nGehan-Breslow\n20.5\n2\n&lt; .001\n\n\nTarone-Ware\n20.4\n2\n&lt; .001\n\n\nPeto-Peto\n20.3\n2\n&lt; .001\n\n\nLog-rank trend\n16.4\n1\n&lt; .001\n\n\n\nNote. H0: the survival curves are identical. Log-rank weights all event times equally; Gehan-Breslow and Tarone-Ware give more weight to early times, Peto-Peto weights by overall survival. The trend test (1 df) uses the group order as scores.\n\n\n\n\n\n\n\n\nAll the tests agree here. When they disagree, the weights tell you when the curves differ: a Gehan-Breslow test much smaller than the log-rank points to an early difference. Choose the test before looking at the data, usually the log-rank. Trying all of them and reporting the smallest p-value is a form of multiple testing.",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "Comparing curves: the log-rank test"
+    ]
+  },
+  {
+    "objectID": "foundations/logrank.html#the-trend-test-for-ordered-groups",
+    "href": "foundations/logrank.html#the-trend-test-for-ordered-groups",
+    "title": "Comparing curves: the log-rank test",
+    "section": "The trend test for ordered groups",
+    "text": "The trend test for ordered groups\nECOG 0, 1 and 2 are ordered. The 2-df log-rank test asks whether the three curves differ in any way; the log-rank test for trend gives the groups scores 1, 2, 3 and asks the narrower question, on 1 df, whether survival changes steadily along the order. When the ordering is real, the trend test is more powerful and the conclusion is clearer: “survival worsened with each step of ECOG”. Report it alongside the overall test for ordinal groups (tick Log-rank trend (ordered groups)); it makes no sense for unordered groups such as treatment arms.",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "Comparing curves: the log-rank test"
+    ]
+  },
+  {
+    "objectID": "foundations/logrank.html#what-the-tests-do-not-tell-you",
+    "href": "foundations/logrank.html#what-the-tests-do-not-tell-you",
+    "title": "Comparing curves: the log-rank test",
+    "section": "What the tests do not tell you",
+    "text": "What the tests do not tell you\n\nHow large the difference is. The p-value depends on the sample size. For the size of the effect, look at the medians, the survival at fixed times, or a hazard ratio from Cox regression.\nWhich groups differ, when there are more than two.\nWhether the difference is due to the grouping variable itself or to something that goes with it (older patients may have a worse ECOG). Adjustment needs a regression model.\n\n\nNext: Cox regression",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "Comparing curves: the log-rank test"
+    ]
+  },
+  {
+    "objectID": "worked/interactions.html",
+    "href": "worked/interactions.html",
+    "title": "Interactions: does one effect depend on another?",
+    "section": "",
+    "text": "Question. Women had a lower hazard of death than men in the Cox example. Is that advantage the same whatever the performance status, or does it depend on ECOG? This is a question about effect modification (see interactions).",
+    "crumbs": [
+      "Home",
+      "Worked examples in jamovi",
+      "Interactions: does one effect depend on another?"
+    ]
+  },
+  {
+    "objectID": "worked/interactions.html#step-1-add-the-interaction",
+    "href": "worked/interactions.html#step-1-add-the-interaction",
+    "title": "Interactions: does one effect depend on another?",
+    "section": "Step 1: add the interaction",
+    "text": "Step 1: add the interaction\nKeep the model of the Cox example (Factors sex, ecog; Covariate age). Open the Interactions section of the panel: the Model variables list holds the factors and covariates of the model. Select sex and ecog together (Ctrl-click, or ⌘-click on a Mac), click the lower arrow, the one with a small menu (→▾), and choose Interaction: the term sex ✻ ecog appears in Interaction terms (Figure 1). The plain arrow above it adds sex and ecog on their own as well; the module ignores those, since they are already in the model.\n\n\n\n\n\n\nFigure 1: The Interactions section of the Cox panel with the term sex ✻ ecog.\n\n\n\n\n\njamovi syntax\nr &lt;- prognosis::cox(data = lung, elapsed = time, event = event, eventLevel = \"dead\",\n                    factors = vars(sex, ecog), covs = age, interactions = ~ sex:ecog,\n                    forest = TRUE, showExplanations = TRUE)\n\n\nTwo new tables appear.\n\n\n\nInteraction tests\n\n\n\n\n\nχ²\ndf\np\n\n\n\n\nsex × ecog\n0.226\n2\n.893\n\n\n\nNote. Likelihood-ratio test for adding the interaction; a small p suggests that the effect of one variable depends on the other.\n\n\n\n\n\n\n\n\nThe interaction test is a likelihood-ratio test comparing the model with and without the interaction terms: χ² = 0.23 on 2 df (one extra coefficient for each combination of a non-reference sex level with a non-reference ECOG level), p = 0.893. There is no evidence that the effect of sex differs between ECOG groups.\n\n\n\nHazard ratios within subgroups\n\n\n\n\n\n95% CI\n\n\n\nEffect of\nWithin\nHR\nLower\nUpper\np\n\n\n\n\nsex: Female – Male\necog = ECOG 0\n0.527\n0.247\n1.122\n.097\n\n\n\necog = ECOG 1\n0.561\n0.353\n0.892\n.014\n\n\n\necog = ECOG 2\n0.657\n0.349\n1.238\n.194\n\n\n\nNote. Hazard ratio of the first variable within each level (or quartile) of the second; other variables at their reference level or median.\n\n\n\n\n\n\n\n\nThe hazard ratios within subgroups give the effect of the first variable of the term (women versus men) within each level of the second (ECOG). Other variables are held at their reference level or median; since age is not part of the interaction, its value does not change these HRs.\n\n\n\n\n\n\nWarningThe subgroup fallacy\n\n\n\nOnly the middle row is “significant” (p = 0.014); the other two are not (p = 0.097 and p = 0.194). It is tempting to conclude that “being a woman is protective only in ECOG 1 patients”. That conclusion is wrong. The three HRs are very similar (0.53, 0.56, 0.66); the ECOG 1 group is simply the largest (113 of 226 patients), so its CI is the narrowest. A significant result in one subgroup and a non-significant one in another is not evidence that the effects differ; the interaction test is, and here it is far from significant (p = 0.893).",
+    "crumbs": [
+      "Home",
+      "Worked examples in jamovi",
+      "Interactions: does one effect depend on another?"
+    ]
+  },
+  {
+    "objectID": "worked/interactions.html#step-2-the-coefficient-table-with-an-interaction",
+    "href": "worked/interactions.html#step-2-the-coefficient-table-with-an-interaction",
+    "title": "Interactions: does one effect depend on another?",
+    "section": "Step 2: the coefficient table with an interaction",
+    "text": "Step 2: the coefficient table with an interaction\n\n\n\nHazard ratios\n\n\n\n\n\n95% CI\n\n\n\n\n\nHR\nLower\nUpper\np\n\n\n\n\nsex\nMale\n1.000\n\n\n\n\n\n\nFemale\n0.527\n0.247\n1.12\n.097\n\n\necog\nECOG 0\n1.000\n\n\n\n\n\n\nECOG 1\n1.489\n0.939\n2.36\n.091\n\n\n\nECOG 2\n2.314\n1.366\n3.92\n.002\n\n\nage\nper unit\n1.010\n0.991\n1.03\n.315\n\n\nsex × ecog\nFemale × ECOG 1\n1.066\n0.439\n2.58\n.888\n\n\n\nFemale × ECOG 2\n1.248\n0.462\n3.37\n.662\n\n\n\nNote. HR &gt; 1: higher hazard (worse prognosis) than the reference level, or per one-unit increase of a covariate. Multivariable HRs are adjusted for the other variables in the model. With interactions, main-effect HRs apply at the reference level (or 0) of the interacting variable.\n\n\n\n\n\n\n\n\nWith an interaction in the model, the other rows change meaning (the note under the table says so):\n\nFemale (HR 0.53) is now the effect of sex in the reference level of ECOG (ECOG 0), which matches the first row of the subgroup table.\nECOG 1 and ECOG 2 are the effects of ECOG in men (the reference level of sex).\nThe interaction rows (Female × ECOG 1, Female × ECOG 2) are ratios of hazard ratios: how much the female-versus-male HR is multiplied in ECOG 1 or 2 compared with ECOG 0. For example, 0.53 × 1.07 = 0.56, the HR for women in ECOG 1. Values near 1 mean no interaction.\n\nSo when you keep an interaction, report the subgroup HRs, not the main-effect rows. When the interaction test is not significant, as here, remove the interaction and report the simpler model of the Cox example.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigure 2: The forest plot of the model with the interaction: the main effects, then one row for each interaction coefficient.",
+    "crumbs": [
+      "Home",
+      "Worked examples in jamovi",
+      "Interactions: does one effect depend on another?"
+    ]
+  },
+  {
+    "objectID": "worked/interactions.html#step-3-a-covariate-and-a-factor",
+    "href": "worked/interactions.html#step-3-a-covariate-and-a-factor",
+    "title": "Interactions: does one effect depend on another?",
+    "section": "Step 3: a covariate and a factor",
+    "text": "Step 3: a covariate and a factor\nInteractions work the same way with a continuous covariate. Does the effect of age differ between men and women? Replace the interaction by age ✻ sex (select both, choose Interaction again), and set HR for covariates to per value below, 10:\n\n\njamovi syntax\nra &lt;- prognosis::cox(data = lung, elapsed = time, event = event, eventLevel = \"dead\",\n                     factors = vars(sex, ecog), covs = age, interactions = ~ age:sex,\n                     covScale = \"custom\", covMult = 10)\n\n\n\n\n\nInteraction tests\n\n\n\n\n\nχ²\ndf\np\n\n\n\n\nage × sex\n1.68\n1\n.196\n\n\n\n\n\n\n\n\nHazard ratios within subgroups\n\n\n\n\n\n95% CI\n\n\n\nEffect of\nWithin\nHR\nLower\nUpper\np\n\n\n\n\nage (per 10)\nsex = Male\n1.214\n0.968\n1.52\n.094\n\n\n\nsex = Female\n0.943\n0.694\n1.28\n.705\n\n\n\n\n\n\n\nEach 10 years of age multiplied the hazard by 1.21 in men and by 0.94 in women, but the interaction test is not significant (p = 0.196): the data cannot tell the two effects apart. When one variable is a factor and the other a covariate, the subgroup table always gives the HR of the covariate within each level of the factor, whatever the order of the term. When both are covariates (say age and a laboratory value), it gives the HR of the first at the 25th, 50th and 75th percentiles of the second.",
+    "crumbs": [
+      "Home",
+      "Worked examples in jamovi",
+      "Interactions: does one effect depend on another?"
+    ]
+  },
+  {
+    "objectID": "worked/interactions.html#good-practice",
+    "href": "worked/interactions.html#good-practice",
+    "title": "Interactions: does one effect depend on another?",
+    "section": "Good practice",
+    "text": "Good practice\n\nDecide on interactions before seeing the data, from a clinical question; every extra interaction tested is another chance of a false positive.\nReport the interaction test, not only the subgroup results.\nExpect low power. Detecting an interaction as large as the main effect needs about four times the sample size (Brookes et al. 2004). A non-significant interaction test means “no evidence of a difference”, not “the effects are equal”.",
+    "crumbs": [
+      "Home",
+      "Worked examples in jamovi",
+      "Interactions: does one effect depend on another?"
+    ]
+  },
+  {
+    "objectID": "worked/cox-example.html",
+    "href": "worked/cox-example.html",
+    "title": "Cox regression in jamovi",
+    "section": "",
+    "text": "Question. The Kaplan-Meier example showed that survival falls with worse ECOG. Does ECOG still predict survival once age and sex are taken into account? And are age and sex prognostic themselves?",
+    "crumbs": [
+      "Home",
+      "Worked examples in jamovi",
+      "Cox regression in jamovi"
+    ]
+  },
+  {
+    "objectID": "worked/cox-example.html#step-1-the-panel",
+    "href": "worked/cox-example.html#step-1-the-panel",
+    "title": "Cox regression in jamovi",
+    "section": "Step 1: the panel",
+    "text": "Step 1: the panel\nOpen Analyses → Prognosis → Cox Regression and set:\n\n\n\nPanel\nSetting\n\n\n\n\nTime\ntime\n\n\nEvent\nevent; Event level dead\n\n\nFactors\nsex, ecog\n\n\nCovariates\nage\n\n\nHazard ratios\nUnivariable and multivariable; Trend test (p)\n\n\nModel\nGlobal tests (LR, Wald, score) (on by default)\n\n\nOptions\nShow explanations\n\n\n\n\n\n\n\n\n\nFigure 1: Prognosis → Cox Regression in jamovi, set as in the table above (the options panel).\n\n\n\nThe results appear once the time, the event level and at least one factor or covariate are set. The module uses the patients with no missing value in any model variable; if some are excluded, a note under the model summary says how many. Here all 226 patients are complete. The univariable models are fitted on the same patients as the multivariable one, so the two columns are comparable.\n\n\njamovi syntax\nr &lt;- prognosis::cox(data = lung, elapsed = time, event = event, eventLevel = \"dead\",\n                    factors = vars(sex, ecog), covs = age, uniMulti = TRUE, trend = TRUE,\n                    showExplanations = TRUE)",
+    "crumbs": [
+      "Home",
+      "Worked examples in jamovi",
+      "Cox regression in jamovi"
+    ]
+  },
+  {
+    "objectID": "worked/cox-example.html#step-2-model-summary-and-global-tests",
+    "href": "worked/cox-example.html#step-2-model-summary-and-global-tests",
+    "title": "Cox regression in jamovi",
+    "section": "Step 2: model summary and global tests",
+    "text": "Step 2: model summary and global tests\n\n\n\nModel summary\n\n\n\n\n\n95% CI\n\n\nN\nEvents\nC-index\nLower\nUpper\n\n\n\n\n226\n163\n0.635\n0.585\n0.684\n\n\n\nNote. C-index: probability that, of two patients, the one who has the event first has the higher predicted risk (0.5 = chance, 1 = perfect).\n\n\n\n\n\n\n\n\n\nGlobal tests\n\n\n\n\n\nχ²\ndf\np\n\n\n\n\nLikelihood ratio\n28.9\n4\n&lt; .001\n\n\nWald\n28.6\n4\n&lt; .001\n\n\nScore (log-rank)\n29.7\n4\n&lt; .001\n\n\n\nNote. H0: all hazard ratios in the model are 1.\n\n\n\n\n\n\n\n\n163 deaths among 226 patients support the four coefficients of this model comfortably (about 41 events per coefficient).\nThe C-index is 0.635: for two patients whose order of death is known, the model gives the higher risk to the one who died first 63% of the time (chance would be 50%). That is modest, and typical for a few clinical variables.\nThe three global tests agree (likelihood ratio χ² = 28.9 on 4 df, p &lt; 0.001): at least one of the variables is associated with survival. Report one of them, usually the likelihood-ratio test.",
+    "crumbs": [
+      "Home",
+      "Worked examples in jamovi",
+      "Cox regression in jamovi"
+    ]
+  },
+  {
+    "objectID": "worked/cox-example.html#step-3-the-hazard-ratio-table",
+    "href": "worked/cox-example.html#step-3-the-hazard-ratio-table",
+    "title": "Cox regression in jamovi",
+    "section": "Step 3: the hazard ratio table",
+    "text": "Step 3: the hazard ratio table\n\n\n\nHazard ratios\n\n\n\n\n\nUnivariable\nMultivariable\n\n\n\n\nHR\nLower\nUpper\np\np trend\nHR\nLower\nUpper\np\np trend\n\n\n\n\nsex\nMale\n1.000\n\n\n.002\n.002\n1.000\n\n\n\n.001\n\n\n\nFemale\n0.596\n0.429\n0.828\n.002\n\n0.579\n0.417\n0.806\n.001\n\n\n\necog\nECOG 0\n1.000\n\n\n&lt; .001\n&lt; .001\n1.000\n\n\n\n&lt; .001\n\n\n\nECOG 1\n1.446\n0.979\n2.134\n.064\n\n1.507\n1.019\n2.228\n.040\n\n\n\n\nECOG 2\n2.498\n1.608\n3.878\n&lt; .001\n\n2.465\n1.577\n3.855\n&lt; .001\n\n\n\nage\nper unit\n1.019\n1.000\n1.037\n.046\n\n1.011\n0.993\n1.029\n.247\n\n\n\n\nNote. HR &gt; 1: higher hazard (worse prognosis) than the reference level, or per one-unit increase of a covariate. Multivariable HRs are adjusted for the other variables in the model. Univariable: each variable alone; on the reference row, p of the Wald test for the whole variable. p trend: the factor entered as a numeric score (level order); multivariable trend keeps the other variables as in the model.\n\n\n\n\n\n\n\n\nHow to read it:\n\nReference rows. Male and ECOG 0 are the reference levels (the first level of each factor): HR = 1 by definition, no CI. In the univariable columns, the p on the reference row is the Wald test of the whole variable (for ECOG, 2 df: do the three levels differ?), and p trend is the 1-df test of a steady change along the levels.\nECOG. Adjusted for sex and age, ECOG 1 patients had 1.51 times the hazard of death of ECOG 0 patients (95% CI 1.02–2.23), and ECOG 2 patients 2.47 times (1.58–3.86). The trend test, p &lt; 0.001, summarises it: the hazard rises with each step of ECOG. Note that ECOG 1 versus 0 is not significant in the univariable column (p = 0.064) but is after adjustment (p = 0.040); the estimates themselves barely move (1.45 and 1.51).\nSex. Women had a lower hazard than men: HR 0.58 (0.42–0.81) adjusted, 0.60 crude. Adjustment changes almost nothing: sex is not confounded by age or ECOG here.\nAge. This is the interesting row. Alone, each year of age multiplied the hazard by 1.019 (1.000–1.037, p = 0.046). Adjusted for sex and ECOG, the HR shrinks to 1.011 (0.993–1.029, p = 0.247). Part of the crude age effect was confounding by ECOG: older patients more often had a poor performance status (mean age 66 years with ECOG 2 versus 61 with ECOG 0–1), and it is the performance status that carries most of the prognostic information.\n\n\n\n\n\n\n\nTipChanging the reference level\n\n\n\nThe first level of a factor is its reference. To compare against another level (for example to report men versus women), open the variable’s Setup in the Data tab and move that level to the top. The HR becomes its reciprocal, 1/0.58 = 1.73, the CI limits are inverted in the same way, and the p-values do not change.",
+    "crumbs": [
+      "Home",
+      "Worked examples in jamovi",
+      "Cox regression in jamovi"
+    ]
+  },
+  {
+    "objectID": "worked/cox-example.html#step-4-hazard-ratios-per-10-years",
+    "href": "worked/cox-example.html#step-4-hazard-ratios-per-10-years",
+    "title": "Cox regression in jamovi",
+    "section": "Step 4: hazard ratios per 10 years",
+    "text": "Step 4: hazard ratios per 10 years\n“1.019 per year” is correct but hard to grasp. Set HR for covariates to per value below and type 10 in Value:\n\n\njamovi syntax\nr10 &lt;- prognosis::cox(data = lung, elapsed = time, event = event, eventLevel = \"dead\",\n                      factors = vars(sex, ecog), covs = age, uniMulti = TRUE,\n                      covScale = \"custom\", covMult = 10, coefDetails = TRUE)\n\n\n\n\n\nHazard ratios\n\n\n\n\n\nUnivariable\nMultivariable\n\n\n\n\n\nHR\nLower\nUpper\np\nHR\nLower\nUpper\np\nβ\nSE\nz\n\n\n\n\nsex\nMale\n1.000\n\n\n.002\n1.000\n\n\n\n\n\n\n\n\n\nFemale\n0.596\n0.429\n0.828\n.002\n0.579\n0.417\n0.806\n.001\n-0.546\n0.1682\n-3.24\n\n\necog\nECOG 0\n1.000\n\n\n&lt; .001\n1.000\n\n\n\n\n\n\n\n\n\nECOG 1\n1.446\n0.979\n2.134\n.064\n1.507\n1.019\n2.228\n.040\n0.410\n0.1996\n2.05\n\n\n\nECOG 2\n2.498\n1.608\n3.878\n&lt; .001\n2.465\n1.577\n3.855\n&lt; .001\n0.902\n0.2281\n3.96\n\n\nage\nper 10\n1.203\n1.004\n1.442\n.046\n1.114\n0.928\n1.337\n.247\n0.108\n0.0931\n1.16\n\n\n\n\n\n\n\nThe age row now reads per 10: the crude HR is 1.20 per 10 years of age (1.203 = 1.01910), the adjusted one 1.11. The module divides age by 10 before fitting, so only the unit changes: the p-values, the other HRs and the model tests are the same as before. Per 1 SD does the same with the standard deviation of the variable, which helps to compare continuous variables measured in different units.\nThis run also ticked β, SE and z, the columns behind each HR: \\(\\mathrm{HR} = e^{\\beta}\\), its 95% CI is \\(e^{\\beta \\pm 1.96\\,\\mathrm{SE}}\\), and \\(z = \\beta/\\mathrm{SE}\\) gives the p-value. For ECOG 2, \\(e^{0.902} = 2.47\\) and \\(e^{0.902 \\pm 1.96 \\times 0.228}\\) gives 1.58–3.86.",
+    "crumbs": [
+      "Home",
+      "Worked examples in jamovi",
+      "Cox regression in jamovi"
+    ]
+  },
+  {
+    "objectID": "worked/cox-example.html#step-5-the-forest-plot",
+    "href": "worked/cox-example.html#step-5-the-forest-plot",
+    "title": "Cox regression in jamovi",
+    "section": "Step 5: the forest plot",
+    "text": "Step 5: the forest plot\nTick Forest plot under Plots. With Univariable and multivariable on, it shows both estimates for each row:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigure 2: Forest plot of the hazard ratios, univariable (grey) and multivariable (blue), on a log scale. Diamonds mark the reference levels. The dashed line is HR = 1.\n\n\n\nThe log scale makes HR = 0.5 and HR = 2 equally far from 1, as they should be: halving and doubling the hazard are effects of the same size.",
+    "crumbs": [
+      "Home",
+      "Worked examples in jamovi",
+      "Cox regression in jamovi"
+    ]
+  },
+  {
+    "objectID": "worked/cox-example.html#step-6-write-it-up",
+    "href": "worked/cox-example.html#step-6-write-it-up",
+    "title": "Cox regression in jamovi",
+    "section": "Step 6: write it up",
+    "text": "Step 6: write it up\n\nIn a Cox model including sex, age and ECOG performance status (226 patients, 163 deaths), survival was worse with higher ECOG: HR 1.51 (95% CI 1.02–2.23) for ECOG 1 and 2.47 (95% CI 1.58–3.86) for ECOG 2, compared with ECOG 0 (p for trend &lt; 0.001). Women had a lower hazard of death than men, HR 0.58 (95% CI 0.42–0.81). Age was associated with survival in the univariable analysis, HR per 10 years 1.20 (95% CI 1.00–1.44), but not after adjustment, 1.11 (95% CI 0.93–1.34). The model C-index was 0.63.\n\nBefore trusting these numbers, check the proportional-hazards assumption: Assumptions.",
+    "crumbs": [
+      "Home",
+      "Worked examples in jamovi",
+      "Cox regression in jamovi"
+    ]
+  },
+  {
+    "objectID": "worked/adjusted-curves.html",
+    "href": "worked/adjusted-curves.html",
+    "title": "Adjusted survival curves",
+    "section": "",
+    "text": "Question. The Kaplan-Meier curves by ECOG compare groups that also differ in age and in the proportion of women. What would the curves look like if the three ECOG groups had the same age and sex distribution?\nHazard ratios answer this on the hazard scale; adjusted survival curves answer it on the scale of survival probabilities, which is easier to communicate.",
+    "crumbs": [
+      "Home",
+      "Worked examples in jamovi",
+      "Adjusted survival curves"
+    ]
+  },
+  {
+    "objectID": "worked/adjusted-curves.html#step-1-the-panel",
+    "href": "worked/adjusted-curves.html#step-1-the-panel",
+    "title": "Adjusted survival curves",
+    "section": "Step 1: the panel",
+    "text": "Step 1: the panel\nIn the Cox model of the Cox example (Factors sex, ecog; Covariate age), tick Adjusted survival curves under Plots (Figure 1). Overlay unadjusted Kaplan-Meier is on by default; Time unit labels the time axis.\n\n\n\n\n\n\nFigure 1: The Plots section of the Cox panel with adjusted curves ticked.\n\n\n\n\n\njamovi syntax\nr &lt;- prognosis::cox(data = lung, elapsed = time, event = event, eventLevel = \"dead\",\n                    factors = vars(sex, ecog), covs = age, adjCurves = TRUE,\n                    timeUnit = \"months\")\n\n\nThe module draws one plot for each factor of the model; covariates such as age get no plot.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigure 2: Survival by ECOG adjusted for sex and age (solid), with the Kaplan-Meier curves of the same groups (dashed). The caption under the plot lists the variables adjusted for.",
+    "crumbs": [
+      "Home",
+      "Worked examples in jamovi",
+      "Adjusted survival curves"
+    ]
+  },
+  {
+    "objectID": "worked/adjusted-curves.html#how-the-curves-are-computed",
+    "href": "worked/adjusted-curves.html#how-the-curves-are-computed",
+    "title": "Adjusted survival curves",
+    "section": "How the curves are computed",
+    "text": "How the curves are computed\nThe module uses direct standardisation (Makuch 1982). For the ECOG 0 curve, it takes every patient in the data, sets their ECOG to 0 while keeping their own sex and age, predicts their survival curve from the Cox model, and averages the 226 curves:\n\\[\\widehat S_{\\text{ECOG }0}(t) = \\frac{1}{n}\\sum_{i=1}^{n} \\widehat S\\bigl(t \\mid \\text{ECOG } 0,\\ \\text{sex}_i,\\ \\text{age}_i\\bigr)\\]\nand the same for ECOG 1 and ECOG 2. The three curves describe the same population (the whole cohort) under three performance statuses, so their differences are due to ECOG alone, as far as the model is right. They are not the curves of the patients who actually had each ECOG; the Kaplan-Meier curves are.",
+    "crumbs": [
+      "Home",
+      "Worked examples in jamovi",
+      "Adjusted survival curves"
+    ]
+  },
+  {
+    "objectID": "worked/adjusted-curves.html#step-2-compare-with-the-unadjusted-curves",
+    "href": "worked/adjusted-curves.html#step-2-compare-with-the-unadjusted-curves",
+    "title": "Adjusted survival curves",
+    "section": "Step 2: compare with the unadjusted curves",
+    "text": "Step 2: compare with the unadjusted curves\n\n\n\nSurvival at 12 months, read from the curves of the plot.\n\n\nECOG\nKaplan-Meier\nAdjusted for sex and age\n\n\n\n\nECOG 0\n54%\n55%\n\n\nECOG 1\n43%\n41%\n\n\nECOG 2\n21%\n24%\n\n\n\n\n\nThe adjusted and unadjusted curves are close. The ECOG 2 group was older than the others, and adjusting for age moves its curve up only slightly: as the Cox example showed, once ECOG is known age adds little. The difference between the ECOG groups is not explained by age or sex.\nWhen the dashed and solid curves are far apart, the groups differed in the adjustment variables, and the Kaplan-Meier comparison was confounded.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigure 3: The same for sex, adjusted for ECOG and age.",
+    "crumbs": [
+      "Home",
+      "Worked examples in jamovi",
+      "Adjusted survival curves"
+    ]
+  },
+  {
+    "objectID": "worked/adjusted-curves.html#limits",
+    "href": "worked/adjusted-curves.html#limits",
+    "title": "Adjusted survival curves",
+    "section": "Limits",
+    "text": "Limits\n\nThe curves are only as good as the Cox model: they assume proportional hazards and the log-linear effect of age.\nThey are not available for stratified models; the module shows a message instead.\nAdjusted curves are an average over the patients in the data: with a different case mix, the curves would be different, even with the same hazard ratios.",
+    "crumbs": [
+      "Home",
+      "Worked examples in jamovi",
+      "Adjusted survival curves"
+    ]
+  },
+  {
+    "objectID": "worked/assumptions.html",
+    "href": "worked/assumptions.html",
+    "title": "Checking proportional hazards",
+    "section": "",
+    "text": "The Cox model of the previous example reports one hazard ratio per variable, valid at every time of follow-up. That is an assumption, and it has to be checked (see proportional hazards).",
+    "crumbs": [
+      "Home",
+      "Worked examples in jamovi",
+      "Checking proportional hazards"
+    ]
+  },
+  {
+    "objectID": "worked/assumptions.html#step-1-the-test",
+    "href": "worked/assumptions.html#step-1-the-test",
+    "title": "Checking proportional hazards",
+    "section": "Step 1: the test",
+    "text": "Step 1: the test\nIn the same Cox analysis, tick Proportional hazards test (under Model) and Schoenfeld residuals (under Plots):\n\n\njamovi syntax\nr &lt;- prognosis::cox(data = lung, elapsed = time, event = event, eventLevel = \"dead\",\n                    factors = vars(sex, ecog), covs = age, ph = TRUE, phPlot = TRUE,\n                    timeUnit = \"months\", showExplanations = TRUE)\n\n\n\n\n\nProportional hazards test\n\n\n\n\n\nχ²\ndf\np\n\n\n\n\nsex\n2.440\n1\n.118\n\n\necog\n2.871\n2\n.238\n\n\nage\n0.163\n1\n.686\n\n\nGlobal\n4.992\n4\n.288\n\n\n\nNote. Test based on Schoenfeld residuals; a small p suggests that the hazard ratio changes over time (non-proportional hazards).\n\n\n\n\n\n\n\n\nThere is one row per variable (ECOG, with two coefficients, is tested on 2 df) and a global test for the whole model. A small p-value would suggest that the HR of that variable changes over time. Here none is small: p = 0.12 for sex, 0.24 for ECOG and 0.69 for age, and 0.29 globally. There is no evidence against proportional hazards, but “no evidence” is not proof: with 163 deaths the test can miss a moderate change. Look at the plot too.",
+    "crumbs": [
+      "Home",
+      "Worked examples in jamovi",
+      "Checking proportional hazards"
+    ]
+  },
+  {
+    "objectID": "worked/assumptions.html#step-2-the-residual-plot",
+    "href": "worked/assumptions.html#step-2-the-residual-plot",
+    "title": "Checking proportional hazards",
+    "section": "Step 2: the residual plot",
+    "text": "Step 2: the residual plot\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigure 1: Scaled Schoenfeld residuals, one panel per coefficient, against time. Each dot is one death. The dashed red line is the coefficient β of the Cox model (constant by assumption); the blue curve, with its 95% band, is a smooth estimate of how the coefficient changes over time, β(t). The p-value in each title tests that coefficient alone.\n\n\n\nHow to read it:\n\nThe residuals of a factor fall in bands (one per level), so look at the smooth curve, not at the dots.\nIf the assumption holds, the curve is flat around the dashed line. A curve that rises or falls over time means the effect grows or fades; for a factor, a curve that crosses 0 means the HR crosses 1.\nThe band is wide where there are few deaths, at the start and especially at the right end. Bends there mean little.\n\nHere the plot shows something the table does not. In roughly the first six months, the curves for both ECOG coefficients rise above the dashed line, and their bands briefly exclude it: the effect of ECOG looks stronger early. This fits the log-log plot of the Kaplan-Meier example, where the ECOG 1 curve starts below ECOG 0 (the very first deaths happened to be in ECOG 0) and overtakes it within a few months. Age shows a similar early wiggle. After that, the curves settle around the dashed lines. For sex the curve drifts upward (towards less protection) late in follow-up, where there are few deaths and the band is wide.\nWhy do the test and the plot seem to disagree? The test looks for a steady trend of β(t) over the whole follow-up, and a bump in the first months followed by a flat stretch is not a trend. The band is pointwise: over many time points, it will exclude the line somewhere by chance fairly often. The fair reading is: there is no strong evidence against proportional hazards, the single HR for ECOG is a reasonable summary, and there are hints that its effect is largest in the first half-year. A paper about ECOG itself could report that, for example with survival at 6 and 12 months or separate HRs for early and late follow-up (step 3).\nThe log-log plot of the Kaplan-Meier analysis is the graphical check for one factor at a time without adjustment; the residuals check each coefficient of the adjusted model, including continuous covariates such as age, which the log-log plot cannot handle.",
+    "crumbs": [
+      "Home",
+      "Worked examples in jamovi",
+      "Checking proportional hazards"
+    ]
+  },
+  {
+    "objectID": "worked/assumptions.html#step-3-if-the-assumption-fails",
+    "href": "worked/assumptions.html#step-3-if-the-assumption-fails",
+    "title": "Checking proportional hazards",
+    "section": "Step 3: if the assumption fails",
+    "text": "Step 3: if the assumption fails\nWhen a variable clearly violates proportional hazards, there are honest options:\n\nStratify on it, if you do not need its HR: each level gets its own baseline hazard, and the other HRs are estimated within levels. See step 4.\nReport survival at fixed times (Kaplan-Meier or adjusted curves) instead of, or as well as, an HR. These need no proportional-hazards assumption. The restricted mean survival time is another summary that does not (Royston and Parmar 2013).\nSplit follow-up: estimate one HR for the early period and another for the late period. The cut-off should be chosen on clinical grounds and reported. This, and models with time-varying coefficients, need software beyond this module (for example R’s survival package, which this module uses).\nReport the average HR with a clear statement that it averages an effect that changes over time, and show the residual plot. Acceptable when the change is mild.\n\nWhat not to do: drop the variable because its test was significant, or switch to another test because its p-value is smaller.",
+    "crumbs": [
+      "Home",
+      "Worked examples in jamovi",
+      "Checking proportional hazards"
+    ]
+  },
+  {
+    "objectID": "worked/assumptions.html#step-4-a-stratified-model",
+    "href": "worked/assumptions.html#step-4-a-stratified-model",
+    "title": "Checking proportional hazards",
+    "section": "Step 4: a stratified model",
+    "text": "Step 4: a stratified model\nSuppose sex had failed the test. Move sex from Factors to Strata:\n\n\njamovi syntax\nrs &lt;- prognosis::cox(data = lung, elapsed = time, event = event, eventLevel = \"dead\",\n                     factors = ecog, covs = age, strata = sex, ph = TRUE)\n\n\n\n\n\nModel summary\n\n\n\n\n\n95% CI\n\n\nN\nEvents\nC-index\nLower\nUpper\n\n\n\n\n226\n163\n0.604\n0.552\n0.656\n\n\n\nNote. Stratified by sex\n\n\n\n\n\n\n\n\n\nHazard ratios\n\n\n\n\n\n95% CI\n\n\n\n\n\nHR\nLower\nUpper\np\n\n\n\n\necog\nECOG 0\n1.00\n\n\n\n\n\n\nECOG 1\n1.44\n0.972\n2.14\n.069\n\n\n\nECOG 2\n2.46\n1.570\n3.84\n&lt; .001\n\n\nage\nper unit\n1.01\n0.992\n1.03\n.277\n\n\n\n\n\n\n\nMen and women now have separate baseline hazards of any shape, and sex has no HR any more. The ECOG hazard ratios (1.44 and 2.46) are close to those of the unstratified model (1.51 and 2.47), as expected when sex’s effect was in fact roughly proportional. The C-index is lower (0.604) because it now only compares patients of the same sex: the part of the prediction that came from sex is gone.\nA stratified model cannot give adjusted survival curves: with a separate baseline per stratum, there is no single curve to adjust.",
+    "crumbs": [
+      "Home",
+      "Worked examples in jamovi",
+      "Checking proportional hazards"
+    ]
+  },
+  {
+    "objectID": "worked/km-example.html",
+    "href": "worked/km-example.html",
+    "title": "Kaplan-Meier in jamovi",
+    "section": "",
+    "text": "Question. In advanced lung cancer, how long do patients survive, and does survival depend on performance status (ECOG) at enrolment?",
+    "crumbs": [
+      "Home",
+      "Worked examples in jamovi",
+      "Kaplan-Meier in jamovi"
+    ]
+  },
+  {
+    "objectID": "worked/km-example.html#step-0-open-the-data",
+    "href": "worked/km-example.html#step-0-open-the-data",
+    "title": "Kaplan-Meier in jamovi",
+    "section": "Step 0: open the data",
+    "text": "Step 0: open the data\nOpen lung.omv in jamovi. The Variables tab lists the variables, with an icon for each measure type (Figure 1): time and age must be Continuous (ruler), event and sex Nominal (circles), and ecog Ordinal (bars). Double-click a variable to see its setup; the levels of ecog must be in the order ECOG 0, ECOG 1, ECOG 2.\n\n\n\n\n\n\nFigure 1: The Variables tab of jamovi with lung.omv open.\n\n\n\nThe module needs the event as a nominal (or ordinal) variable and asks which of its levels is the event. A column coded 0/1 works once you set its measure type to Nominal. Until you pick the level, the analysis shows nothing, on purpose: guessing which code means “event” is a classic source of errors (in the original lung data, 1 means censored and 2 means dead).",
+    "crumbs": [
+      "Home",
+      "Worked examples in jamovi",
+      "Kaplan-Meier in jamovi"
+    ]
+  },
+  {
+    "objectID": "worked/km-example.html#step-1-the-whole-cohort",
+    "href": "worked/km-example.html#step-1-the-whole-cohort",
+    "title": "Kaplan-Meier in jamovi",
+    "section": "Step 1: the whole cohort",
+    "text": "Step 1: the whole cohort\nOpen Analyses → Prognosis → Kaplan-Meier and set:\n\n\n\nPanel\nSetting\n\n\n\n\nTime\ntime\n\n\nEvent\nevent; Event level dead\n\n\nTables → Survival at times\n6, 12, 24\n\n\nTables → Time unit\nmonths\n\n\nShow on plots\nConfidence bands\n\n\n\n\n\njamovi syntax\nall &lt;- prognosis::km(data = lung, elapsed = time, event = event, eventLevel = \"dead\",\n                     timeUnit = \"months\", survTimes = \"6, 12, 24\", ci = TRUE)\n\n\n\n\n\nSurvival summary\n\n\n\n\n\n95% CI\n\n\nN\nEvents\nCensored\nMedian\nLower\nUpper\n\n\n\n\n226\n163\n63\n10.2\n9.36\n11.9\n\n\n\n\n\n\n\n\nSurvival at given times\n\n\n\n\n\n95% CI\n\n\nTime\nAt risk\nEvents\nSurvival\nLower\nUpper\n\n\n\n\n6.00\n156\n64\n71.4 %\n65.8 %\n77.6 %\n\n\n12.00\n65\n119\n41.3 %\n34.8 %\n49.0 %\n\n\n24.00\n13\n157\n11.7 %\n7.2 %\n18.8 %\n\n\n\n\n\n\n\nMedian survival was 10.18 months (95% CI 9.36–11.93). Survival was 41% at one year and 12% at two years; only 13 patients were still under observation at 24 months, which is why that CI is wide relative to the estimate.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigure 2: The survival curve of the whole cohort with its 95% confidence band. Crosses mark censored patients.\n\n\n\n\nMedian follow-up\nA paper should say how long patients were followed. The median of the observed times (8.62 months) underestimates follow-up, because patients who died stop contributing time early. The usual method is the reverse Kaplan-Meier: swap the roles of event and censoring, so that “being censored” is the event. In the module, simply choose alive as the event level:\n\n\njamovi syntax\nrevkm &lt;- prognosis::km(data = lung, elapsed = time, event = event, eventLevel = \"alive\",\n                     kmPlot = FALSE)\n\n\n\n\n\nSurvival summary\n\n\n\n\n\n95% CI\n\n\nN\nEvents\nCensored\nMedian\nLower\nUpper\n\n\n\n\n226\n63\n163\n19.3\n16.8\n33.2\n\n\n\n\n\n\n\nThe median follow-up was 19.32 months (95% CI 16.79–33.18). Change the event level back to dead before going on.",
+    "crumbs": [
+      "Home",
+      "Worked examples in jamovi",
+      "Kaplan-Meier in jamovi"
+    ]
+  },
+  {
+    "objectID": "worked/km-example.html#step-2-survival-by-ecog",
+    "href": "worked/km-example.html#step-2-survival-by-ecog",
+    "title": "Kaplan-Meier in jamovi",
+    "section": "Step 2: survival by ECOG",
+    "text": "Step 2: survival by ECOG\nAdd ecog to Group, and set:\n\n\n\n\n\n\n\nPanel\nSetting\n\n\n\n\nTests\nLog-rank; Log-rank trend (ordered groups)\n\n\nShow on plots\nConfidence bands, Number at risk table, Median lines, Test p-value\n\n\nAxes and colours\nX-axis step 6\n\n\nOptions\nShow explanations\n\n\n\nFigure 3 shows the analysis in jamovi with these settings: the options panel on the left, the results on the right.\n\n\n\n\n\n\nFigure 3: Prognosis → Kaplan-Meier in jamovi, set as in the table above.\n\n\n\n\n\njamovi syntax\nr &lt;- prognosis::km(data = lung, elapsed = time, event = event, eventLevel = \"dead\",\n                   group = ecog, timeUnit = \"months\", survTimes = \"6, 12, 24\",\n                   tests = c(\"logrank\", \"trend\"), ci = TRUE, riskTable = TRUE,\n                   medianLine = TRUE, pvalPlot = TRUE, xby = 6, showExplanations = TRUE)\n\n\n\n\n\nSurvival summary\n\n\n\n\n\n95% CI\n\n\n\nN\nEvents\nCensored\nMedian\nLower\nUpper\n\n\n\n\nECOG 0\n63\n37\n26\n12.94\n11.43\n18.86\n\n\nECOG 1\n113\n82\n31\n10.05\n8.80\n14.09\n\n\nECOG 2\n50\n44\n6\n6.54\n5.13\n9.46\n\n\n\nNote. Median: time at which the Kaplan-Meier survival falls to 50%; empty if not reached.\n\n\n\n\n\n\n\n\nMedian survival fell from 12.94 months with ECOG 0 to 10.05 with ECOG 1 and 6.54 with ECOG 2. The notes under each table are the explanations; switch them off when you know the tables.\n\n\n\nSurvival at given times\n\n\n\n\n\n95% CI\n\n\n\nTime\nAt risk\nEvents\nSurvival\nLower\nUpper\n\n\n\n\nECOG 0\n6.00\n52\n10\n84.1 %\n75.5 %\n93.6 %\n\n\n\n12.00\n22\n24\n53.5 %\n41.0 %\n69.9 %\n\n\n\n24.00\n5\n35\n19.3 %\n9.4 %\n39.6 %\n\n\nECOG 1\n6.00\n79\n31\n72.4 %\n64.6 %\n81.2 %\n\n\n\n12.00\n34\n58\n43.1 %\n34.2 %\n54.3 %\n\n\n\n24.00\n7\n79\n11.4 %\n5.8 %\n22.2 %\n\n\nECOG 2\n6.00\n25\n23\n52.7 %\n40.4 %\n68.9 %\n\n\n\n12.00\n9\n37\n21.5 %\n12.3 %\n37.6 %\n\n\n\n24.00\n1\n43\n3.7 %\n0.6 %\n22.9 %\n\n\n\nNote. Survival: Kaplan-Meier probability of being event-free at that time. Events: cumulative events up to that time.\n\n\n\n\n\n\n\n\nSurvival at one year was 54% for ECOG 0, 43% for ECOG 1 and 21% for ECOG 2. The Events column is cumulative: by 12 months 37 of the 50 ECOG 2 patients had died. At 24 months only 1 ECOG 2 patient was still at risk: the estimate exists, but its CI shows it carries little information.\n\n\n\nTests comparing groups\n\n\n\n\n\nχ²\ndf\np\n\n\n\n\nLog-rank\n18.0\n2\n&lt; .001\n\n\nLog-rank trend\n16.4\n1\n&lt; .001\n\n\n\nNote. H0: the survival curves are identical. Log-rank weights all event times equally; Gehan-Breslow and Tarone-Ware give more weight to early times, Peto-Peto weights by overall survival. The trend test (1 df) uses the group order as scores.\n\n\n\n\n\n\n\n\nThe log-rank test compares the three curves: χ² = 18.01 on 2 df, p &lt; 0.001. Because ECOG is ordered, the trend test asks the more specific question of a steady decline in survival from ECOG 0 to 2: χ² = 16.45 on 1 df, p &lt; 0.001. Most of the difference between the groups is this trend.\n\n\n\n\n\n\nNoteWhere the log-rank χ² comes from\n\n\n\nThe module reports the test; the observed and expected deaths behind it (see the log-rank page) are:\n\n\n\n\n\nGroup\nObserved\nExpected\nO − E\n\n\n\n\nECOG 0\n37\n53.9\n-16.9\n\n\nECOG 1\n82\n83.1\n-1.1\n\n\nECOG 2\n44\n26.0\n18.0\n\n\n\n\n\nECOG 0 patients had fewer deaths than expected if all groups shared one curve, ECOG 2 patients many more, and ECOG 1 almost exactly the expected number.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigure 4: Survival by ECOG as the module draws it, with the options of step 2. The number-at-risk table under the plot is part of the figure: it shows how few patients remain after 24 months.\n\n\n\nRead the plot as a sceptical reader would: the curves start at 1 and separate early; the median lines agree with the table; the bands widen to the right as the numbers at risk fall; and after about 24 months the curves rest on a handful of patients.",
+    "crumbs": [
+      "Home",
+      "Worked examples in jamovi",
+      "Kaplan-Meier in jamovi"
+    ]
+  },
+  {
+    "objectID": "worked/km-example.html#step-3-the-other-views",
+    "href": "worked/km-example.html#step-3-the-other-views",
+    "title": "Kaplan-Meier in jamovi",
+    "section": "Step 3: the other views",
+    "text": "Step 3: the other views\nTick Cumulative incidence (1 − S), Cumulative hazard and Log-log (PH check) under Plots. They use the same data and the same options.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigure 5: Cumulative hazard by ECOG. The slope of each curve is the hazard: all three get steeper with time (the death rate rises as the disease progresses), and ECOG 2 is the steepest from the start. The last steps on the right rest on very few patients.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigure 6: The log-log plot: \\(\\log(-\\log \\widehat S(t))\\) against time on a log scale. Parallel curves support the proportional-hazards assumption of the Cox model; curves that cross or converge are a warning.\n\n\n\nECOG 2 stays above the other two and roughly parallel to them. ECOG 0 and ECOG 1 cross in the first four months, but each step there is a single death, and they come closer again after about a year: a hint, no more, that the difference between ECOG 0 and 1 is not constant over time. The assumptions page checks this formally.",
+    "crumbs": [
+      "Home",
+      "Worked examples in jamovi",
+      "Kaplan-Meier in jamovi"
+    ]
+  },
+  {
+    "objectID": "worked/km-example.html#step-4-write-it-up",
+    "href": "worked/km-example.html#step-4-write-it-up",
+    "title": "Kaplan-Meier in jamovi",
+    "section": "Step 4: write it up",
+    "text": "Step 4: write it up\n\nOf 226 patients with advanced non-small-cell lung cancer, 163 died during a median follow-up of 19.3 months (reverse Kaplan-Meier). Median survival was 10.2 months (95% CI 9.4–11.9) and 1-year survival 41% (95% CI 35%–49%). Survival decreased with worse performance status: median 12.9, 10.1 and 6.5 months, and 1-year survival 54%, 43% and 21%, for ECOG 0, 1 and 2 (log-rank χ² = 18.0, 2 df, p &lt; 0.001; test for trend p &lt; 0.001).\n\nWhat this does not say is whether ECOG predicts survival independently of age and sex. That needs Cox regression.",
+    "crumbs": [
+      "Home",
+      "Worked examples in jamovi",
+      "Kaplan-Meier in jamovi"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Survival analysis for prognostic studies",
+    "section": "",
+    "text": "A patient with a new cancer diagnosis asks two questions: will I be cured? and how long do I have? The second one is about time. Prognostic studies follow patients from a starting point (diagnosis, surgery, randomisation) until an event (death, relapse, graft failure) and try to answer it: how likely is the event by one year, by five years, and for which patients is it more likely?\nThe data from such studies have a peculiarity that breaks the methods you already know: when the study ends, many patients have not had the event yet. We know they survived at least this long, but not how long they will survive. Survival analysis is the set of methods that handles this correctly. This tutorial introduces the three tools you will meet in almost every clinical paper with a time-to-event outcome:\nIt assumes you know what a p-value, a 95% confidence interval and a 2×2 table are. Each method has a short theory page, then a worked example that you can repeat step by step in jamovi, a free point-and-click statistics program, with the prognosis module. Its menu has the same two entries as this tutorial: Prognosis → Kaplan-Meier and Prognosis → Cox Regression.",
+    "crumbs": [
+      "Home",
+      "Survival analysis for prognostic studies"
+    ]
+  },
+  {
+    "objectID": "index.html#what-you-need",
+    "href": "index.html#what-you-need",
+    "title": "Survival analysis for prognostic studies",
+    "section": "What you need",
+    "text": "What you need\n\njamovi (desktop, from jamovi.org).\nThe prognosis module. Download the .jmo file for your jamovi from the releases page; the module README says which of the four files to pick. In jamovi, click Modules (the ⊕ icon, top right) → Sideload and choose the file. A new Prognosis menu appears in the Analyses tab.\nThe teaching dataset: lung.omv (open it with File → Open). A plain lung.csv is also available; if you use it, read the tip below.",
+    "crumbs": [
+      "Home",
+      "Survival analysis for prognostic studies"
+    ]
+  },
+  {
+    "objectID": "index.html#the-dataset-used-throughout",
+    "href": "index.html#the-dataset-used-throughout",
+    "title": "Survival analysis for prognostic studies",
+    "section": "The dataset used throughout",
+    "text": "The dataset used throughout\nAll the examples use one dataset: patients with advanced non-small-cell lung cancer followed in a study of the North Central Cancer Treatment Group, which looked at which features predict survival (Loprinzi et al. 1994). It ships with the R package survival as lung. We keep the 226 patients whose performance status was rated 0, 1 or 2 by their physician (only one patient had ECOG 3).\n\n\n\n\n\n\n\n\nVariable\nType in jamovi\nMeaning\n\n\n\n\ntime\ncontinuous\nmonths from enrolment to death or to the last contact\n\n\nevent\nnominal: alive, dead\nstatus at the last contact; dead means the event was observed\n\n\nsex\nnominal: Male, Female\n\n\n\nage\ncontinuous\nage in years\n\n\necog\nordinal: ECOG 0, ECOG 1, ECOG 2\nECOG performance status (Oken et al. 1982): 0 = fully active; 1 = symptoms, but walks and does light work; 2 = up and about more than half of the day, cannot work\n\n\n\n163 of the 226 patients died during follow-up. The median age was 63 years and 40% were women.\n\n\n\n\n\n\nTipOpening the CSV instead of the .omv\n\n\n\njamovi sorts text levels alphabetically when it imports a CSV, so sex gets the levels Female, Male, and ecog is imported as nominal. The analyses use the first level as the reference, so your hazard ratios would compare men with women instead of women with men. To match this tutorial, open the Data tab, select sex, click Setup and move Male to the top of the levels list; set the measure type of ecog to Ordinal. The .omv file already has both.",
+    "crumbs": [
+      "Home",
+      "Survival analysis for prognostic studies"
+    ]
+  },
+  {
+    "objectID": "index.html#how-to-use-this-tutorial",
+    "href": "index.html#how-to-use-this-tutorial",
+    "title": "Survival analysis for prognostic studies",
+    "section": "How to use this tutorial",
+    "text": "How to use this tutorial\nRead the four Foundations pages first. They explain the ideas behind each method with small examples you could compute by hand. Then open jamovi and work through the worked examples: each one says what to put in each box of the analysis panel, shows the output the module gives, and explains how to read it and how to write it up. Reporting collects what a paper should say, and the glossary defines every term.\n\n\n\n\n\n\nNoteThe examples are computed by the module\n\n\n\nEvery table and plot in the worked examples is produced by running the prognosis analyses themselves on the teaching dataset, so they are exactly what you will see in jamovi. The folded jamovi syntax blocks show the equivalent R call; jamovi shows the same text above the results when you switch on Syntax mode (in the ⋮ menu, top right).\n\n\n\nNotation\n\n\n\n\n\n\n\nSymbol\nMeaning\n\n\n\n\n\\(T\\)\nthe time until the event for a patient (unknown until it happens)\n\n\n\\(t_i\\), \\(\\delta_i\\)\nthe observed time of patient \\(i\\) and whether it ended with the event (\\(\\delta_i = 1\\)) or with censoring (\\(\\delta_i = 0\\))\n\n\n\\(S(t)\\)\nsurvival function: the probability of being event-free at time \\(t\\), \\(P(T &gt; t)\\)\n\n\n\\(h(t)\\)\nhazard: the rate of the event at time \\(t\\) among those still event-free\n\n\n\\(H(t)\\)\ncumulative hazard, the hazard added up from 0 to \\(t\\); \\(S(t) = e^{-H(t)}\\)\n\n\n\\(n_j\\), \\(d_j\\)\nnumber at risk and number of events at the \\(j\\)-th event time\n\n\nHR\nhazard ratio",
+    "crumbs": [
+      "Home",
+      "Survival analysis for prognostic studies"
+    ]
+  },
+  {
+    "objectID": "index.html#map-of-the-module",
+    "href": "index.html#map-of-the-module",
+    "title": "Survival analysis for prognostic studies",
+    "section": "Map of the module",
+    "text": "Map of the module\n\n\n\nYou want to …\nIn jamovi\nTheory\nExample\n\n\n\n\nestimate survival, median survival, survival at 1 or 2 years\nKaplan-Meier: tables\nKaplan-Meier\nKM example\n\n\ncompare survival between groups\nKaplan-Meier: Tests\nLog-rank\nKM example\n\n\ndraw survival curves with the number at risk\nKaplan-Meier: Plots\nKaplan-Meier\nKM example\n\n\nestimate hazard ratios, crude and adjusted\nCox Regression\nCox model\nCox example\n\n\ncheck that the hazard ratios are constant over time\nCox: Proportional hazards test, Schoenfeld residuals; KM: Log-log plot\nCox model\nAssumptions\n\n\nask whether the effect of one variable depends on another\nCox: Interactions\nCox model\nInteractions\n\n\ndraw survival curves adjusted for other variables\nCox: Adjusted survival curves\nCox model\nAdjusted curves",
+    "crumbs": [
+      "Home",
+      "Survival analysis for prognostic studies"
+    ]
+  },
+  {
+    "objectID": "index.html#further-reading",
+    "href": "index.html#further-reading",
+    "title": "Survival analysis for prognostic studies",
+    "section": "Further reading",
+    "text": "Further reading\nFor a short, readable introduction aimed at clinicians, see the series Survival analysis in the British Journal of Cancer (Clark et al. 2003; Bradburn et al. 2003a, 2003b) and the BMJ statistics notes on the Kaplan-Meier method and the log-rank test (Bland and Altman 1998, 2004). The standard textbook on the Cox model is Therneau and Grambsch (2000).",
+    "crumbs": [
+      "Home",
+      "Survival analysis for prognostic studies"
+    ]
+  },
+  {
+    "objectID": "foundations/kaplan-meier.html",
+    "href": "foundations/kaplan-meier.html",
+    "title": "Kaplan-Meier: estimating the survival curve",
+    "section": "",
+    "text": "The probability of surviving two years is the probability of surviving the first year, times the probability of surviving the second year given that you survived the first. The Kaplan-Meier estimator (Kaplan and Meier 1958) applies this idea at every time an event happens. At each event time \\(t_j\\) it looks only at the \\(n_j\\) patients still at risk (alive and under observation just before \\(t_j\\)), counts the \\(d_j\\) events, and estimates the chance of getting through that moment as \\(1 - d_j/n_j\\). The survival curve is the product of these factors:\n\\[\\widehat S(t) = \\prod_{t_j \\le t} \\left(1 - \\frac{d_j}{n_j}\\right)\\]\nCensored patients never contribute a factor. They count in the number at risk up to their censoring time and then leave the risk set. This is how the method uses each patient for exactly as long as they were observed.",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "Kaplan-Meier: estimating the survival curve"
+    ]
+  },
+  {
+    "objectID": "foundations/kaplan-meier.html#the-idea-survive-one-step-at-a-time",
+    "href": "foundations/kaplan-meier.html#the-idea-survive-one-step-at-a-time",
+    "title": "Kaplan-Meier: estimating the survival curve",
+    "section": "",
+    "text": "The probability of surviving two years is the probability of surviving the first year, times the probability of surviving the second year given that you survived the first. The Kaplan-Meier estimator (Kaplan and Meier 1958) applies this idea at every time an event happens. At each event time \\(t_j\\) it looks only at the \\(n_j\\) patients still at risk (alive and under observation just before \\(t_j\\)), counts the \\(d_j\\) events, and estimates the chance of getting through that moment as \\(1 - d_j/n_j\\). The survival curve is the product of these factors:\n\\[\\widehat S(t) = \\prod_{t_j \\le t} \\left(1 - \\frac{d_j}{n_j}\\right)\\]\nCensored patients never contribute a factor. They count in the number at risk up to their censoring time and then leave the risk set. This is how the method uses each patient for exactly as long as they were observed.",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "Kaplan-Meier: estimating the survival curve"
+    ]
+  },
+  {
+    "objectID": "foundations/kaplan-meier.html#by-hand-ten-patients",
+    "href": "foundations/kaplan-meier.html#by-hand-ten-patients",
+    "title": "Kaplan-Meier: estimating the survival curve",
+    "section": "By hand: ten patients",
+    "text": "By hand: ten patients\nHere are ten patients, times in months, a + marking a censored time:\n2, 4, 5+, 6, 8, 10+, 12, 14, 21+, 30\n\n\n\n\nTable 1: The Kaplan-Meier calculation for the ten patients. The confidence interval is the one the module reports (next section).\n\n\n\n\n\n\nMonth\nAt risk\nDeaths\nCensored\n1 − d/n\nS(t)\n95% CI\n\n\n\n\n2\n10\n1\n0\n9/10 = 0.900\n0.900\n0.732–1.000\n\n\n4\n9\n1\n0\n8/9 = 0.889\n0.800\n0.587–1.000\n\n\n5\n8\n0\n1\n\n0.800\n0.587–1.000\n\n\n6\n7\n1\n0\n6/7 = 0.857\n0.686\n0.445–1.000\n\n\n8\n6\n1\n0\n5/6 = 0.833\n0.571\n0.326–1.000\n\n\n10\n5\n0\n1\n\n0.571\n0.326–1.000\n\n\n12\n4\n1\n0\n3/4 = 0.750\n0.429\n0.193–0.951\n\n\n14\n3\n1\n0\n2/3 = 0.667\n0.286\n0.092–0.884\n\n\n21\n2\n0\n1\n\n0.286\n0.092–0.884\n\n\n30\n1\n1\n0\n0/1 = 0.000\n0.000\n\n\n\n\n\n\n\n\n\nFollow the rows. At month 2 all 10 patients are at risk and one dies: \\(\\widehat S = 9/10 = 0.9\\). At month 4, 9 are at risk and one dies: \\(\\widehat S = 0.9 \\times 8/9 = 0.8\\). The patient censored at month 5 does not change the curve, but from then on only 7 patients are at risk, so the death at month 6 multiplies the curve by \\(6/7\\), not by \\(7/8\\). And so on, until the last patient dies at month 30 and the curve reaches 0.\nNotice what the naive calculation would say: 7 of the 10 patients died, so “30% survival”. But the three censored patients were followed for 5, 10 and 21 months only. The Kaplan-Meier estimate of survival at 21 months is 0.286, and it is 0 after the last death at month 30, because the one patient still at risk then died.\nThis is what the module draws for these ten patients:\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigure 1: Prognosis → Kaplan-Meier with the ten patients, Median lines ticked. The curve steps down at each death; the crosses are the censored times; the dashed line marks the median.\n\n\n\n\n\n\n\n\n\nNoteDeaths and censoring at the same time\n\n\n\nWhen a death and a censoring happen at the same recorded time, the convention is that the death came first: the censored patient is still counted at risk at that time. With several deaths at one time, \\(d_j\\) is simply larger than 1.",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "Kaplan-Meier: estimating the survival curve"
+    ]
+  },
+  {
+    "objectID": "foundations/kaplan-meier.html#how-precise-is-the-curve",
+    "href": "foundations/kaplan-meier.html#how-precise-is-the-curve",
+    "title": "Kaplan-Meier: estimating the survival curve",
+    "section": "How precise is the curve?",
+    "text": "How precise is the curve?\nEach factor \\(1 - d_j/n_j\\) is estimated from the patients at risk at that moment, so the curve becomes less precise as that number shrinks. Greenwood’s formula (Greenwood 1926) gives the variance of \\(\\log \\widehat S(t)\\) by adding up a contribution from each event time:\n\\[\\widehat{\\operatorname{var}}\\bigl[\\log \\widehat S(t)\\bigr] = \\sum_{t_j \\le t} \\frac{d_j}{n_j\\,(n_j - d_j)}\\]\nThe module (through the R survival package) builds the 95% confidence interval on the log scale and transforms it back:\n\\[\\widehat S(t)\\,\\exp\\Bigl(\\pm 1.96\\,\\sqrt{\\widehat{\\operatorname{var}}\\bigl[\\log \\widehat S(t)\\bigr]}\\Bigr)\\]\nwith an upper limit above 1 cut to 1. The interval is asymmetric and widens quickly when few patients remain at risk, as in the last rows of Table 1. On a plot, the confidence band (option Confidence bands) shows where the curve is still informative. At the right end of a curve, where only a handful of patients are at risk, the steps are large and the band is wide: do not read much into the tail of a Kaplan-Meier curve.",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "Kaplan-Meier: estimating the survival curve"
+    ]
+  },
+  {
+    "objectID": "foundations/kaplan-meier.html#median-survival",
+    "href": "foundations/kaplan-meier.html#median-survival",
+    "title": "Kaplan-Meier: estimating the survival curve",
+    "section": "Median survival",
+    "text": "Median survival\nThe median survival is the first time at which \\(\\widehat S(t)\\) drops to 0.5 or below. It is preferred to the mean because survival times are skewed and the mean cannot be estimated when the curve does not reach 0. Its 95% CI comes from the confidence band: it runs from the time the lower limit of the band crosses 0.5 to the time the upper limit does (Brookmeyer and Crowley 1982). An upper limit can be missing when the band never gets down to 0.5: for the ten patients the median is 12 months, and its 95% CI runs from 6 months to not reached, because the upper limit of the band never falls to 0.5 (Table 1).\nIf fewer than half of the patients have had the event by the end of follow-up, the median is not reached, and the module leaves the cell empty. That is information, not a failure: report survival at fixed times instead.",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "Kaplan-Meier: estimating the survival curve"
+    ]
+  },
+  {
+    "objectID": "foundations/kaplan-meier.html#survival-at-fixed-times",
+    "href": "foundations/kaplan-meier.html#survival-at-fixed-times",
+    "title": "Kaplan-Meier: estimating the survival curve",
+    "section": "Survival at fixed times",
+    "text": "Survival at fixed times\n“One-year survival 41 %” is \\(\\widehat S(12)\\), read off the curve at 12 months. In the module, type the times in Survival at times (for example 6, 12, 24) and the table gives, for each group and time, the number still at risk, the cumulative number of events, \\(\\widehat S(t)\\) and its CI. These are the numbers clinicians quote, and they need no assumption about the shape of the curve.\nA time beyond the last follow-up of a group has 0 patients at risk. The curve is then carried forward from the last observed value, and the module adds a note to the table; those rows are not estimates.",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "Kaplan-Meier: estimating the survival curve"
+    ]
+  },
+  {
+    "objectID": "foundations/kaplan-meier.html#four-views-of-the-same-curve",
+    "href": "foundations/kaplan-meier.html#four-views-of-the-same-curve",
+    "title": "Kaplan-Meier: estimating the survival curve",
+    "section": "Four views of the same curve",
+    "text": "Four views of the same curve\nThe Kaplan-Meier module can draw the estimate in four ways (section Plots):\n\n\n\n\n\n\n\n\nPlot\nShows\nUse it to …\n\n\n\n\nSurvival curve\n\\(\\widehat S(t)\\)\nshow survival; the standard figure\n\n\nCumulative incidence (1 − S)\n\\(1 - \\widehat S(t)\\)\nshow how the proportion with the event grows (for relapse, infection …)\n\n\nCumulative hazard\n\\(\\widehat H(t) = -\\log \\widehat S(t)\\)\nsee how the hazard changes: a straight line means a constant hazard\n\n\nLog-log (PH check)\n\\(\\log(-\\log \\widehat S(t))\\) against log time\ncheck the proportional-hazards assumption of Cox regression: the curves of two groups should be parallel\n\n\n\nThe KM worked example shows all four for the ECOG groups.\n\n\n\n\n\n\nWarningCompeting risks\n\n\n\n\\(1 - \\widehat S(t)\\) is the probability of the event by time \\(t\\) only if every patient would eventually have it. For death from any cause that is true. For an event such as death from cancer, patients who die of something else are not “censored” in the usual sense: they can no longer have the event. Treating them as censored overestimates the cumulative incidence; this needs competing-risks methods (Austin et al. 2016), which this module does not provide.",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "Kaplan-Meier: estimating the survival curve"
+    ]
+  },
+  {
+    "objectID": "foundations/kaplan-meier.html#reading-any-kaplan-meier-plot-critically",
+    "href": "foundations/kaplan-meier.html#reading-any-kaplan-meier-plot-critically",
+    "title": "Kaplan-Meier: estimating the survival curve",
+    "section": "Reading any Kaplan-Meier plot critically",
+    "text": "Reading any Kaplan-Meier plot critically\n\nCheck the number at risk under the plot (Pocock et al. 2002; Morris et al. 2019). Differences at the right end, with few patients left, are unreliable.\nLook at the whole curve, not only the median. Two groups can have the same median and very different early or late survival.\nAsk how long patients were followed, and whether losses to follow-up could be informative (see Censoring).\nCheck the axes. The y-axis should go from 0 to 1 (or 0 to 100%); a truncated axis exaggerates differences.\n\n\nNext: Comparing curves: the log-rank test",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "Kaplan-Meier: estimating the survival curve"
+    ]
+  },
+  {
+    "objectID": "foundations/cox.html",
+    "href": "foundations/cox.html",
+    "title": "Cox regression",
+    "section": "",
+    "text": "The log-rank test says whether survival differs between groups. It does not say by how much, it cannot use a continuous variable such as age without cutting it into groups, and it cannot tell whether ECOG predicts survival by itself or only because patients with a worse ECOG are older. Cox regression (Cox 1972) does all three, and is the most used model in clinical research with a time-to-event outcome.",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "Cox regression"
+    ]
+  },
+  {
+    "objectID": "foundations/cox.html#why-a-regression-model",
+    "href": "foundations/cox.html#why-a-regression-model",
+    "title": "Cox regression",
+    "section": "",
+    "text": "The log-rank test says whether survival differs between groups. It does not say by how much, it cannot use a continuous variable such as age without cutting it into groups, and it cannot tell whether ECOG predicts survival by itself or only because patients with a worse ECOG are older. Cox regression (Cox 1972) does all three, and is the most used model in clinical research with a time-to-event outcome.",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "Cox regression"
+    ]
+  },
+  {
+    "objectID": "foundations/cox.html#the-model",
+    "href": "foundations/cox.html#the-model",
+    "title": "Cox regression",
+    "section": "The model",
+    "text": "The model\nCox regression describes the hazard of a patient with characteristics \\(x_1, x_2, \\dots\\) as a baseline hazard multiplied by a factor that depends on those characteristics:\n\\[h(t \\mid x) = h_0(t)\\,\\exp(\\beta_1 x_1 + \\beta_2 x_2 + \\cdots)\\]\n\n\\(h_0(t)\\) is the hazard of a patient with all \\(x = 0\\) (the reference levels). The model makes no assumption about its shape: it can rise, fall or do anything else. This is why the Cox model is called semi-parametric.\nFor two patients who differ by one unit in \\(x_1\\) and are equal in everything else, the ratio of their hazards is\n\\[\\mathrm{HR} = \\frac{h(t \\mid x_1 + 1)}{h(t \\mid x_1)} = e^{\\beta_1}\\]\nand it does not depend on \\(t\\). The model assumes that a variable multiplies the hazard by the same factor at every time: the proportional hazards assumption.\n\nA hazard ratio of 2 means that at any time, among patients still alive, those in one group die at twice the rate of comparable patients in the other group. HR = 1 means no difference; HR &lt; 1 a lower hazard (better prognosis), HR &gt; 1 a higher one.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nFigure 1: Left: group B has twice the hazard of group A at every time, and one HR (2) describes the difference at any time. Right: group B has a high early hazard that falls below A’s later; the survival curves cross, and no single HR describes this.",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "Cox regression"
+    ]
+  },
+  {
+    "objectID": "foundations/cox.html#how-the-model-is-estimated",
+    "href": "foundations/cox.html#how-the-model-is-estimated",
+    "title": "Cox regression",
+    "section": "How the model is estimated",
+    "text": "How the model is estimated\nCox’s idea was to avoid estimating \\(h_0(t)\\) at all. At each time \\(t_j\\) when a patient dies, ask: of all the patients at risk at that moment (\\(R_j\\)), what was the probability that it was this patient who died? Under the model it is\n\\[\\frac{e^{\\beta^\\top x_{(j)}}}{\\sum_{i \\in R_j} e^{\\beta^\\top x_i}}\\]\nThe baseline hazard cancels out. Multiplying these probabilities over all event times gives the partial likelihood, and the estimates \\(\\hat\\beta\\) are the values that maximise it. Only the order of the event times matters, not their exact values. The standard errors come from the curvature of the likelihood, and the 95% CI of a hazard ratio is \\(\\exp(\\hat\\beta \\pm 1.96\\,\\mathrm{SE})\\): asymmetric around the HR.",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "Cox regression"
+    ]
+  },
+  {
+    "objectID": "foundations/cox.html#kinds-of-variables",
+    "href": "foundations/cox.html#kinds-of-variables",
+    "title": "Cox regression",
+    "section": "Kinds of variables",
+    "text": "Kinds of variables\nFactors (nominal or ordinal variables, in the Factors box) are compared level by level with a reference level: the first level of the variable in jamovi. A factor with \\(k\\) levels gets \\(k - 1\\) hazard ratios, each “this level versus the reference”. To change the reference, reorder the levels in the variable’s Setup. For an ordered factor such as ECOG, the option Trend test (p) adds a 1-df test that the hazard changes steadily along the levels, like the trend version of the log-rank test.\nCovariates (continuous variables, in the Covariates box) get one hazard ratio per unit increase: per year of age, per mg/dL. The model assumes that each unit multiplies the hazard by the same factor, whether from 40 to 41 years or from 80 to 81 (a log-linear effect); this module does not check that. A per-unit HR can look tiny (1.02 per year) and still matter: over 10 years it is \\(1.02^{10} = 1.22\\). The option HR for covariates reports it per 1 SD or per any value you choose (for example per 10 years); only the unit changes, not the p-values.",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "Cox regression"
+    ]
+  },
+  {
+    "objectID": "foundations/cox.html#tests",
+    "href": "foundations/cox.html#tests",
+    "title": "Cox regression",
+    "section": "Tests",
+    "text": "Tests\n\nWald test of each coefficient: \\(z = \\hat\\beta / \\mathrm{SE}\\); its p-value is in the HR table.\nGlobal tests of the null hypothesis that all HRs in the model are 1: likelihood ratio, Wald and score. They usually agree; the likelihood-ratio test is the most reliable in small samples. With a single factor, the score test is the log-rank test: with the teaching data, sex alone gives a score χ² and a log-rank χ² that agree to three decimals (they are exactly equal when no two deaths happen at the same time).",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "Cox regression"
+    ]
+  },
+  {
+    "objectID": "foundations/cox.html#univariable-and-multivariable-models",
+    "href": "foundations/cox.html#univariable-and-multivariable-models",
+    "title": "Cox regression",
+    "section": "Univariable and multivariable models",
+    "text": "Univariable and multivariable models\nA univariable (crude) model has one variable. A multivariable model estimates the effect of each variable adjusted for the others: the HR for ECOG compares patients of the same sex and age. When the two differ, the variable was partly confounded: its crude effect was partly the effect of something associated with it. The option Univariable and multivariable puts both side by side, fitted on the same patients, which is the usual table of a prognostic-factor paper.\nHow many variables? A classic rule of thumb is about 10 events per estimated coefficient (Peduzzi et al. 1995); it is not a strict limit (Vittinghoff and McCulloch 2007), but with fewer events the estimates become unstable and too extreme. Count events, not patients: 1000 patients with 30 deaths support about three coefficients.",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "Cox regression"
+    ]
+  },
+  {
+    "objectID": "foundations/cox.html#discrimination-the-c-index",
+    "href": "foundations/cox.html#discrimination-the-c-index",
+    "title": "Cox regression",
+    "section": "Discrimination: the C-index",
+    "text": "Discrimination: the C-index\nThe concordance index (C-index) (Harrell et al. 1982, 1996) measures how well the model ranks patients: take two patients whose order of events is known; C is the probability that the one the model predicts to be at higher risk has the event first. C = 0.5 is chance and C = 1 perfect ranking. Clinical models with a few variables typically reach 0.6–0.75. C says nothing about calibration (whether the predicted probabilities are right).",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "Cox regression"
+    ]
+  },
+  {
+    "objectID": "foundations/cox.html#proportional-hazards",
+    "href": "foundations/cox.html#proportional-hazards",
+    "title": "Cox regression",
+    "section": "Proportional hazards",
+    "text": "Proportional hazards\nThe Cox model assumes that each HR is constant over time. It is violated when, for example, a treatment helps only in the first months, or the curves of two groups cross. Then the single reported HR is a weighted average of different effects at different times, which may describe no patient well (Hernán 2010). Three checks:\n\nLook at the Kaplan-Meier curves. Crossing curves are a warning.\nLog-log plot (Kaplan-Meier module): if the hazards are proportional, the curves of \\(\\log(-\\log \\widehat S(t))\\) against log time are parallel.\nSchoenfeld residuals (Schoenfeld 1982; Grambsch and Therneau 1994): at each death, the value of the variable in the patient who died minus the average value in the risk set. Scaled and plotted against time, they show how the coefficient changes over time, \\(\\beta(t)\\). Under proportional hazards \\(\\beta(t)\\) is flat, and the test (option Proportional hazards test) asks whether there is a trend.\n\nA small p-value does not by itself mean the model is useless: in a large study a trivial change in the HR gives a small p, and in a small study a real change can be missed (Stensrud and Hernán 2020). Always look at the residual plot. The assumptions example shows what to do when the assumption fails.\n\nStratification\nA variable that violates proportional hazards, or one you need to adjust for but not to estimate (for example the hospital in a multicentre study), can go into Strata. The model then gets a separate baseline hazard \\(h_{0s}(t)\\) for each stratum, with shapes free to differ, while the HRs of the other variables are shared across strata. The price is that there is no HR for the stratification variable.",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "Cox regression"
+    ]
+  },
+  {
+    "objectID": "foundations/cox.html#interactions",
+    "href": "foundations/cox.html#interactions",
+    "title": "Cox regression",
+    "section": "Interactions",
+    "text": "Interactions\nSometimes the effect of one variable depends on another: a marker is prognostic in women but not in men, or a treatment works only in early stages. This is effect modification, tested by adding an interaction term (Interactions section of the Cox panel). The likelihood-ratio test for the interaction tells whether the effect differs between subgroups; the table Hazard ratios within subgroups gives the effect in each one.\nTwo warnings. With an interaction in the model, the “main effect” HR of a variable applies only at the reference level of the other variable. And the power to detect an interaction is low: finding a significant effect in one subgroup and not in another is not evidence that the effects differ; only the interaction test is. The interactions example shows both.",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "Cox regression"
+    ]
+  },
+  {
+    "objectID": "foundations/cox.html#adjusted-survival-curves",
+    "href": "foundations/cox.html#adjusted-survival-curves",
+    "title": "Cox regression",
+    "section": "Adjusted survival curves",
+    "text": "Adjusted survival curves\nHazard ratios are hard to translate into probabilities. Adjusted survival curves show what survival would look like in each group of a factor if all groups had the same distribution of the other variables. The module uses direct standardisation (Makuch 1982): for each level of the factor, it predicts the survival curve of every patient in the data as if they had that level (keeping their own values of the other variables), and averages these curves. Comparing them with the unadjusted Kaplan-Meier curves shows how much of the difference between groups is explained by the other variables. Adjusted curves are not available for stratified models.\n\n\n\n\n\n\nImportantWhat a hazard ratio is not\n\n\n\n\nNot a risk ratio. HR = 0.5 does not mean “half as many deaths at 1 year”. The difference in the probability of death depends on the baseline risk and on the time horizon; report survival probabilities (Kaplan-Meier or adjusted curves) as well.\nNot a ratio of median survival times, except under special assumptions.\nNot constant in reality just because the model says so: check it.\n\n\n\n\nNext: the worked examples, starting with Kaplan-Meier in jamovi",
+    "crumbs": [
+      "Home",
+      "Foundations",
+      "Cox regression"
+    ]
+  },
+  {
+    "objectID": "further/glossary.html",
+    "href": "further/glossary.html",
+    "title": "Glossary",
+    "section": "",
+    "text": "Adjusted survival curve\n\nThe survival curve each group would have if all groups had the same distribution of the other variables of a Cox model; the module computes it by direct standardisation. Adjusted curves\n\nAt risk\n\nA patient is at risk at time \\(t\\) if they are alive (event-free) and still under observation just before \\(t\\). The number at risk \\(n_j\\) is the denominator of each Kaplan-Meier step. Kaplan-Meier\n\nBaseline hazard, \\(h_0(t)\\)\n\nThe hazard of a patient with all variables at their reference level (or 0) in a Cox model. Its shape is not estimated as part of the hazard ratios. Cox\n\nC-index (concordance)\n\nThe probability that, of two patients whose order of events is known, the one the model predicts to be at higher risk has the event first. 0.5 = chance, 1 = perfect. Cox\n\nCensoring (right censoring)\n\nObservation of a patient ends before the event: their survival time is known to be longer than the observed time. Administrative censoring happens when the study closes; informative censoring, when the reason for censoring is related to prognosis, biases the estimates. Censoring\n\nCompeting risk\n\nAn event that prevents the event of interest (death from another cause when the event is death from cancer). Treating it as censoring overestimates the cumulative incidence. Kaplan-Meier\n\nConfounding\n\nA distortion of the association between a variable and the outcome because of a third variable associated with both. In the tutorial, part of the crude effect of age was due to ECOG. Cox example\n\nCox regression (proportional hazards model)\n\n\\(h(t \\mid x) = h_0(t)\\exp(\\beta_1 x_1 + \\dots)\\): a regression model for the hazard, which gives hazard ratios adjusted for the other variables. Cox\n\nCumulative hazard, \\(H(t)\\)\n\nThe hazard added up from 0 to \\(t\\); \\(S(t) = e^{-H(t)}\\). Time-to-event data\n\nCumulative incidence\n\nThe probability of having had the event by time \\(t\\), \\(1 - S(t)\\) when there are no competing risks.\n\nDirect standardisation\n\nAveraging the predicted survival curves of all patients after setting the variable of interest to the same level for everyone; used for adjusted survival curves.\n\nEffect modification (interaction)\n\nThe effect of one variable depends on the value of another. Tested with an interaction term in a Cox model. Interactions\n\nEvent\n\nWhat ends the survival time: death, relapse, progression. Its definition, and the time origin, must be stated.\n\nEvents per variable\n\nThe number of events divided by the number of coefficients of a model; roughly 10 or more is a common rule of thumb. Cox\n\nGreenwood’s formula\n\nThe variance of the Kaplan-Meier estimate, used for its confidence interval. Kaplan-Meier\n\nHazard, \\(h(t)\\)\n\nThe rate of the event at time \\(t\\) among patients still event-free just before \\(t\\); a rate, with units (per month), not a probability. Time-to-event data\n\nHazard ratio (HR)\n\nThe ratio of the hazards of two groups (or per unit of a covariate). HR = 1: no difference; HR &lt; 1: lower hazard. It is not a risk ratio. Cox\n\nKaplan-Meier estimator\n\nThe product of the conditional probabilities of surviving each event time, \\(\\prod (1 - d_j/n_j)\\); the standard estimate of the survival curve. Kaplan-Meier\n\nLog-log plot\n\n\\(\\log(-\\log \\widehat S(t))\\) against log time, by group; parallel curves support proportional hazards. Assumptions\n\nLog-rank test\n\nCompares survival curves by adding up observed minus expected events at each event time. Weighted versions: Gehan-Breslow, Tarone-Ware, Peto-Peto. Log-rank\n\nMedian follow-up\n\nThe median time patients were (or would have been) followed, estimated with the reverse Kaplan-Meier method: the event and censoring indicators are swapped. KM example\n\nMedian survival\n\nThe first time at which the Kaplan-Meier curve reaches 0.5 or less. “Not reached” if fewer than half of the patients had the event. Kaplan-Meier\n\nPartial likelihood\n\nThe likelihood that the Cox model maximises: at each event time, the probability that the patient who died was the one to die among those at risk. The baseline hazard cancels out.\n\nProportional hazards\n\nThe assumption of the Cox model that each hazard ratio is constant over time. Assumptions\n\nReference level\n\nThe level of a factor that the others are compared with (HR = 1); in jamovi, the first level of the variable.\n\nSchoenfeld residuals\n\nFor each death, the variable’s value in the patient who died minus its average in the risk set; plotted against time, they show whether a coefficient changes over time. Assumptions\n\nStratified Cox model\n\nA Cox model with a separate baseline hazard in each stratum and common hazard ratios; the stratification variable gets no HR. Assumptions\n\nSurvival function, \\(S(t)\\)\n\nThe probability of being event-free beyond time \\(t\\), \\(P(T &gt; t)\\).\n\nTrend test\n\nA 1-df test that survival (or the hazard) changes steadily along the levels of an ordered factor. Log-rank\n\nUnivariable and multivariable\n\nA univariable (crude) model has one variable; a multivariable model estimates each variable’s effect adjusted for the others.\n\nWald, likelihood ratio and score tests\n\nThree ways of testing coefficients of a Cox model; the global versions test that all hazard ratios are 1. With one factor, the score test is the log-rank test.\n\n\n\n\n\n Back to top",
+    "crumbs": [
+      "Home",
+      "Further",
+      "Glossary"
+    ]
+  }
+]

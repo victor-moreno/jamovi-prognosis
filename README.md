@@ -24,6 +24,9 @@ It needs no packages beyond those bundled with jamovi: `survival`, `ggplot2`, `g
 - Forest plot (multivariable, or univariable vs multivariable).
 - Adjusted survival curves: one plot per factor, by direct standardisation, with an optional unadjusted KM overlay.
 
+## Tutorial
+A [website for medical students](https://victor-moreno.github.io/jamovi-prognosis/) (in `docs/`): time-to-event data and censoring, the Kaplan-Meier estimator and the log-rank test (each worked by hand on ten patients), Cox regression, proportional hazards, interactions, adjusted curves and reporting. The worked examples run this module on a teaching dataset (`docs/data/lung.omv`, from `survival::lung`) that students open in jamovi, so every table and plot is what jamovi shows. The site is rendered with Quarto from a source kept outside this repository.
+
 ## Languages
 The options, tables, notes and plots are available in English, Spanish and Catalan. jamovi uses the language chosen in its settings. The translations are in `jamovi/i18n/*.po`.
 
@@ -48,7 +51,6 @@ bash tools/install.sh docker [name]   # jmc --install in a running container
 bash tools/build-jmo.sh current       # release: dist/*_current_R4.6.0_{x64,arm64}.jmo
 bash tools/build-jmo.sh solid         # release: dist/*_solid_R4.5.0_{x64,arm64}.jmo
 bash tools/release.sh                 # build all four and publish one GitHub release
-sh tools/tutorial_redo.sh             # re-render the tutorial from scratch
 ```
 After each install, `tools/smoke.R` checks the installed module against `survival` (log-rank χ², Cox HRs with an ordinal factor). The other checks in `tests/` run against a scratch install: `R CMD INSTALL -l .tmp/lib .`, then `Rscript tests/<file>.R`.
 Manual steps:

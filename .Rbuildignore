@@ -1,0 +1,14 @@
+^\.tmp$
+^\.R$
+^docs$
+^documents$
+^dev$
+^tools$
+^build$
+^dist$
+^gallery$
+^.*\.jmo$
+^task_plan\.md$
+^findings\.md$
+^progress\.md$
+^tutorial$
