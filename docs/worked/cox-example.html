@@ -832,13 +832,13 @@ Figure&nbsp;1: <em>Prognosis → Cox Regression</em> in jamovi, set as in the ta
 </section>
 <section id="step-4-hazard-ratios-per-10-years" class="level2">
 <h2 class="anchored" data-anchor-id="step-4-hazard-ratios-per-10-years">Step 4: hazard ratios per 10 years</h2>
-<p>“1.019 per year” is correct but hard to grasp. Set <strong>HR for covariates</strong> to <em>per value below</em> and type <code>10</code> in <strong>Value</strong>:</p>
+<p>“1.019 per year” is correct but hard to grasp. Open <strong>Covariate Scaling</strong>, which lists every covariate, and set <code>age</code> to <em>per 10 units</em>:</p>
 <div class="cell">
 <details class="code-fold">
 <summary>jamovi syntax</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>r10 <span class="ot">&lt;-</span> prognosis<span class="sc">::</span><span class="fu">cox</span>(<span class="at">data =</span> lung, <span class="at">elapsed =</span> time, <span class="at">event =</span> event, <span class="at">eventLevel =</span> <span class="st">"dead"</span>,</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                      <span class="at">factors =</span> <span class="fu">vars</span>(sex, ecog), <span class="at">covs =</span> age, <span class="at">uniMulti =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">covScale =</span> <span class="st">"custom"</span>, <span class="at">covMult =</span> <span class="dv">10</span>, <span class="at">coefDetails =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">covScales =</span> <span class="fu">list</span>(<span class="fu">list</span>(<span class="at">var =</span> <span class="st">"age"</span>, <span class="at">scale =</span> <span class="st">"ten"</span>)), <span class="at">coefDetails =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div class="cell">
@@ -948,7 +948,7 @@ Figure&nbsp;1: <em>Prognosis → Cox Regression</em> in jamovi, set as in the ta
 </tr>
 <tr class="even">
 <td>age</td>
-<td>per 10</td>
+<td>per 10 units</td>
 <td class="num">1.203</td>
 <td class="num">1.004</td>
 <td class="num">1.442</td>
@@ -967,7 +967,7 @@ Figure&nbsp;1: <em>Prognosis → Cox Regression</em> in jamovi, set as in the ta
 </div>
 </div>
 </div>
-<p>The age row now reads <em>per 10</em>: the crude HR is 1.20 per 10 years of age (1.203 = 1.019<sup>10</sup>), the adjusted one 1.11. The module divides age by 10 before fitting, so only the unit changes: the p-values, the other HRs and the model tests are the same as before. <em>Per 1 SD</em> does the same with the standard deviation of the variable, which helps to compare continuous variables measured in different units.</p>
+<p>The age row now reads <em>per 10 units</em>: the crude HR is 1.20 per 10 years of age (1.203 = 1.019<sup>10</sup>), the adjusted one 1.11. The module divides age by 10 before fitting, so only the unit changes: the p-values, the other HRs and the model tests are the same as before. <em>Per 1 SD</em> does the same with the standard deviation of the variable, which helps to compare continuous variables measured in different units.</p>
 <p>This run also ticked <strong>β, SE and z</strong>, the columns behind each HR: <span class="math inline">\(\mathrm{HR} = e^{\beta}\)</span>, its 95% CI is <span class="math inline">\(e^{\beta \pm 1.96\,\mathrm{SE}}\)</span>, and <span class="math inline">\(z = \beta/\mathrm{SE}\)</span> gives the p-value. For ECOG 2, <span class="math inline">\(e^{0.902} = 2.47\)</span> and <span class="math inline">\(e^{0.902 \pm 1.96 \times 0.228}\)</span> gives 1.58–3.86.</p>
 </section>
 <section id="step-5-the-forest-plot" class="level2">

@@ -11,13 +11,13 @@ coxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             eventLevel = NULL,
             factors = NULL,
             covs = NULL,
+            refLevels = NULL,
+            covScales = NULL,
             interactions = NULL,
             strata = NULL,
             timeUnit = "none",
             uniMulti = FALSE,
             trend = FALSE,
-            covScale = "unit",
-            covMult = 10,
             coefDetails = FALSE,
             globalTests = TRUE,
             ph = FALSE,
@@ -69,6 +69,41 @@ coxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "continuous"),
                 permitted=list(
                     "numeric"))
+            private$..refLevels <- jmvcore::OptionArray$new(
+                "refLevels",
+                refLevels,
+                default=NULL,
+                template=jmvcore::OptionGroup$new(
+                    "refLevels",
+                    NULL,
+                    elements=list(
+                        jmvcore::OptionVariable$new(
+                            "var",
+                            NULL),
+                        jmvcore::OptionLevel$new(
+                            "ref",
+                            NULL))))
+            private$..covScales <- jmvcore::OptionArray$new(
+                "covScales",
+                covScales,
+                default=NULL,
+                template=jmvcore::OptionGroup$new(
+                    "covScales",
+                    NULL,
+                    elements=list(
+                        jmvcore::OptionVariable$new(
+                            "var",
+                            NULL),
+                        jmvcore::OptionList$new(
+                            "scale",
+                            NULL,
+                            options=list(
+                                "unit",
+                                "sd",
+                                "ten",
+                                "hundred",
+                                "thousand"),
+                            default="unit"))))
             private$..interactions <- jmvcore::OptionTerms$new(
                 "interactions",
                 interactions,
@@ -100,19 +135,6 @@ coxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                 "trend",
                 trend,
                 default=FALSE)
-            private$..covScale <- jmvcore::OptionList$new(
-                "covScale",
-                covScale,
-                options=list(
-                    "unit",
-                    "sd",
-                    "custom"),
-                default="unit")
-            private$..covMult <- jmvcore::OptionNumber$new(
-                "covMult",
-                covMult,
-                min=0.000001,
-                default=10)
             private$..coefDetails <- jmvcore::OptionBool$new(
                 "coefDetails",
                 coefDetails,
@@ -159,13 +181,13 @@ coxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
             self$.addOption(private$..eventLevel)
             self$.addOption(private$..factors)
             self$.addOption(private$..covs)
+            self$.addOption(private$..refLevels)
+            self$.addOption(private$..covScales)
             self$.addOption(private$..interactions)
             self$.addOption(private$..strata)
             self$.addOption(private$..timeUnit)
             self$.addOption(private$..uniMulti)
             self$.addOption(private$..trend)
-            self$.addOption(private$..covScale)
-            self$.addOption(private$..covMult)
             self$.addOption(private$..coefDetails)
             self$.addOption(private$..globalTests)
             self$.addOption(private$..ph)
@@ -182,13 +204,13 @@ coxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         eventLevel = function() private$..eventLevel$value,
         factors = function() private$..factors$value,
         covs = function() private$..covs$value,
+        refLevels = function() private$..refLevels$value,
+        covScales = function() private$..covScales$value,
         interactions = function() private$..interactions$value,
         strata = function() private$..strata$value,
         timeUnit = function() private$..timeUnit$value,
         uniMulti = function() private$..uniMulti$value,
         trend = function() private$..trend$value,
-        covScale = function() private$..covScale$value,
-        covMult = function() private$..covMult$value,
         coefDetails = function() private$..coefDetails$value,
         globalTests = function() private$..globalTests$value,
         ph = function() private$..ph$value,
@@ -204,13 +226,13 @@ coxOptions <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
         ..eventLevel = NA,
         ..factors = NA,
         ..covs = NA,
+        ..refLevels = NA,
+        ..covScales = NA,
         ..interactions = NA,
         ..strata = NA,
         ..timeUnit = NA,
         ..uniMulti = NA,
         ..trend = NA,
-        ..covScale = NA,
-        ..covMult = NA,
         ..coefDetails = NA,
         ..globalTests = NA,
         ..ph = NA,
@@ -323,8 +345,8 @@ coxResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "strata",
                     "uniMulti",
                     "trend",
-                    "covScale",
-                    "covMult"),
+                    "refLevels",
+                    "covScales"),
                 columns=list(
                     list(
                         `name`="var", 
@@ -451,8 +473,8 @@ coxResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "covs",
                     "interactions",
                     "strata",
-                    "covScale",
-                    "covMult"),
+                    "refLevels",
+                    "covScales"),
                 columns=list(
                     list(
                         `name`="effect", 
@@ -530,8 +552,8 @@ coxResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "interactions",
                     "strata",
                     "uniMulti",
-                    "covScale",
-                    "covMult")))
+                    "refLevels",
+                    "covScales")))
             self$add(jmvcore::Image$new(
                 options=options,
                 name="phPlot",
@@ -549,8 +571,8 @@ coxResults <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
                     "interactions",
                     "strata",
                     "timeUnit",
-                    "covScale",
-                    "covMult")))
+                    "refLevels",
+                    "covScales")))
             self$add(jmvcore::Array$new(
                 options=options,
                 name="adjPlots",
@@ -607,13 +629,13 @@ coxBase <- if (requireNamespace("jmvcore", quietly=TRUE)) R6::R6Class(
 #' @param eventLevel .
 #' @param factors .
 #' @param covs .
+#' @param refLevels .
+#' @param covScales .
 #' @param interactions .
 #' @param strata .
 #' @param timeUnit .
 #' @param uniMulti .
 #' @param trend .
-#' @param covScale .
-#' @param covMult .
 #' @param coefDetails .
 #' @param globalTests .
 #' @param ph .
@@ -650,13 +672,13 @@ cox <- function(
     eventLevel,
     factors = NULL,
     covs = NULL,
+    refLevels = NULL,
+    covScales = NULL,
     interactions = NULL,
     strata = NULL,
     timeUnit = "none",
     uniMulti = FALSE,
     trend = FALSE,
-    covScale = "unit",
-    covMult = 10,
     coefDetails = FALSE,
     globalTests = TRUE,
     ph = FALSE,
@@ -695,13 +717,13 @@ cox <- function(
         eventLevel = eventLevel,
         factors = factors,
         covs = covs,
+        refLevels = refLevels,
+        covScales = covScales,
         interactions = interactions,
         strata = strata,
         timeUnit = timeUnit,
         uniMulti = uniMulti,
         trend = trend,
-        covScale = covScale,
-        covMult = covMult,
         coefDetails = coefDetails,
         globalTests = globalTests,
         ph = ph,

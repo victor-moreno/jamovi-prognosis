@@ -779,13 +779,13 @@ Figure&nbsp;2: The forest plot of the model with the interaction: the main effec
 </section>
 <section id="step-3-a-covariate-and-a-factor" class="level2">
 <h2 class="anchored" data-anchor-id="step-3-a-covariate-and-a-factor">Step 3: a covariate and a factor</h2>
-<p>Interactions work the same way with a continuous covariate. Does the effect of age differ between men and women? Replace the interaction by <code>age ✻ sex</code> (select both, choose <em>Interaction</em> again), and set <strong>HR for covariates</strong> to <em>per value below</em>, <code>10</code>:</p>
+<p>Interactions work the same way with a continuous covariate. Does the effect of age differ between men and women? Replace the interaction by <code>age ✻ sex</code> (select both, choose <em>Interaction</em> again), and set <code>age</code> to <em>per 10 units</em> in <strong>Covariate Scaling</strong>:</p>
 <div class="cell">
 <details class="code-fold">
 <summary>jamovi syntax</summary>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>ra <span class="ot">&lt;-</span> prognosis<span class="sc">::</span><span class="fu">cox</span>(<span class="at">data =</span> lung, <span class="at">elapsed =</span> time, <span class="at">event =</span> event, <span class="at">eventLevel =</span> <span class="st">"dead"</span>,</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                     <span class="at">factors =</span> <span class="fu">vars</span>(sex, ecog), <span class="at">covs =</span> age, <span class="at">interactions =</span> <span class="sc">~</span> age<span class="sc">:</span>sex,</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">covScale =</span> <span class="st">"custom"</span>, <span class="at">covMult =</span> <span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                     <span class="at">covScales =</span> <span class="fu">list</span>(<span class="fu">list</span>(<span class="at">var =</span> <span class="st">"age"</span>, <span class="at">scale =</span> <span class="st">"ten"</span>)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </details>
 </div>
 <div class="cell">
@@ -836,7 +836,7 @@ Figure&nbsp;2: The forest plot of the model with the interaction: the main effec
 </thead>
 <tbody>
 <tr class="odd">
-<td>age (per 10)</td>
+<td>age (per 10 units)</td>
 <td>sex = Male</td>
 <td class="num">1.214</td>
 <td class="num">0.968</td>

@@ -69,12 +69,6 @@ children:
                 name: trend
               - type: CheckBox
                 name: coefDetails
-              - type: ComboBox
-                name: covScale
-              - type: TextBox
-                name: covMult
-                format: number
-                enable: (covScale:custom)
       - type: LayoutBox
         cell:
           column: 1
@@ -88,6 +82,59 @@ children:
                 name: globalTests
               - type: CheckBox
                 name: ph
+  - type: CollapseBox
+    label: Reference Levels
+    collapsed: true
+    stretchFactor: 1
+    children:
+      - type: ListBox
+        name: refLevels
+        events:
+          change: './cox.events::onChange_refLevels'
+        showColumnHeaders: true
+        fullRowSelect: true
+        stretchFactor: 1
+        height: large
+        columns:
+          - name: var
+            label: Factor
+            selectable: false
+            stretchFactor: 1
+            maxWidth: 300
+            template:
+              type: VariableLabel
+          - name: ref
+            label: Reference level
+            selectable: false
+            stretchFactor: 0.5
+            template:
+              type: LevelSelector
+              label: ''
+  - type: CollapseBox
+    label: Covariate Scaling
+    collapsed: true
+    stretchFactor: 1
+    children:
+      - type: ListBox
+        name: covScales
+        showColumnHeaders: true
+        fullRowSelect: true
+        stretchFactor: 1
+        height: large
+        columns:
+          - name: var
+            label: Covariate
+            selectable: false
+            stretchFactor: 1
+            maxWidth: 300
+            template:
+              type: VariableLabel
+          - name: scale
+            label: Hazard ratio
+            selectable: false
+            stretchFactor: 0.5
+            template:
+              type: ComboBox
   - type: CollapseBox
     label: Interactions
     collapsed: true

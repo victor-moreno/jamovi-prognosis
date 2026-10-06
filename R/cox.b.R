@@ -127,15 +127,30 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
                                       paste(nm, collapse = ", ")))
             }
 
-            # HR per 1 SD or per a given value: covariates are divided by the
-            # scale before fitting, so every estimate uses the same unit
+            # trend scores: each factor's levels numbered in their data order,
+            # kept before the reference level is moved first ("t" prefix, so
+            # coefParts never mistakes them for a "v" variable)
+            for (v in safe[vars %in% o$factors]) {
+                df[[sub("^v", "t", v)]] <- as.numeric(df[[v]])
+                ref <- private$.refOf(lab[[v]])
+                if (!is.null(ref) && ref %in% levels(df[[v]]))
+                    df[[v]] <- stats::relevel(df[[v]], ref = ref)
+            }
+
+            # Covariate Scaling: each covariate is divided by its scale before
+            # fitting (per unit, per SD of the analysed rows, per 10/100/1000)
             scale <- unit <- c()
             for (v in safe[vars %in% o$covs]) {
-                scale[v] <- switch(o$covScale, unit = 1, sd = stats::sd(df[[v]]), custom = o$covMult)
+                how <- private$.scaleOf(lab[[v]])
+                scale[v] <- switch(how, unit = 1, sd = stats::sd(df[[v]]),
+                                   ten = 10, hundred = 100, thousand = 1000)
+                if (is.na(scale[[v]]) || scale[[v]] <= 0) scale[v] <- 1
                 df[[v]] <- df[[v]] / scale[[v]]
-                unit[v] <- switch(o$covScale, unit = "per unit",
+                # "per unit" is the internal marker of an unscaled covariate
+                unit[v] <- switch(how, unit = "per unit",
                                   sd = sprintf(.("per SD (%s)"), format(signif(scale[[v]], 3))),
-                                  custom = sprintf(.("per %s"), format(scale[[v]])))
+                                  ten = .("per 10 units"), hundred = .("per 100 units"),
+                                  thousand = .("per 1000 units"))
             }
 
             ints <- Filter(function(t) length(t) > 1, o$interactions)
@@ -200,21 +215,35 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
             rows
         },
 
-        # Trend tests for factors: the factor enters as.numeric() (its level
-        # order as scores). Univariable: alone; multivariable: replacing only
+        # Trend tests for factors: the factor enters as its scores (levels
+        # numbered in their data order, column "t.._" made by .prepare). Univariable: alone; multivariable: replacing only
         # that factor in the model, so the adjustment matches the HRs. Skipped
         # for factors that are part of an interaction.
         .trendP = function(m) {
             fac <- m$main[vapply(m$main, function(v) is.factor(m$df[[v]]), logical(1))]
+            # the score column ("t" for "v") keeps the data order of the
+            # levels, whichever level is the reference
             pOf <- function(terms, v) {
                 f <- private$.fit(m$df, terms, m$strata)
-                summary(f)$coefficients[sprintf("as.numeric(%s)", v), "Pr(>|z|)"]
+                summary(f)$coefficients[sub("^v", "t", v), "Pr(>|z|)"]
             }
             inInt <- function(v) any(vapply(strsplit(m$ints, ":", fixed = TRUE),
                                             function(t) v %in% t, logical(1)))
-            list(uni = vapply(fac, function(v) pOf(sprintf("as.numeric(%s)", v), v), numeric(1)),
+            list(uni = vapply(fac, function(v) pOf(sub("^v", "t", v), v), numeric(1)),
                  multi = vapply(fac, function(v) if (inInt(v)) NA_real_ else
-                     pOf(replace(m$terms, m$terms == v, sprintf("as.numeric(%s)", v)), v), numeric(1)))
+                     pOf(replace(m$terms, m$terms == v, sub("^v", "t", v)), v), numeric(1)))
+        },
+
+        # Reference Levels / Covariate Scaling choices for a variable
+        .refOf = function(var) {
+            for (item in self$options$refLevels)
+                if (identical(item$var, var) && !is.null(item$ref)) return(item$ref)
+            NULL
+        },
+        .scaleOf = function(cov) {
+            for (item in self$options$covScales)
+                if (identical(item$var, cov) && !is.null(item$scale)) return(item$scale)
+            "unit"
         },
 
         # write a row by key (created in .init), adding it if missing
@@ -313,6 +342,8 @@ coxClass <- if (requireNamespace('jmvcore', quietly = TRUE)) R6::R6Class(
             r$globalTable$setNote("expl", if (on) .("H0: all hazard ratios in the model are 1."))
             r$coefTable$setNote("expl", if (on) paste(
                 .("HR > 1: higher hazard (worse prognosis) than the reference level, or per one-unit increase of a covariate."),
+                if (any(m$unit != "per unit"))
+                    .("Scaled covariates: HR per the unit shown, as set in Covariate Scaling."),
                 if (length(m$main) > 1)
                     .("Multivariable HRs are adjusted for the other variables in the model."),
                 if (o$uniMulti) .("Univariable: each variable alone; on the reference row, p of the Wald test for the whole variable."),

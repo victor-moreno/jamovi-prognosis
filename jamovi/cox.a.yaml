@@ -45,6 +45,42 @@ options:
       suggested: [ continuous ]
       permitted: [ numeric ]
 
+    - name: refLevels
+      title: Reference Levels
+      type: Array
+      default:
+      template:
+          type: Group
+          elements:
+              - name: var
+                type: Variable
+              - name: ref
+                type: Level
+
+    - name: covScales
+      title: Covariate Scaling
+      type: Array
+      default:
+      template:
+          type: Group
+          elements:
+              - name: var
+                type: Variable
+              - name: scale
+                type: List
+                options:
+                  - name: unit
+                    title: per unit
+                  - name: sd
+                    title: per 1 SD
+                  - name: ten
+                    title: per 10 units
+                  - name: hundred
+                    title: per 100 units
+                  - name: thousand
+                    title: per 1000 units
+                default: unit
+
     - name: interactions
       title: Interaction terms
       type: Terms
@@ -82,24 +118,6 @@ options:
       title: Trend test (p)
       type: Bool
       default: false
-
-    - name: covScale
-      title: HR for covariates
-      type: List
-      options:
-        - name: unit
-          title: per unit
-        - name: sd
-          title: per 1 SD
-        - name: custom
-          title: per value below
-      default: unit
-
-    - name: covMult
-      title: Value
-      type: Number
-      min: 0.000001
-      default: 10
 
     - name: coefDetails
       title: β, SE and z

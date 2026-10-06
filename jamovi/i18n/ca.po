@@ -229,10 +229,6 @@ msgstr ""
 "HR > 1: risc més alt (pitjor pronòstic) que el nivell de referència, o per "
 "cada augment d'una unitat d'una covariable."
 
-#: cox/options/covScale.title
-msgid "HR for covariates"
-msgstr "HR de les covariables"
-
 #: R/coxutils.R
 msgid "HR uni | multi"
 msgstr "HR uni | multi"
@@ -435,10 +431,6 @@ msgstr ""
 msgid "Palette"
 msgstr "Paleta"
 
-#: R/cox.b.R
-msgid "per %s"
-msgstr "per %s"
-
 #: cox/options/covScale/sd.title
 msgid "per 1 SD"
 msgstr "per 1 DE"
@@ -451,10 +443,6 @@ msgstr "per DE (%s)"
 #: cox/options/covScale/unit.title
 msgid "per unit"
 msgstr "per unitat"
-
-#: cox/options/covScale/custom.title
-msgid "per value below"
-msgstr "pel valor indicat a sota"
 
 #: R/km.b.R
 #: km/options/tests/petopeto.title
@@ -678,10 +666,6 @@ msgstr ""
 msgid "Upper"
 msgstr "Superior"
 
-#: cox/options/covMult.title
-msgid "Value"
-msgstr "Valor"
-
 #: R/cox.b.R
 msgid "Wald"
 msgstr "Wald"
@@ -719,3 +703,43 @@ msgstr "anys"
 #: cox/options/coefDetails.title
 msgid "β, SE and z"
 msgstr "β, EE i z"
+
+#: cox/options/refLevels.title
+msgid "Reference Levels"
+msgstr "Nivells de referència"
+
+#: cox/ui/refLevels.var
+msgid "Factor"
+msgstr "Factor"
+
+#: cox/ui/refLevels.ref
+msgid "Reference level"
+msgstr "Nivell de referència"
+
+#: cox/options/covScales.title
+msgid "Covariate Scaling"
+msgstr "Escala de les covariables"
+
+#: cox/ui/covScales.var
+msgid "Covariate"
+msgstr "Covariable"
+
+#: cox/ui/covScales.scale
+msgid "Hazard ratio"
+msgstr "Hazard ratio"
+
+#: cox/options/covScales.scale
+msgid "per 10 units"
+msgstr "per 10 unitats"
+
+#: cox/options/covScales.scale
+msgid "per 100 units"
+msgstr "per 100 unitats"
+
+#: cox/options/covScales.scale
+msgid "per 1000 units"
+msgstr "per 1000 unitats"
+
+#: R/cox.b.R
+msgid "Scaled covariates: HR per the unit shown, as set in Covariate Scaling."
+msgstr "Covariables escalades: HR per la unitat indicada, segons l'escala de les covariables."
